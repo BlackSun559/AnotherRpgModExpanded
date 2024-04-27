@@ -1,11 +1,11 @@
 ﻿using System;
 using Terraria;
 using Terraria.ID;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
     class NPCUtils
     {
@@ -52,7 +52,6 @@ namespace AnotherRpgMod.RPGModule.Entities
             { "Giant",        new float[4]      {1.8f,       1.05f,       1.05f,       1.2f    } },
             { "Colossus",     new float[4]      {2.2f,         1.10f,       1.10f,       1.5f    } },
             { "Titan",        new float[4]      {2.5f,         1.15f,       1.2f,       1.8f    } },
-
         };
 
         public static float DELTATIME = 1f / 60f;
@@ -70,10 +69,13 @@ namespace AnotherRpgMod.RPGModule.Entities
 
             int damage = npc.damage;
             int def = npc.defense;
+
             if (npc.damage < 0)
                 damage = 1;
+
             if (npc.defense < 0)
                 def = 1;
+
             if (npc.defense > npc.damage)
                 def = npc.damage / 2;
 
@@ -86,10 +88,12 @@ namespace AnotherRpgMod.RPGModule.Entities
                 {
                     baselevel = Mathf.HugeCalc((int)(health / 150 + Mathf.Pow(damage * 0.30f, 1.09f) + Mathf.Pow(def * 0.8f, 1.15f)), -1);
                 }
+
                 else if (Main.expertMode)
                 {
                     baselevel = Mathf.HugeCalc((int)(health / 100 + Mathf.Pow(damage * 0.325f, 1.09f) + Mathf.Pow(def*0.85f, 1.15f)),-1);
                 }
+
                 else
                 {
                     baselevel = Mathf.HugeCalc((int)(health / 80 + Mathf.Pow(damage * 0.35f, 1.09f) + Mathf.Pow(def * 0.9f, 1.15f)),-1) ;
@@ -100,19 +104,19 @@ namespace AnotherRpgMod.RPGModule.Entities
                     {
                         baselevel = Mathf.HugeCalc((int)(Mathf.Pow(health / 650,0.5f) + Mathf.Pow(damage * 0.31f, 1.05f) + Mathf.Pow(def * 0.8f, 1.07f)), -1);
                     }
+
                     else
                     {
                         baselevel = Mathf.HugeCalc((int)(Mathf.Pow(health / 500, 0.5f) + Mathf.Pow(damage * 0.31f, 1.05f) + Mathf.Pow(def * 0.8f, 1.07f)), -1);
                     }
                 }
-
             }
-
 
             if (Main.masterMode)
             {
                 baselevel = (int)(baselevel * 0.35f);
-                if (AnotherRpgMod.LoadedMods[SupportedMod.Calamity])
+
+                if (AnotherRpgModExpanded.LoadedMods[SupportedMod.Calamity])
                 {
                     if (baselevel > 15)
                     {
@@ -126,7 +130,8 @@ namespace AnotherRpgMod.RPGModule.Entities
             else if (Main.expertMode)
             {
                 baselevel = (int)(baselevel * 0.5f);
-                if (AnotherRpgMod.LoadedMods[SupportedMod.Calamity])
+
+                if (AnotherRpgModExpanded.LoadedMods[SupportedMod.Calamity])
                 {
                     if (baselevel > 15)
                     {
@@ -142,8 +147,10 @@ namespace AnotherRpgMod.RPGModule.Entities
 
 
             baselevel = WorldManager.GetWorldLevelMultiplier(baselevel);
+
             if (baselevel < -1)
                 return 1;
+
             if (Config.NPCConfig.LimitNPCGrowth)
             {
                 baselevel = Mathf.Clamp(baselevel, 10, maxLevel);
@@ -157,6 +164,7 @@ namespace AnotherRpgMod.RPGModule.Entities
         public static int GetMaxLevel()
         {
             int maxLevel = Mathf.CeilInt(WorldManager.PlayerLevel + Config.NPCConfig.LimitNPCGrowthValue + (float)WorldManager.PlayerLevel * Config.NPCConfig.LimitNPCGrowthPercent * 0.01f);
+
             if (maxLevel < 1)
                 maxLevel = 1;
             return maxLevel;
@@ -168,6 +176,7 @@ namespace AnotherRpgMod.RPGModule.Entities
 
             int BonusLevel = WorldManager.GetWorldAdditionalLevel();
             int maxLevel = GetMaxLevel();
+
             if (BonusLevel + baselevel >  maxLevel)
             {
                 return maxLevel - baselevel;
@@ -194,8 +203,10 @@ namespace AnotherRpgMod.RPGModule.Entities
             if (!WorldManager.ascended) { 
                 if (!Config.NPCConfig.NPCRarity)
                     return NPCRank.Normal;
+
                 if (boss && !Config.NPCConfig.BossRarity)
                     return NPCRank.Normal;
+
                 if (level < 1)
                     level = 1; 
                 float rarityBooster = (float)Math.Log(level+1) + 1;
@@ -203,45 +214,56 @@ namespace AnotherRpgMod.RPGModule.Entities
 
                 if (rn <= 1)
                     return NPCRank.DIO;
+
                 if (rn <= 3)
                     return NPCRank.Godly;
+
                 if (rn <= 8)
                     return NPCRank.Mythical;
+
                 if (rn < 15)
                     return NPCRank.Legendary;
+
                 if (rn < 150)
                     return NPCRank.Elite;
+
                 if (rn < 350)
                     return NPCRank.Alpha;
+
                 if (rn < 1050)
                     return NPCRank.Normal;
                 return NPCRank.Weak;
-
             }else
             {
                 if (!Config.NPCConfig.NPCRarity)
                     return NPCRank.Raised;
+
                 if (level < 1)
                     level = 1;
                 int rn = Mathf.RandomInt(0, 4000 / (level / 1000 + 1));
 
                 if (rn <= 1)
                     return NPCRank.DioAboveHeaven;
+
                 if (rn <= 5)
                     return NPCRank.TransDimensional;
+
                 if (rn <= 15)
                     return NPCRank.Transcendental;
+
                 if (rn < 35)
                     return NPCRank.PeakAscended;
+
                 if (rn < 150)
                     return NPCRank.HighAscended;
+
                 if (rn < 500)
                     return NPCRank.Ascended;
+
                 if (rn < 2000)
                     return NPCRank.Raised;
                 return NPCRank.LimitBreaked;
             }
-
         }
 
         #endregion
@@ -270,13 +292,13 @@ namespace AnotherRpgMod.RPGModule.Entities
                 
             }
             return pool[pool.Count-1];
-
         }
 
         public static NPCModifier GetModifier(NPCRank rank,NPC npc)
         {
             if (npc.dontCountMe)
                 return NPCModifier.None;
+
             if (!Config.NPCConfig.NPCModifier)
                 return NPCModifier.None;
 
@@ -449,10 +471,10 @@ namespace AnotherRpgMod.RPGModule.Entities
                 string size = (string)anpc.GetBufferProperty("size");
                 Prefix += (size + " ");
             }
+
             if (sufix == " the ")
                 sufix = "";
             return Prefix + name + sufix;
-
         }
 
         public static NPC SetRankStat(NPC npc, NPCRank rank)
@@ -589,10 +611,7 @@ namespace AnotherRpgMod.RPGModule.Entities
             npc.life = npc.lifeMax;
 
             return npc;
-
         }
-
-
 
         static public void SpawnSized(NPC npc, Terraria.DataStructures.IEntitySource source , Dictionary<string, string> buffer)
         {
@@ -620,15 +639,18 @@ namespace AnotherRpgMod.RPGModule.Entities
                 {
                     DoTDamage += Mathf.Clamp(  Mathf.Logx(npc.lifeMax,1.01f) * 0.25f * DELTATIME , 0 , npc.lifeMax*0.003f * DELTATIME);
                 }
+
                 if (npc.HasBuff(BuffID.Burning))
                 {
                     DoTDamage += Mathf.Clamp(Mathf.Logx(npc.lifeMax, 1.01f) * 0.05f * DELTATIME, 0, npc.lifeMax * 0.002f * DELTATIME);
                 }
+
                 if (npc.HasBuff(BuffID.Frostburn))
                 {
 
                     DoTDamage += Mathf.Clamp(Mathf.Logx(npc.lifeMax, 1.01f) * 0.25f * DELTATIME, 0, npc.lifeMax * 0.004f * DELTATIME);
                 }
+
                 if (npc.HasBuff(BuffID.Venom))
                 {
 
@@ -705,7 +727,6 @@ namespace AnotherRpgMod.RPGModule.Entities
                         npc.defense = 0;
 
                     npc.life = npc.lifeMax;
-
                 }
                 else
                 {

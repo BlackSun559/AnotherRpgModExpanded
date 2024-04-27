@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     [Flags]
     public enum Modifier : int

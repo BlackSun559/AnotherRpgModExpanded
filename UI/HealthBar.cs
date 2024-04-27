@@ -8,7 +8,7 @@ using Terraria;
 using System;
 using System.Collections.Generic;
 using Terraria.ModLoader;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 using System.Reflection;
 using Terraria.GameInput;
 using Terraria.Localization;
@@ -16,7 +16,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using ReLogic.Content;
 
-namespace AnotherRpgMod.UI
+namespace AnotherRpgModExpanded.UI
 {
     internal enum Mode
     {
@@ -53,7 +53,6 @@ namespace AnotherRpgMod.UI
             Height.Set(_texture.Height, 0f);
         }
 
-
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions = GetDimensions();
@@ -61,7 +60,6 @@ namespace AnotherRpgMod.UI
             spriteBatch.Draw(_texture, dimensions.Position() + new Vector2(0, _texture.Size().Y) * (1f - ImageScale), null, color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None, 0f);
         }
     }
-
 
     class RessourceInfo
     {
@@ -82,8 +80,6 @@ namespace AnotherRpgMod.UI
         {
             size = baseSize * scale;
         }
-
-
     }
 
     class HealthBar : UIState
@@ -122,6 +118,7 @@ namespace AnotherRpgMod.UI
         {
 
             UpdateBuffList();
+
             if (!Config.gpConfig.RPGPlayer)
             {
                 RemoveAllChildren();
@@ -134,6 +131,7 @@ namespace AnotherRpgMod.UI
                 hiden = false;
                 OnInitialize();
             }
+
             buffPanel.Top.Set(Main.screenHeight - baseUiHeight + YDefaultOffSet + 185 * scale, 0f);
             Player player = Main.player[Main.myPlayer]; //Get Player
 
@@ -142,6 +140,7 @@ namespace AnotherRpgMod.UI
                 health.Left.Set(450 * scale, 0f);
                 health.SetText("" + player.statLife + " | " + player.statLifeMax2 + " (" + player.statLifeMax2/(1- player.GetModPlayer<RPGPlayer>().m_virtualRes)+")"); //Set Life
             }
+
             else
                 health.SetText("" + player.statLife + " | " + player.statLifeMax2); //Set Life
 
@@ -171,11 +170,13 @@ namespace AnotherRpgMod.UI
                     int buffType = Main.player[Main.myPlayer].buffType[i];
                     int x_pos = 32 + i * 38;
                     int y_pos = 76;
+
                     if (i >= rowLimit)
                     {
                         y_pos -= 50;
                         x_pos = 32 + (i - rowLimit) * 38;
                     }
+
                     DrawBuff(buffType,i, x_pos, y_pos);
                     
                 }
@@ -191,7 +192,8 @@ namespace AnotherRpgMod.UI
             
             buffIcon.Left.Set(x, 0f);
             buffIcon.Top.Set(y, 0f);
-            if (!Main.vanityPet[type] && 
+
+            if (!Main.vanityPet[type] &&
                 !Main.lightPet[type] && 
                 !Main.buffNoTimeDisplay[type] && 
                 (!Main.player[Main.myPlayer].honeyWet || type != 48) && 
@@ -209,17 +211,21 @@ namespace AnotherRpgMod.UI
             if (Main.mouseX-buffPanel.Left.Pixels < x + buffTexture.Width && Main.mouseY -buffPanel.Top.Pixels < y + buffTexture.Height && Main.mouseX- buffPanel.Left.Pixels > x && Main.mouseY- buffPanel.Top.Pixels > y)
             {
                 DrawBuffToolTip(type, buffIcon);
+
                 if (Main.mouseRight && Main.mouseRightRelease)
                 {
                     RemoveBuff(i, type);
                 }
             }
+
             buffPanel.Append(buffIcon);
         }
+
         private void RemoveBuff(int id, int type)
         {
-            //AnotherRpgMod.Instance.Logger.Info("Remove buff");
+            //AnotherRpgModExpanded.Instance.Logger.Info("Remove buff");
             bool flag = false;
+
             if (!Main.debuff[type] && type != 60 && type != 151)
             {
                 if (Main.player[Main.myPlayer].mount.Active && Main.player[Main.myPlayer].mount.CheckBuff(type))
@@ -227,15 +233,19 @@ namespace AnotherRpgMod.UI
                     Main.player[Main.myPlayer].mount.Dismount(Main.player[Main.myPlayer]);
                     flag = true;
                 }
+
                 if (Main.player[Main.myPlayer].miscEquips[0].buffType == type && !Main.player[Main.myPlayer].hideMisc[0])
                 {
                     Main.player[Main.myPlayer].hideMisc[0] = true;
                 }
+
                 if (Main.player[Main.myPlayer].miscEquips[1].buffType == type && !Main.player[Main.myPlayer].hideMisc[1])
                 {
                     Main.player[Main.myPlayer].hideMisc[1] = true;
                 }
+
                 SoundEngine.PlaySound(SoundID.MenuTick);
+
                 if (!flag)
                 {
                     Main.player[Main.myPlayer].DelBuff(id);
@@ -243,17 +253,18 @@ namespace AnotherRpgMod.UI
             }
         }
 
-
         private void DrawBuffToolTip(int id,BuffIcon icon)
         {
             int mouseY = Main.lastMouseY - (int)buffPanel.Top.Pixels;
             int mouseX = Main.lastMouseX - (int)buffPanel.Left.Pixels;
             icon.color = new Color(1, 1, 1, 1f);
             string buffDesc = Lang.GetBuffDescription(id);
+
             if (id == 26 && Main.expertMode)
             {
                 buffDesc = Language.GetTextValue("BuffDescription.WellFed_Expert");
             }
+
             if (id == 94)
             {
                 int percentManaSick = (int)(Main.player[Main.myPlayer].manaSickReduction * 100f) + 1;
@@ -270,6 +281,7 @@ namespace AnotherRpgMod.UI
 
             buffTTPanel.Append(TText);
             buffTTPanel.Append(DescText);
+
             if (id == 147)
             {
                 string bannerTT = "";
@@ -288,7 +300,6 @@ namespace AnotherRpgMod.UI
                 BText.TextColor = Color.Green;
                 buffTTPanel.Append(BText);
             }
-
         }
         
         public void Erase()
@@ -301,8 +312,6 @@ namespace AnotherRpgMod.UI
         {
             LoadTexture();
             Reset();
-
-
         }
 
         public void LoadTexture()
@@ -319,16 +328,15 @@ namespace AnotherRpgMod.UI
 
             RessourceTexture = new Dictionary<Mode, RessourceInfo>()
             {
-                { Mode.Leech, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/LeechBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(14*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[0]),scale)},
-                { Mode.HP, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/HealthBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(14*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[0]),scale)},
-                { Mode.MANA, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/ManaBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(31*scale,Main.screenHeight  + YDefaultOffSet - baseUiOffset[1]),scale)},
-                { Mode.XP, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/XPBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(44*scale,Main.screenHeight + YDefaultOffSet -baseUiOffset[2]),scale)},
-                { Mode.Weapon, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/WeaponBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(50*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[3]),scale)},
-                { Mode.Breath, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/BreathBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(5*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[4]),scale)}
-
+                { Mode.Leech, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/LeechBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(14*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[0]),scale)},
+                { Mode.HP, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/HealthBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(14*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[0]),scale)},
+                { Mode.MANA, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/ManaBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(31*scale,Main.screenHeight  + YDefaultOffSet - baseUiOffset[1]),scale)},
+                { Mode.XP, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/XPBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(44*scale,Main.screenHeight + YDefaultOffSet -baseUiOffset[2]),scale)},
+                { Mode.Weapon, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/WeaponBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(50*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[3]),scale)},
+                { Mode.Breath, new RessourceInfo(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/BreathBar",AssetRequestMode.ImmediateLoad).Value,new Vector2(5*scale,Main.screenHeight + YDefaultOffSet - baseUiOffset[4]),scale)}
             };
 
-            Overlay = new UIOverlay(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/OverlayHealthBar", AssetRequestMode.ImmediateLoad).Value);
+            Overlay = new UIOverlay(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/OverlayHealthBar", AssetRequestMode.ImmediateLoad).Value);
         }
 
         public void Reset()
@@ -397,6 +405,7 @@ namespace AnotherRpgMod.UI
             for (int i = 0; i < 6; i++)
             {
                 MainPanel[i + 1] = new PanelBar((Mode)i, RessourceTexture[(Mode)i].texture);
+
                 if ((Mode)i == Mode.Breath) {
                     breath = new RessourceBreath((Mode)i, RessourceTexture[(Mode)i].texture);
                 }
@@ -421,14 +430,13 @@ namespace AnotherRpgMod.UI
                 else
                 {
                     ressourcebar[i].ImageScale = scale;
+
                     if (i == 0)
                         ressourcebar[i].color = new Color(0.3f, 0.3f, 0.3f, 0.3f);
                     MainPanel[i + 1].Append(ressourcebar[i]);
                 }
 
                 base.Append(MainPanel[i + 1]);
-
-
             }
             ;
             
@@ -460,13 +468,9 @@ namespace AnotherRpgMod.UI
             MainPanel[0].Append(Level);
 
             Recalculate();
-            //Texture2D OverlayTexture = ModLoader.Request<Texture2D>("AnotherRpgMod/Assets/UI/OverlayHealthBar").Value;
-
+            //Texture2D OverlayTexture = ModLoader.Request<Texture2D>("AnotherRpgModExpanded/Assets/UI/OverlayHealthBar").Value;
         }
     }
-
-
-
 
     class RessourceBreath : UIElement
     {
@@ -489,7 +493,6 @@ namespace AnotherRpgMod.UI
             this.stat = stat;
             VAlign = 0;
             HAlign = 0;
-
         }
 
         public void SetImage(Texture2D texture)
@@ -497,8 +500,6 @@ namespace AnotherRpgMod.UI
             _texture = texture;
             Width.Set(_texture.Width, 0f);
             Height.Set(_texture.Height, 0f);
-
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -555,8 +556,6 @@ namespace AnotherRpgMod.UI
             _texture = texture;
             Width.Set(_texture.Width, 0f);
             Height.Set(_texture.Height, 0f);
-
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -625,7 +624,6 @@ namespace AnotherRpgMod.UI
             Height.Set(_texture.Height, 0f);
         }
 
-
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions = GetDimensions();
@@ -633,7 +631,6 @@ namespace AnotherRpgMod.UI
             spriteBatch.Draw(_texture, dimensions.Position() + new Vector2(0, _texture.Size().Y) * (1f - ImageScale), null, Color.White, 0f, Vector2.Zero, ImageScale, SpriteEffects.None, 0f);
         }
     }
-
 
     class PanelBar : UIElement
     {
@@ -648,10 +645,6 @@ namespace AnotherRpgMod.UI
             VAlign = 0;
             HAlign = 0;
         }
-
-
-
     }
 }
-
 

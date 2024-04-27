@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     public enum LeechType
     {

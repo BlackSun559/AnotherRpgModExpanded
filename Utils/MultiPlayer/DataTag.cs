@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using System.IO;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
     public class DataTag
     {

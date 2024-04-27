@@ -1,8 +1,8 @@
 ﻿
 using System.Collections.Generic;
-using AnotherRpgMod.RPGModule;
+using AnotherRpgModExpanded.RPGModule;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     public struct ItemStat
     {
@@ -24,6 +24,7 @@ namespace AnotherRpgMod.Items
         {
             Stats.Add(itemStat);
         }
+
         public float GetStat(int key)
         {
             return Stats[key].value;

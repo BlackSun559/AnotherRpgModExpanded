@@ -8,12 +8,12 @@ using Terraria;
 using Terraria.ModLoader.IO;
 using System.IO;
 using Terraria.ID;
-using AnotherRpgMod.UI;
+using AnotherRpgModExpanded.UI;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics;
 using Terraria.UI;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
     class WorldManager : ModSystem
     {
@@ -44,10 +44,12 @@ namespace AnotherRpgMod.Utils
                 BossDefeated = FirstBossDefeated;
 
             BossDefeated++;
+
             if (BossDefeatedList.Exists(x => x == npc.type))
             {
                 return;
             }
+
             BossDefeatedList.Add(npc.type);
             FirstBossDefeated++;
             Main.NewText("The world grow stronger..", 144, 32, 185);
@@ -60,17 +62,19 @@ namespace AnotherRpgMod.Utils
             BossDefeatedList = new List<int>();
         }
 
-
         public static int GetWorldLevelMultiplier(int Level)
         {
             float baseLevelMult = 0.6f;
+
             if (Main.hardMode)
                 baseLevelMult = 1;
             baseLevelMult += Day * 0.05f;
+
             if (!Main.expertMode)
             {
                  Mathf.Clamp(baseLevelMult, 0, 1);
             }
+
             return Mathf.FloorInt(baseLevelMult * Level) + ascendedLevelBonus;
         } 
 
@@ -88,6 +92,7 @@ namespace AnotherRpgMod.Utils
             {
                 limit = (BossDefeated * Config.gpConfig.AscendLimitPerBoss);
             }
+
             else
                 limit = (FirstBossDefeated * Config.gpConfig.AscendLimitPerBoss);
 
@@ -97,8 +102,10 @@ namespace AnotherRpgMod.Utils
             if (Main.hardMode && limit < 5)
             {
                 limit = 5;
+
                 if (NPC.downedPlantBoss && limit < 15)
                     limit = 15;
+
                 if (NPC.downedMoonlord)
                     return 999;
             }
@@ -114,31 +121,27 @@ namespace AnotherRpgMod.Utils
             {
                 limit = (BossDefeated * Config.gpConfig.AscendLimitPerBoss);
             }
+
             else
                 limit = (FirstBossDefeated * Config.gpConfig.AscendLimitPerBoss);
 
             return 1+ Mathf.FloorInt(limit)*0.5f;
         }
 
-
-
-
-
         public override void PostUpdateTime()
         {
             if (Main.dayTime != lastDayTime)
             {
                 lastDayTime = Main.dayTime;
+
                 if (Main.dayTime)
                 {
                     Day++;
-
                 }
-
             }
+
             base.PostUpdateTime();
         }
-
 
         public static int GetWorldAdditionalLevel()
         {
@@ -148,6 +151,7 @@ namespace AnotherRpgMod.Utils
             {
                 bonuslevel = (int)(BossDefeated * Config.NPCConfig.NPCGrowthValue);
             }
+
             else
                 bonuslevel = (int)(FirstBossDefeated * Config.NPCConfig.NPCGrowthValue);
             
@@ -161,15 +165,16 @@ namespace AnotherRpgMod.Utils
             return bonuslevel;
         }
 
-
         public override void SaveWorldData(TagCompound tag)
         {
-            //AnotherRpgMod.Instance.Logger.Info("Is it saving World Data ? ....");
+            //AnotherRpgModExpanded.Instance.Logger.Info("Is it saving World Data ? ....");
             base.SaveWorldData(tag);
+
             if (BossDefeatedList == null)
             {
                 BossDefeatedList = new List<int>();
             }
+
             tag.Add("BossDefeated", BossDefeated);
             tag.Add("FirstBossDefeated", FirstBossDefeated);
             tag.Add("BossDefeatedList", ConvertToInt(BossDefeatedList));
@@ -186,6 +191,7 @@ namespace AnotherRpgMod.Utils
             {
                 newList[i] = list[i];
             }
+
             return newList;
         }
 
@@ -200,8 +206,8 @@ namespace AnotherRpgMod.Utils
         public override void LoadWorldData(TagCompound tag)
         {
             instance = this;
-            //AnotherRpgMod.Instance.Logger.Info(tag);
-            //AnotherRpgMod.Instance.Logger.Info("Load World Data");
+            //AnotherRpgModExpanded.Instance.Logger.Info(tag);
+            //AnotherRpgModExpanded.Instance.Logger.Info("Load World Data");
             BossDefeatedList = new List<int>();
             FirstBossDefeated = tag.GetInt("FirstBossDefeated");
             BossDefeated = tag.GetInt("BossDefeated");
@@ -209,6 +215,7 @@ namespace AnotherRpgMod.Utils
             ConvertToList(tag.GetIntArray("BossDefeatedList"));
             ascended = tag.GetBool("ascended");
             ascendedLevelBonus = tag.GetInt("ascendedLevel");
+
             if (Main.netMode == NetmodeID.SinglePlayer)
                 PlayerLevel = tag.GetInt("PlayerLevel");
             else
@@ -252,6 +259,7 @@ namespace AnotherRpgMod.Utils
 
             Message msg;
             msg = (Message)reader.ReadByte();
+
             if (msg == Message.syncWorld) {
                 Dictionary<WorldDataTag, object> tags = new Dictionary<WorldDataTag, object>();
                 foreach (WorldDataTag tag in worldDataTag[msg])
@@ -267,11 +275,8 @@ namespace AnotherRpgMod.Utils
                 PlayerLevel = (int)tags[WorldDataTag.PlayerLevel];
             }
 
-
-
             base.NetReceive(reader);
         }
-
 
         public override void PreSaveAndQuit()
         {
@@ -282,36 +287,37 @@ namespace AnotherRpgMod.Utils
         public override void PostUpdateEverything()
         {
             //Update UI when screen Size Change
+
             if (Main.netMode != NetmodeID.Server)
             {
-                if (Math.Abs(AnotherRpgMod.Instance.lastUpdateScreenScale - Main.screenHeight) > 0.01f)
+                if (Math.Abs(AnotherRpgModExpanded.Instance.lastUpdateScreenScale - Main.screenHeight) > 0.01f)
                 {
-                    AnotherRpgMod.Instance.healthBar.Reset();
-                    AnotherRpgMod.Instance.OpenST.Reset();
-                    AnotherRpgMod.Instance.openStatMenu.Reset();
+                    AnotherRpgModExpanded.Instance.healthBar.Reset();
+                    AnotherRpgModExpanded.Instance.OpenST.Reset();
+                    AnotherRpgModExpanded.Instance.openStatMenu.Reset();
                 }
-                AnotherRpgMod.Instance.lastUpdateScreenScale = Main.screenHeight;
+                AnotherRpgModExpanded.Instance.lastUpdateScreenScale = Main.screenHeight;
             }
             base.PostUpdateEverything();
         }
         public override void UpdateUI(GameTime gameTime)
         {
             base.UpdateUI(gameTime);
-            if (AnotherRpgMod.Instance.customstats != null)
-                AnotherRpgMod.Instance.customstats.Update(gameTime);
-        }
 
+            if (AnotherRpgModExpanded.Instance.customstats != null)
+                AnotherRpgModExpanded.Instance.customstats.Update(gameTime);
+        }
 
         public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform)
         {
-            AnotherRpgMod.zoomValue = Transform.Zoom;
+            AnotherRpgModExpanded.zoomValue = Transform.Zoom;
             base.ModifyTransformMatrix(ref Transform);
         }
-
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             base.ModifyInterfaceLayers(layers);
+
             if (Main.netMode == NetmodeID.Server)
                 return;
 
@@ -324,14 +330,15 @@ namespace AnotherRpgMod.Utils
 
             //Vanilla: MouseOver
             int mouseid = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Over"));
+
             if (mouseid != -1)
             {
                 layers.Insert(mouseid, new LegacyGameInterfaceLayer(
                     "AnotherRpgMod: NPC Mouse Info",
                     delegate
                     {
-                        AnotherRpgMod.Instance.customNPCInfo.Update(Main._drawInterfaceGameTime);
-                        AnotherRpgMod.Instance.NPCInfo.Draw(Main.spriteBatch);
+                        AnotherRpgModExpanded.Instance.customNPCInfo.Update(Main._drawInterfaceGameTime);
+                        AnotherRpgModExpanded.Instance.NPCInfo.Draw(Main.spriteBatch);
                         return true;
                     },
                     InterfaceScaleType.UI)
@@ -341,16 +348,16 @@ namespace AnotherRpgMod.Utils
                     "AnotherRpgMod: NPC Name Info",
                     delegate
                     {
-                        AnotherRpgMod.Instance.customNPCName.Update(Main._drawInterfaceGameTime);
-                        AnotherRpgMod.Instance.NPCName.Draw(Main.spriteBatch);
+                        AnotherRpgModExpanded.Instance.customNPCName.Update(Main._drawInterfaceGameTime);
+                        AnotherRpgModExpanded.Instance.NPCName.Draw(Main.spriteBatch);
                         return true;
                     },
                     InterfaceScaleType.Game)
                 );
             }
 
-
             int skilltreeid = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 2"));
+
             if (skilltreeid != -1)
             {
                 //layers.RemoveAt(id);
@@ -363,13 +370,13 @@ namespace AnotherRpgMod.Utils
                         if (Stats.visible)
                         {
 
-                            AnotherRpgMod.Instance.statMenu.Draw(Main.spriteBatch);
-
+                            AnotherRpgModExpanded.Instance.statMenu.Draw(Main.spriteBatch);
                         }
+
                         if (OpenStatsButton.visible)
                         {
-                            AnotherRpgMod.Instance.customOpenstats.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.openStatMenu.Draw(Main.spriteBatch);
+                            AnotherRpgModExpanded.Instance.customOpenstats.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.openStatMenu.Draw(Main.spriteBatch);
                         }
 
                         return true;
@@ -383,8 +390,8 @@ namespace AnotherRpgMod.Utils
                     {
                         if (OpenSTButton.visible)
                         {
-                            AnotherRpgMod.Instance.customOpenST.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.OpenST.Draw(Main.spriteBatch);
+                            AnotherRpgModExpanded.Instance.customOpenST.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.OpenST.Draw(Main.spriteBatch);
                         }
                         return true;
                     }, InterfaceScaleType.None)
@@ -397,9 +404,8 @@ namespace AnotherRpgMod.Utils
                         if (ItemTreeUi.visible)
                         {
                             //Update Item Tree
-                            AnotherRpgMod.Instance.customItemTree.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.ItemTreeUI.Draw(Main.spriteBatch);
-
+                            AnotherRpgModExpanded.Instance.customItemTree.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.ItemTreeUI.Draw(Main.spriteBatch);
                         }
                         return true;
                     }, InterfaceScaleType.None)
@@ -412,18 +418,16 @@ namespace AnotherRpgMod.Utils
                         if (SkillTreeUi.visible)
                         {
                             //Update Skill Tree
-                            AnotherRpgMod.Instance.customSkillTree.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.skillTreeUI.Draw(Main.spriteBatch);
-
+                            AnotherRpgModExpanded.Instance.customSkillTree.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.skillTreeUI.Draw(Main.spriteBatch);
                         }
                         return true;
                     }, InterfaceScaleType.None)
                 );
             }
 
-
-
             int id = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
+
             if (id != -1)
             {
                 layers.Insert(id, new LegacyGameInterfaceLayer(
@@ -433,18 +437,16 @@ namespace AnotherRpgMod.Utils
                         if (HealthBar.visible)
                         {
                             //Update CustomBars
-                            AnotherRpgMod.Instance.customOpenST.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.customOpenstats.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.customResources.Update(Main._drawInterfaceGameTime);
-                            AnotherRpgMod.Instance.healthBar.Draw(Main.spriteBatch);
+                            AnotherRpgModExpanded.Instance.customOpenST.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.customOpenstats.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.customResources.Update(Main._drawInterfaceGameTime);
+                            AnotherRpgModExpanded.Instance.healthBar.Draw(Main.spriteBatch);
                         }
                         return true;
                     }, InterfaceScaleType.None)
                 );
             }
-
         }
-
     }
 
     

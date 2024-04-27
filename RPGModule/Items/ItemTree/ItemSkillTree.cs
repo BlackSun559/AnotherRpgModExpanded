@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
 
     class Branch
@@ -19,12 +19,14 @@ namespace AnotherRpgMod.Items
         {
             m_nodeID.Add(ID);
         }
+
         public int GetLast()
         {
             if (IsEmpty())
                 return 0;
             return m_nodeID.Last();
         }
+
         public int GetLastandBefore()
         {
             if (m_nodeID.Count>1)
@@ -32,12 +34,14 @@ namespace AnotherRpgMod.Items
 
             return GetLast();
         }
+
         public bool IsEmpty()
         {
             if (m_nodeID.Count == 0)
             {
                 return true;
             }
+
             return false;
         }
 
@@ -64,8 +68,6 @@ namespace AnotherRpgMod.Items
                     return 300;
                 default:
                     return 0;
-
-
             }
         }
 
@@ -87,8 +89,6 @@ namespace AnotherRpgMod.Items
                     return  6;
                 default:
                     return 0;
-
-
             }
         }
 
@@ -100,25 +100,30 @@ namespace AnotherRpgMod.Items
             {
                 if (noEmpty && (id >= BList.Count || id < BList.Count && BList[id].IsEmpty()))
                     idToDel.Add(id);
+
                 if (id > limit)
                 {
                     idToDel.Add(id);
                 }
             }
+
             foreach(int id in idToDel)
             {
                 branches.Remove(id);
             }
+
             if (branches.Count == 0)
             {
                 branches = GetNearbyBranchesID(index);
 
                 return GetRandomNearbyBranches(branches[Mathf.RandomInt(0, branches.Count - 1)],limit, BList, noEmpty);
             }
+
             if (branches.Count == 1)
             {
                 return branches[0];
             }
+
             return branches[Mathf.RandomInt(0, 1)];
         }
 
@@ -211,6 +216,7 @@ namespace AnotherRpgMod.Items
                 {
                     
                     save += skilltree.GetNode(i).GetNeighboor[j];
+
                     if (j < skilltree.GetNode(i).GetNeighboor.Count-1)
                         save += ':';
                 }
@@ -218,7 +224,6 @@ namespace AnotherRpgMod.Items
                 save += "|" + skilltree.GetNode(i).GetState + "|"+ skilltree.GetNode(i).GetLevel+ "|" + skilltree.GetNode(i).GetMaxLevel + "|" + skilltree.GetNode(i).GetRequiredPoints + "|" + skilltree.GetNode(i).GetPos.X + ":"+ skilltree.GetNode(i).GetPos.Y+"|";
                 
                 save += skilltree.GetNode(i).GetSaveValue();
-
             }
             
             return save;
@@ -243,11 +248,12 @@ namespace AnotherRpgMod.Items
             {
                 bufferNode = null;
                 nodeDetails = nodeSave.Split('|');
+
                 if (nodeDetails.Length != 8)
                 {
-                    AnotherRpgMod.Instance.Logger.Error(source.ItemName);
-                    AnotherRpgMod.Instance.Logger.Error("Item tree corrupted, reseting tree");
-                    AnotherRpgMod.Instance.Logger.Error(nodeSave);
+                    AnotherRpgModExpanded.Instance.Logger.Error(source.ItemName);
+                    AnotherRpgModExpanded.Instance.Logger.Error("Item tree corrupted, reseting tree");
+                    AnotherRpgModExpanded.Instance.Logger.Error(nodeSave);
                     tree = new ItemSkillTree();
                     tree.MaxEvolutionPoints = evoPoint;
                     tree.MaxAscendPoints = AscPoint;
@@ -295,11 +301,8 @@ namespace AnotherRpgMod.Items
         protected List<ItemNode> m_nodeList;
         protected ItemUpdate m_ItemSource;
 
-
         private const int MAXBRANCH = 7;
         private const int MINBRANCH = 3;
-
-        
 
         public ItemSkillTree()
         {
@@ -318,7 +321,6 @@ namespace AnotherRpgMod.Items
 
         public void ApplyFlatPassives(Item item)
         {
-
             foreach(ItemNode n in m_nodeList)
             {
                 if (n.GetLevel > 0 && n.GetNodeCategory == NodeCategory.Flat)
@@ -326,26 +328,21 @@ namespace AnotherRpgMod.Items
                     n.Passive(item);
                 }
             }
-
         }
 
         public void ApplyMultiplierPassives(Item item)
         {
-
             foreach (ItemNode n in m_nodeList)
             {
-                
                 if (n.GetLevel>0 && n.GetNodeCategory == NodeCategory.Multiplier)
                 {
                     n.Passive(item);
                 }
             }
-
         }
 
         public void ApplyOtherPassives(Item item)
         {
-
             foreach (ItemNode n in m_nodeList)
             {
                 if (n.GetLevel > 0 && n.GetNodeCategory == NodeCategory.Other)
@@ -353,7 +350,6 @@ namespace AnotherRpgMod.Items
                     n.Passive(item);
                 }
             }
-
         }
 
         public void ApplyPlayerPassive(Item item, Player Player)
@@ -371,12 +367,9 @@ namespace AnotherRpgMod.Items
                 if (n is ItemNodeAdvanced m)
                     m.OnShoot(source, item, Player, ref position, ref velocity, ref type, ref damage, ref knockBack);
             }
-
         }
 
         #endregion
-
-
 
         #region GeneralIntractionFunction
         public void AddNode(ItemNode node)
@@ -390,7 +383,6 @@ namespace AnotherRpgMod.Items
             {
                 return m_nodeList.Count;
             }
-
         }
 
         public void Reset(bool Complete)
@@ -398,6 +390,7 @@ namespace AnotherRpgMod.Items
 
             m_evolutionPoints = m_maxEvolutionPoints;
             m_ascendPoints = m_maxAscendPoints;
+
             if (Complete)
             {
                 m_nodeList = new List<ItemNode>();
@@ -500,6 +493,7 @@ namespace AnotherRpgMod.Items
             foreach(Branch b in Branches)
             {
                 id++;
+
                 if ((int)(m_nodeList[b.GetLast()].GetPos.Y / 100) == ypos)
                     higgest = id;
             }
@@ -525,6 +519,7 @@ namespace AnotherRpgMod.Items
             bool emptyLevel = false;
 
             int brancheID = GetLowestBranch(Branches, yPos);
+
             if (brancheID == -1)
             {
                 brancheID++;
@@ -534,7 +529,7 @@ namespace AnotherRpgMod.Items
             int connectionBranch;
             Vector2 pos;
 
-            AnotherRpgMod.Instance.Logger.Info(m_nodeList.Count);
+            AnotherRpgModExpanded.Instance.Logger.Info(m_nodeList.Count);
             for (int i = 0; i < Node; i++)
             {
                 //20% chance to add a new branches
@@ -550,6 +545,7 @@ namespace AnotherRpgMod.Items
                     brancheID = 0;
                     yPos++;
                 }
+
                 if (Mathf.RandomInt(0, 5) < 4 || (brancheID == Branches.Count - 1 && emptyLevel))
                 {
                     emptyLevel = false;
@@ -590,7 +586,6 @@ namespace AnotherRpgMod.Items
                 brancheID += 1;
             }
             UpdateConnection();
-
         }
 
         private void GenerateTree()
@@ -622,7 +617,6 @@ namespace AnotherRpgMod.Items
                     Branches.Add(new Branch());
                 }
 
-
                 //Used to init the first node
                 
                 if (i == 0)
@@ -641,6 +635,7 @@ namespace AnotherRpgMod.Items
                         brancheID = 0;
                         yPos++;
                     }
+
                     if (Mathf.RandomInt(0, 5) < 4 ||(brancheID== Branches.Count-1 && emptyLevel))
                     {
                         emptyLevel = false;
@@ -676,11 +671,9 @@ namespace AnotherRpgMod.Items
                             if (!m_nodeList[Branches[brancheID].GetLast()].GetNeighboor.Contains(id))
                                 m_nodeList[Branches[brancheID].GetLast()].AddNeightboor(id);
                         }
-
                     }
                     //Go through all the node one by one
                     brancheID += 1;
-
                 }
             }
             BuildConnection();  
@@ -706,7 +699,6 @@ namespace AnotherRpgMod.Items
                 }
                 m_nodeList.Add(Node);
             }
-
 
             return m_nodeList.Count-1;
         }

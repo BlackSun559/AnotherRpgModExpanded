@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     class NodeParent
     {
@@ -97,7 +97,6 @@ namespace AnotherRpgMod.RPGModule
             }
         }
 
-
         public NodeParent(Node node, Vector2 pos)
         {
             neighboorNode = new List<NodeParent>();
@@ -119,7 +118,6 @@ namespace AnotherRpgMod.RPGModule
         {
             actualNode.ToggleEnable();
         }
-
 
         public void Unlock()
         {

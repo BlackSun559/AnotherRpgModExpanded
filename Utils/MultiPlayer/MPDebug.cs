@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using System.IO;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 using Terraria.ID;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
     class MPDebug
     {
@@ -14,7 +14,6 @@ namespace AnotherRpgMod.Utils
         {
             Log(mod, message.ToString());
         }
-
 
         static public void Log(Mod mod, string message)
         {

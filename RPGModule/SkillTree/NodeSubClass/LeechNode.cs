@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     class LeechNode : Node
     {

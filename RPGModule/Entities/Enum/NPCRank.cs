@@ -1,5 +1,5 @@
 ﻿
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
     public enum NPCRank
     {

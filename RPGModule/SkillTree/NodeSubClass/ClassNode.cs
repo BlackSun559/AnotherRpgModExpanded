@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 using Terraria.Localization;
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     class ClassNode : Node
     {
@@ -22,7 +22,7 @@ namespace AnotherRpgMod.RPGModule
         {
             get
             {
-                return Language.GetTextValue("Mods.AnotherRpgMod.ClassName." + classType.ToString());
+                return Language.GetTextValue("Mods.AnotherRpgModExpanded.ClassName." + classType.ToString());
             }
         }
 
@@ -60,19 +60,21 @@ namespace AnotherRpgMod.RPGModule
         {
             NodeParent _node;
             ClassType Active = ClassType.Hobo;
+
             if (Main.player[Main.myPlayer].GetModPlayer<RPGPlayer>().GetskillTree.ActiveClass != null)
                 Active = Main.player[Main.myPlayer].GetModPlayer<RPGPlayer>().GetskillTree.ActiveClass.GetClassType;
             for (int i = 0; i < Main.player[Main.myPlayer].GetModPlayer<RPGPlayer>().GetskillTree.nodeList.nodeList.Count; i++)
             {
                 _node = Main.player[Main.myPlayer].GetModPlayer<RPGPlayer>().GetskillTree.nodeList.nodeList[i];
+
                 if (_node.GetNodeType == NodeType.Class)
                 {
                     ClassNode classNode = (ClassNode)_node.GetNode;
+
                     if (Active != classNode.GetClassType && classNode.GetActivate)
                     {
                         classNode.Disable();
                     }
-
                 }
             }
         }
@@ -92,10 +94,9 @@ namespace AnotherRpgMod.RPGModule
             
 
             UpdateClass();
+
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 player.SendClientChanges(player);
         }
-
-
     }
 }

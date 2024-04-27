@@ -9,7 +9,7 @@ using Terraria;
 using System.IO;
 using Terraria.ModLoader;
 
-namespace AnotherRpgMod
+namespace AnotherRpgModExpanded
 {
     
     /*DamageType _damageType
@@ -308,7 +308,6 @@ namespace AnotherRpgMod
         }
     }
 
-
     class JsonSkillTree
     {
         static JsonNodeList jsonSkillList;
@@ -330,7 +329,7 @@ namespace AnotherRpgMod
             }
             catch (SystemException e)
             {
-                AnotherRpgMod.Instance.Logger.Error(e.ToString());
+                AnotherRpgModExpanded.Instance.Logger.Error(e.ToString());
             }
         }
 
@@ -351,11 +350,10 @@ namespace AnotherRpgMod
                     }
                 }
                 Save();
-
             }
             catch (SystemException e)
             {
-                AnotherRpgMod.Instance.Logger.Error(e.ToString());
+                AnotherRpgModExpanded.Instance.Logger.Error(e.ToString());
             }
         }
 
@@ -372,9 +370,8 @@ namespace AnotherRpgMod
             }
             catch (SystemException e)
             {
-                AnotherRpgMod.Instance.Logger.Error(e.ToString());
+                AnotherRpgModExpanded.Instance.Logger.Error(e.ToString());
             }
         }
-
     }
 }

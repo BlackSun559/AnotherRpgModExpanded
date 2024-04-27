@@ -8,22 +8,23 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-using AnotherRpgMod.RPGModule;
+using AnotherRpgModExpanded.RPGModule;
 using Terraria;
 using System.Collections.Generic;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class ModifierManager
     {
-
         public static WeaponType GetWeaponType (Item item)
         {
             if (item.DamageType == DamageClass.Summon)
                 return WeaponType.Summon;
+
             if (item.DamageType == DamageClass.Magic)
                 return WeaponType.Magic;
+
             if (item.DamageType == DamageClass.Ranged)
             {
                 switch (item.useAmmo)
@@ -41,10 +42,12 @@ namespace AnotherRpgMod.Items
             {
                 return WeaponType.Throw;
             }
+
             if (item.DamageType == DamageClass.Melee)
             {
                 if (item.useStyle == ItemUseStyleID.Shoot && item.noMelee)
                     return WeaponType.Spear;
+
                 if (item.noMelee)
                     return WeaponType.OtherMelee;
                 switch (item.useStyle)
@@ -57,6 +60,7 @@ namespace AnotherRpgMod.Items
                         return WeaponType.OtherMelee;
                 }
             }
+
             return WeaponType.Other;
         }
 
@@ -85,7 +89,6 @@ namespace AnotherRpgMod.Items
             {Modifier.BloodSeeker,0.25f },
             {Modifier.Cleave,0.5f },
             {Modifier.Random,0.01f } 
-
         };
 
 
@@ -310,8 +313,6 @@ namespace AnotherRpgMod.Items
                     new RarityWeight(Rarity.Mythical,0.001f)
                 })
             }
-
-
         };
 
         
@@ -331,7 +332,6 @@ namespace AnotherRpgMod.Items
         }
 
 
-        
         public static Color GetRarityColor (Rarity rarity)
         {
             Color color = new Color(1f, 1f, 1f);
@@ -365,7 +365,6 @@ namespace AnotherRpgMod.Items
                 case (Rarity.Mythical):
                     color = new Color(255, 47, 20);
                     break;
-
             }
             return color;
         }
@@ -373,20 +372,24 @@ namespace AnotherRpgMod.Items
         public static Rarity GetRarity(Item item, bool bAscendWorldDrop, int AscendWorldDropLevel)
         {
             int rarity = item.rare;
-            if (rarity >= -1) { 
+
+            if (rarity >= -1) {
 
                 if (WorldManager.ascended)
                 {
                     rarity+= 2;
                     rarity += Mathf.CeilInt(Mathf.Logx(1 + AscendWorldDropLevel * 0.1f, 10));
+
                     if (Main.hardMode)
                         rarity++;
                 }
+
                 if (NPC.downedMoonlord)
                 {
                     rarity++;
                 }
             }
+
             if (rarityConversion.ContainsKey(rarity))
                 return rarityConversion[rarity].DrawRarity();
             else return rarityConversion[17].DrawRarity();
@@ -430,6 +433,7 @@ namespace AnotherRpgMod.Items
                     value = Mathf.Random(9, 20);
                     break;
             }
+
             if (accesories)
                 value *= Mathf.Random(0.4f, 0.7f);
             if (bAscendWorldDrop)
@@ -440,7 +444,6 @@ namespace AnotherRpgMod.Items
                 
             value = (float)Math.Round(value, 2);
             return new ItemStat(stat, value);
-
         }
 
         public static ItemStats GetStatsArmor(Rarity rarity, bool bAscendWorldDrop, int AscendWorldDropLevel)
@@ -601,10 +604,12 @@ namespace AnotherRpgMod.Items
                     count = 3.5f;
                     break;
             }
+
             if (bAscendWorldDrop)
             {
                 count *= (1f + 0.25f * Mathf.Logx( 1 + AscendWorldDropLevel*0.1f,10));
             }
+
             if (item.accessory)
             {
                 count -= 1;
@@ -636,10 +641,8 @@ namespace AnotherRpgMod.Items
                 if (rn < checkingWeight + ModifierWeight[pool[i]])
                     return pool[i];
                 checkingWeight += ModifierWeight[pool[i]];
-
             }
             return pool[pool.Count - 1];
-
         }
 
         static public Modifier GetModifier(Item item, Rarity rarity, bool bAscendWorldDrop, int AscendWorldDropLevel)
@@ -665,7 +668,6 @@ namespace AnotherRpgMod.Items
                     ModifierListToAdd.Add(grandlist[i]);
                 }
 
-
             int slot = GetModCount(rarity,item, bAscendWorldDrop, AscendWorldDropLevel);
             for (int i = 0; (i < slot) ; i++)
             {
@@ -677,7 +679,6 @@ namespace AnotherRpgMod.Items
             
 
             return RModifier;
-
         }
 
         static public Modifier ModifierList(int type)
@@ -698,6 +699,7 @@ namespace AnotherRpgMod.Items
                     Modifier.SelfLearning |
                     Modifier.BloodSeeker;
             }
+
             if (type == 1) // accesories
             {
                 return Modifier.Berserker |
@@ -717,6 +719,7 @@ namespace AnotherRpgMod.Items
                     Modifier.VampiricAura |
                     Modifier.BloodSeeker;
             }
+
             if (type == 2) // weapon
             {
                 return Modifier.Berserker |
@@ -739,6 +742,7 @@ namespace AnotherRpgMod.Items
                     Modifier.Cleave |
                     Modifier.Random;
             }
+
             if (type == 3) //melee and summon weapon
             {
                 return ModifierList(2) - (int)Modifier.Random;
@@ -767,7 +771,6 @@ namespace AnotherRpgMod.Items
                 case (Modifier.Cleave):
                     value = Mathf.Clamp(5 + (itemU.Level * 0.5f) + itemU.Ascention * 2.5f + Mathf.Log2((float)itemU.rarity) * 3f, 0f, 80f);
                     break;
-
             }
             return value;
         }

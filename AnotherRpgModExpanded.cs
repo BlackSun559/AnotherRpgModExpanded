@@ -7,9 +7,9 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria.UI;
-using AnotherRpgMod.UI;
+using AnotherRpgModExpanded.UI;
 using MonoMod.Cil;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria.GameInput;
@@ -17,10 +17,10 @@ using Terraria.Localization;
 using Terraria.Audio;
 
 
-using AnotherRpgMod.Items;
+using AnotherRpgModExpanded.Items;
 using Terraria.GameContent;
 
-namespace AnotherRpgMod
+namespace AnotherRpgModExpanded
 {
     public enum DamageType : byte
     {
@@ -32,10 +32,11 @@ namespace AnotherRpgMod
         Symphonic, //thorium
         Radiant, //thorium
         KI,
-
+        Hunter
     }
 
-    public enum Message : byte {
+    public enum Message : byte
+    {
         AddXP,
         SyncLevel,
         SyncPlayerHealth,
@@ -47,18 +48,17 @@ namespace AnotherRpgMod
         syncWorld,
     };
 
-    
-
     enum SupportedMod
     {
         Thorium,
         Calamity,
-        DBZMOD
+        DBZMOD,
+        Metroid
     }
 
-    class AnotherRpgMod : Mod
-	{
-        public static AnotherRpgMod Instance;
+    class AnotherRpgModExpanded : Mod
+    {
+        public static AnotherRpgModExpanded Instance;
         public UserInterface customResources;
         public HealthBar healthBar;
 
@@ -68,13 +68,12 @@ namespace AnotherRpgMod
         public UserInterface customOpenstats;
         public UserInterface customOpenST;
         public UserInterface customItemTree;
-
         public UserInterface customSkillTree;
 
         public OpenStatsButton openStatMenu;
         public OpenSTButton OpenST;
         public Stats statMenu;
-        
+
         public SkillTreeUi skillTreeUI;
         public ItemTreeUi ItemTreeUI;
 
@@ -89,18 +88,16 @@ namespace AnotherRpgMod
         public static ModKeybind ChestItemTreeHotKey;
         public static ModKeybind LegsItemTreeHotKey;
 
-
         internal static GamePlayConfig gpConfig;
         internal static NPCConfig NPCConfig;
         internal static VisualConfig visualConfig;
-
 
         public static ItemUpdate source;
         public static ItemUpdate Transfer;
         public static float XPTvalueA;
         public static float XPTvalueB;
 
-        public static Vector2 zoomValue = new Vector2(1,1);
+        public static Vector2 zoomValue = new Vector2(1, 1);
 
         public float lastUpdateScreenScale = Main.screenHeight;
 
@@ -109,24 +106,21 @@ namespace AnotherRpgMod
             {SupportedMod.Thorium,false },
             {SupportedMod.Calamity,false },
             {SupportedMod.DBZMOD,false },
+            {SupportedMod.Metroid,false }
             //{SupportedMod.Spirit,false }
-
         };
 
-    
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-
             MPPacketHandler.HandlePacket(reader, whoAmI);
         }
-        
-
 
         private void Player_Update(ILContext il)
         {
             try
             {
                 ILCursor cursor = new ILCursor(il);
+
                 if (!cursor.TryGotoNext(MoveType.Before,
                                                     i => i.MatchLdfld("Terraria.Player", "statManaMax2"),
                                                     i => i.MatchLdcI4(400)))
@@ -143,7 +137,6 @@ namespace AnotherRpgMod
             }
         }
 
-
         public override void Unload()
         {
             base.Unload();
@@ -159,12 +152,12 @@ namespace AnotherRpgMod
             HelmetItemTreeHotKey = null;
             ChestItemTreeHotKey = null;
             LegsItemTreeHotKey = null;
+
             if (!Main.dedServ)
             {
                 ItemTreeUi.Instance = null;
                 SkillTreeUi.Instance = null;
                 Stats.Instance = null;
-
 
                 visualConfig = null;
                 NPCConfig = null;
@@ -176,8 +169,6 @@ namespace AnotherRpgMod
 
                 source = null;
                 Transfer = null;
-
-
 
                 customNPCInfo = null;
                 NPCInfo = null;
@@ -195,18 +186,12 @@ namespace AnotherRpgMod
                 skillTreeUI = null;
                 customItemTree = null;
                 ItemTreeUI = null;
-
-                
             }
-
-
             //Instance.Logger.Info("Another Rpg Mod " + Version + " Correctly Unloaded");
 
             Instance = null;
-
-
-            
         }
+
         public override void Load()
         {
             Terraria.IL_Player.Update += Player_Update;
@@ -215,24 +200,25 @@ namespace AnotherRpgMod
             Instance.Logger.Info("Another Rpg Mod " + Version + " Correctly loaded");
             JsonSkillTree.Init();
             JsonCharacterClass.Init();
-            //LoadedMods[SupportedMod.Thorium] = ModLoader.GetMod("ThoriumMod") != null;
-            //LoadedMods[SupportedMod.Calamity] = ModLoader.GetMod("CalamityMod") != null;
-            //LoadedMods[SupportedMod.DBZMOD] = ModLoader.GetMod("DBZMOD") != null;
-            
-            StatsHotKey = KeybindLoader.RegisterKeybind(this,"Open Stats Menu", "C");
+            LoadedMods[SupportedMod.Thorium] = ModLoader.HasMod("ThoriumMod");
+            LoadedMods[SupportedMod.Calamity] = ModLoader.HasMod("CalamityMod");
+            LoadedMods[SupportedMod.DBZMOD] = ModLoader.HasMod("DBZMOD");
+            LoadedMods[SupportedMod.Metroid] = ModLoader.HasMod("MetroidMod");
+
+            StatsHotKey = KeybindLoader.RegisterKeybind(this, "Open Stats Menu", "C");
             SkillTreeHotKey = KeybindLoader.RegisterKeybind(this, "Open SkillTree", "X");
             ItemTreeHotKey = KeybindLoader.RegisterKeybind(this, "Open Item Tree", "V");
             HelmetItemTreeHotKey = KeybindLoader.RegisterKeybind(this, "Open Helmet Item Tree", "NumPad1");
             ChestItemTreeHotKey = KeybindLoader.RegisterKeybind(this, "Open Chest Item Tree", "NumPad2");
             LegsItemTreeHotKey = KeybindLoader.RegisterKeybind(this, "Open Legs Item Tree", "NumPad3");
+
             if (!Main.dedServ)
             {
-                
                 customNPCInfo = new UserInterface();
                 NPCInfo = new ReworkMouseOver();
                 ReworkMouseOver.visible = true;
                 customNPCInfo.SetState(NPCInfo);
-                
+
                 customNPCName = new UserInterface();
                 NPCName = new NPCNameUI();
                 NPCNameUI.visible = true;
@@ -275,26 +261,19 @@ namespace AnotherRpgMod
                 customstats.SetState(statMenu);
                 */
             }
-            
         }
-
-        
-        
-
-        
-
 
         private void DrawInterface_Resources_ClearBuffs()
         {
             Main.buffString = "";
             Main.bannerMouseOver = false;
+
             if (!Main.recBigList)
             {
                 Main.recStart = 0;
             }
         }
-        
-        
+
         public void DrawInterface_Resources_Buffs()
         {
             Main.recBigList = false;
@@ -311,6 +290,7 @@ namespace AnotherRpgMod
                     int num2 = Main.player[Main.myPlayer].buffType[buffSlot];
                     int x = 32 + buffSlot * 38;
                     int y = 76;
+
                     if (buffSlot >= num1)
                     {
                         x = 32 + Math.Abs(buffSlot % 11) * 38;
@@ -319,30 +299,36 @@ namespace AnotherRpgMod
                     BuffID = Main.DrawBuffIcon(BuffID, buffSlot, x, y);
                 }
             }
+
             if (BuffID >= 0)
             {
                 int num5 = Main.player[Main.myPlayer].buffType[BuffID];
+
                 if (num5 > 0)
                 {
                     string buffName = Lang.GetBuffName(num5);
                     string buffTooltip = Main.GetBuffTooltip(Main.player[Main.myPlayer], num5);
+
                     if (num5 == 147)
                     {
                         Main.bannerMouseOver = true;
                     }
                     int rarity = 0;
+
                     if (Main.meleeBuff[num5])
                     {
                         rarity = -10;
                     }
-                    Main.instance.MouseText(buffName, buffTooltip, rarity,0);
+                    Main.instance.MouseText(buffName, buffTooltip, rarity, 0);
                 }
             }
         }
+
         public static int DrawBuffIcon(int drawBuffText, int buffSlotOnPlayer, int x, int y)
         {
             int num1;
             int buffId = Main.player[Main.myPlayer].buffType[buffSlotOnPlayer];
+
             if (buffId != 0)
             {
                 Color color = new Color(Main.buffAlpha[buffSlotOnPlayer], Main.buffAlpha[buffSlotOnPlayer], Main.buffAlpha[buffSlotOnPlayer], Main.buffAlpha[buffSlotOnPlayer]);
@@ -352,6 +338,7 @@ namespace AnotherRpgMod
                 Rectangle? nullable = new Rectangle?(new Rectangle(0, 0, TextureAssets.Buff[buffId].Width(), TextureAssets.Buff[buffId].Height()));
                 Vector2 origin = new Vector2();
                 spriteBatch.Draw(value, position, nullable, color, 0f, origin, 1f, 0, 0f);
+
                 if (Main.TryGetBuffTime(buffSlotOnPlayer, out var buffTimeValue) && buffTimeValue > 2)
                 {
                     string str = Lang.LocalizedDuration(new TimeSpan(0, 0, buffTimeValue / 60), true, false);
@@ -361,6 +348,7 @@ namespace AnotherRpgMod
                     origin = new Vector2();
                     DynamicSpriteFontExtensionMethods.DrawString(buffTimerBatch, dynamicSpriteFont, str, timerPosition, color, 0f, origin, 0.8f, 0, 0f);
                 }
+
                 if ((Main.mouseX >= x + TextureAssets.Buff[buffId].Width() || Main.mouseY >= y + TextureAssets.Buff[buffId].Height() || Main.mouseX <= x || Main.mouseY <= y))
                 {
                     Main.buffAlpha[buffSlotOnPlayer] -= 0.05f;
@@ -370,6 +358,7 @@ namespace AnotherRpgMod
                     drawBuffText = buffSlotOnPlayer;
                     Main.buffAlpha[buffSlotOnPlayer] += 0.1f;
                     bool flag = (Main.mouseRight && Main.mouseRightRelease);
+
                     if (!PlayerInput.UsingGamepad)
                     {
                         Main.player[Main.myPlayer].mouseInterface = true;
@@ -377,16 +366,19 @@ namespace AnotherRpgMod
                     else
                     {
                         flag = (Main.mouseLeft && Main.mouseLeftRelease && Main.playerInventory);
+
                         if (Main.playerInventory)
                         {
                             Main.player[Main.myPlayer].mouseInterface = true;
                         }
                     }
+
                     if (flag)
                     {
                         Main.TryRemovingBuff(buffSlotOnPlayer, buffId);
                     }
                 }
+
                 if (Main.buffAlpha[buffSlotOnPlayer] > 1f)
                 {
                     Main.buffAlpha[buffSlotOnPlayer] = 1f;
@@ -395,16 +387,19 @@ namespace AnotherRpgMod
                 {
                     Main.buffAlpha[buffSlotOnPlayer] = 0.4f;
                 }
+
                 if ((PlayerInput.UsingGamepad && !Main.playerInventory))
                 {
                     drawBuffText = -1;
                 }
+
                 num1 = drawBuffText;
             }
             else
             {
                 num1 = drawBuffText;
             }
+
             return num1;
         }
     }

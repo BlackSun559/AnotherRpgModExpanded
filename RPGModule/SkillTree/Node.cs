@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     class Node
     {
@@ -28,7 +28,9 @@ namespace AnotherRpgMod.RPGModule
                 return Type;
             }
         }
+
         public NodeParent GetParent { get { return Parent; } }
+
         public void SetParrent(NodeParent Parent)
         {
             this.Parent = Parent;
@@ -118,15 +120,16 @@ namespace AnotherRpgMod.RPGModule
             levelRequirement = _levelrequirement;
             unlocked = _unlocked;
             Ascended = ascended;
-
         }
 
         public Reason CanUpgrade(int points)
         {
             if (points < pointsPerLevel)
                 return Reason.NoEnoughtPoints;
+
             if (level >= maxLevel)
                 return Reason.MaxLevelReach;
+
             if (!unlocked)
                 return Reason.NotUnlocked;
             return Reason.CanUpgrade;
@@ -147,6 +150,5 @@ namespace AnotherRpgMod.RPGModule
         {
             unlocked = true;
         }
-
     }
 }

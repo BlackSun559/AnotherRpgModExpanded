@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     class NodeList //prefer to make this class to stock in different set each type of node to speedup
                    //looking for the entire tree would take lot of time
@@ -58,7 +58,6 @@ namespace AnotherRpgMod.RPGModule
             classes = new List<ClassNode>();
             perks = new List<PerkNode>();
             immunities = new List<ImmunityNode>();
-
         }
 
         public List<StatNode> GetStatsList
@@ -219,7 +218,6 @@ namespace AnotherRpgMod.RPGModule
             nodeList.Add(nodeParent);
             LBNodes.Add(LBnode);
         }
-
     }
 
 }

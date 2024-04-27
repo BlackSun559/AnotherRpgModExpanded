@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Terraria;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class MagicCostReduction : ItemNode
     {

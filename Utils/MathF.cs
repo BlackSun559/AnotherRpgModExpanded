@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 //Just Simple utils tool
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
     public static class Mathf // float math
     {
@@ -59,6 +59,7 @@ namespace AnotherRpgMod.Utils
                 return a;
             return Terraria.Main.rand.Next(a, b);
         }
+
         public static float Random(float a, float b)
         {
             if (Terraria.Main.rand == null)
@@ -70,18 +71,22 @@ namespace AnotherRpgMod.Utils
         {
             return (float)Math.Pow(number, power);
         }
+
         public static float Pow(float number, float power)
         {
             return (float)Math.Pow(number, power);
         }
+
         public static float Pow(int number, int power)
         {
             return (float)Math.Pow(number, power);
         }
+
         public static float Pow(float number, int power)
         {
             return (float)Math.Pow(number, power);
         }
+
         public static float Pow(int number, float power)
         {
             return (float)Math.Pow(number, power);
@@ -91,20 +96,22 @@ namespace AnotherRpgMod.Utils
         {
             return (float)Math.Log(number);
         }
+
         public static float Log(float number)
         {
             return (float)Math.Log((double)number);
         }
+
         public static float Log(int number)
         {
             return (float)Math.Log((double)number);
         }
 
-
         public static int RoundInt(double number)
         {
             return (int)Math.Round(number);
         }
+
         public static int RoundInt(float number)
         {
             return (int)Math.Round((double)number);
@@ -152,7 +159,6 @@ namespace AnotherRpgMod.Utils
         {
             return (int)Math.Ceiling((double)number);
         }
-
 
         public static float Floor(double number)
         {

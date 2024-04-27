@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using System.IO;
 using Terraria.ModLoader;
-using AnotherRpgMod.RPGModule;
-namespace AnotherRpgMod
+using AnotherRpgModExpanded.RPGModule;
+namespace AnotherRpgModExpanded
 {
 
     /*DamageType _damageType
@@ -30,12 +30,13 @@ namespace AnotherRpgMod
             for (int i = 0;i< jsonList.Length; i++)
             {
                 ClassName = (ClassType)Enum.Parse(typeof(ClassType), jsonList[i].Name);
+
                 if (ClassName == classType)
                 {
                     return jsonList[i];
                 }
             }
-            AnotherRpgMod.Instance.Logger.Warn("Class "+ classType.ToString() +"is missing from class List");
+            AnotherRpgModExpanded.Instance.Logger.Warn("Class "+ classType.ToString() +"is missing from class List");
             return jsonList[0];
         }
 
@@ -441,7 +442,6 @@ namespace AnotherRpgMod
         { }
     }
 
-
     class JsonCharacterClass
     {
         static JsonChrClassList jsonCCList;
@@ -463,7 +463,7 @@ namespace AnotherRpgMod
             }
             catch (SystemException e)
             {
-                AnotherRpgMod.Instance.Logger.Error(e.ToString());
+                AnotherRpgModExpanded.Instance.Logger.Error(e.ToString());
             }
         }
 
@@ -490,11 +490,10 @@ namespace AnotherRpgMod
                 }
                 
                 Save();
-
             }
             catch (SystemException e)
             {
-                AnotherRpgMod.Instance.Logger.Error(e.ToString());
+                AnotherRpgModExpanded.Instance.Logger.Error(e.ToString());
             }
         }
 
@@ -507,9 +506,8 @@ namespace AnotherRpgMod
             }
             catch (SystemException e)
             {
-                AnotherRpgMod.Instance.Logger.Error(e.ToString());
+                AnotherRpgModExpanded.Instance.Logger.Error(e.ToString());
             }
         }
-
     }
 }

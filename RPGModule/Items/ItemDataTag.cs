@@ -8,11 +8,11 @@ using System;
 using System.Collections.Generic;
 using Terraria.ID;
 using Terraria.Utilities;
-using AnotherRpgMod.RPGModule.Entities;
-using AnotherRpgMod.Utils;
-using AnotherRpgMod.RPGModule;
+using AnotherRpgModExpanded.RPGModule.Entities;
+using AnotherRpgModExpanded.Utils;
+using AnotherRpgModExpanded.RPGModule;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     public class ItemDataTag
     {

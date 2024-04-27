@@ -1,5 +1,5 @@
 ﻿
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     public struct RollInfo
     {

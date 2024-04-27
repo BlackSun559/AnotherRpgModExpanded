@@ -1,5 +1,5 @@
 Mods: {
-	AnotherRpgMod: {
+	AnotherRpgModExpanded: {
 		Configs: {
 			GamePlayConfig: {
 				ItemModifier: {
@@ -67,8 +67,7 @@ Mods: {
 				UseCustomSkillTree: {
 					Label: Use Custom SkillTree
 					Tooltip: '''When true, it'll use the JsonSkillTree in "Documents\My Games\Terraria\ModLoader\Mod Configs\AnRPG" '''
-				}
-			}
+				}			}
 
 			NPCConfig: {
 				DisplayName: AnRPG Enemies config
@@ -161,8 +160,7 @@ Mods: {
 				NPCGrowthHardModePercent: {
 					Label: NPC growth Hard Mode Percent
 					Tooltip: Multiply the world level by this value (applied before "NPC growth OnHardMode")
-				}
-			}
+				}			}
 
 			VisualConfig: {
 				DisplayName: AnRPG display config
@@ -195,8 +193,7 @@ Mods: {
 				HideVanillaHB: {
 					Label: Hide Old Bar
 					Tooltip: Hide The vanilla game HealthBar
-				}
-			}
+				}			}
 		}
 
 		Keybinds: {
@@ -630,7 +627,6 @@ Mods: {
 					Allow Exp Gain after level 1000
 
 					'''
-			}
-		}
+			}		}
 	}
 }

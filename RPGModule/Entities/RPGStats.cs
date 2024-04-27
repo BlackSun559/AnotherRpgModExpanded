@@ -1,11 +1,10 @@
 ﻿
 using System.Collections.Generic;
 
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
     class RPGStats
     {
-
         readonly int Default = 4;
         private Dictionary<Stat, StatData> ActualStat;
 
@@ -27,6 +26,7 @@ namespace AnotherRpgMod.RPGModule.Entities
         {
             return ActualStat[a].AddLevel;
         }
+
         public int GetStat(Stat a)
         {
             return ActualStat[a].GetLevel;
@@ -41,10 +41,12 @@ namespace AnotherRpgMod.RPGModule.Entities
         {
             ActualStat[statname].AddXp(value);
         }
+
         public int GetStatXP(Stat statname)
         {
             return ActualStat[statname].GetXP;
         }
+
         public int GetStatXPMax(Stat statname)
         {
             return ActualStat[statname].XpForLevel();

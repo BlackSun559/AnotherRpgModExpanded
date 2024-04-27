@@ -1,5 +1,5 @@
 ﻿using System;
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     [Flags]
     public enum WeaponType : int
@@ -19,6 +19,5 @@ namespace AnotherRpgMod.Items
         Magic = 0x100,
         Summon = 0x200,
         Other = 0x400,
-
     }
 }

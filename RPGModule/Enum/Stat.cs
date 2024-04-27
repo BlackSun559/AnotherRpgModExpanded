@@ -1,5 +1,5 @@
 ﻿
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     public enum Stat : byte
     {

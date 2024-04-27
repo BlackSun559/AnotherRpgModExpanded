@@ -1,8 +1,8 @@
 ﻿
-using AnotherRpgMod.RPGModule;
-using AnotherRpgMod.Items;
+using AnotherRpgModExpanded.RPGModule;
+using AnotherRpgModExpanded.Items;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
 
     public enum DamageNameTree : byte
@@ -14,7 +14,6 @@ namespace AnotherRpgMod.Utils
         Summon,
         Bow, //thorium
         Gun //thorium
-
     }
 
     class SkillTextures
@@ -22,13 +21,13 @@ namespace AnotherRpgMod.Utils
 
         static public string GetItemTexture(ItemNode node)
         {
-            string path = "AnotherRpgMod/Textures/ItemTree/" + node.GetName;
+            string path = "AnotherRpgModExpanded/Textures/ItemTree/" + node.GetName;
             return path;
         }
 
         static public string GetTexture(Node node)
         {
-            string path = "AnotherRpgMod/Textures/SkillTree/" + node.GetNodeType + "/";
+            string path = "AnotherRpgModExpanded/Textures/SkillTree/" + node.GetNodeType + "/";
 
             string additional = "";
 
@@ -59,10 +58,10 @@ namespace AnotherRpgMod.Utils
                     additional += (node as LimitBreakNode).LimitBreakType;
                     break;
             }
+
             path += additional;
             return path;
         }
     }
-
     
 }

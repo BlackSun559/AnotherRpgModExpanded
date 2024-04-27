@@ -9,12 +9,12 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using System.Collections.Generic;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 using System.Diagnostics;
 using log4net.Util;
 using Terraria.ID;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
 
     class ReworkMouseOver : UIState
@@ -42,7 +42,6 @@ namespace AnotherRpgMod.Utils
             {10,Color.PaleVioletRed },
             {11,Color.Purple },
             {12,Color.BlueViolet }
-
         };
 
         public override void Update(GameTime gameTime)
@@ -58,6 +57,7 @@ namespace AnotherRpgMod.Utils
             GetDetails();
             
             UIText npanel;
+
             if (NPCDetails.Text != null)
             {
                 npanel = new UIText(NPCDetails.Text,0.8f);
@@ -66,8 +66,6 @@ namespace AnotherRpgMod.Utils
                 npanel.Top.Set(NPCDetails.Position.Y + 25, 0);
                 ScreenPanel.Append(npanel);
             }
-
-
 
             ScreenPanel.Recalculate();
             ScreenPanel.RecalculateChildren();
@@ -92,10 +90,12 @@ namespace AnotherRpgMod.Utils
             PlayerInput.SetZoom_Unscaled();
             PlayerInput.SetZoom_MouseInWorld();
             Rectangle mouseRectangle = new Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);
+
             if (Main.player[Main.myPlayer].gravDir == -1f)
             {
                 mouseRectangle.Y = (int)Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
             }
+
             Rectangle screenRectangle = new Rectangle((int)(Main.screenPosition.X), (int)(Main.screenPosition.Y), Main.screenWidth, Main.screenHeight);
             PlayerInput.SetZoom_UI();
             IngameOptions.MouseOver();
@@ -108,19 +108,24 @@ namespace AnotherRpgMod.Utils
             for (int k = 0; k < 200; k++)
             {
                 ActualNPC = Main.npc[k];
+
                 if (ActualNPC.active)
                 {
                     Rectangle NPCPos = new Rectangle((int)ActualNPC.Bottom.X - ActualNPC.frame.Width / 2, (int)ActualNPC.Bottom.Y - ActualNPC.frame.Height, ActualNPC.frame.Width, ActualNPC.frame.Height);
+
                     if (ActualNPC.type >= NPCID.WyvernHead && ActualNPC.type <= NPCID.WyvernTail)
                     {
                         NPCPos = new Rectangle((int)(ActualNPC.position.X + ActualNPC.width * 0.5 - 32.0), (int)(ActualNPC.position.Y + ActualNPC.height * 0.5 - 32.0), 64, 64);
                     }
+
                     bool IsMouseOver = mouseRectangle.Intersects(NPCPos);
                     bool IsOnScreen = screenRectangle.Intersects(NPCPos);
+
                     if (IsMouseOver)
                     {
                         ARPGGlobalNPC Rnpc = ActualNPC.GetGlobalNPC<ARPGGlobalNPC>();
                         string preFix = "";
+
                         if (Rnpc.getLevel >= 0 && ActualNPC.damage > 0)
                         {
                             preFix = "Level : " + (Rnpc.getLevel + Rnpc.getTier) + "\n";
@@ -128,6 +133,7 @@ namespace AnotherRpgMod.Utils
                             if (NPCUtils.GetWorldTier(ActualNPC, Rnpc.getLevel) > 0)
                                 preFix += "World bonus level : +" + NPCUtils.GetWorldTier(ActualNPC, Rnpc.getLevel) + "\n";
                         }
+
                         TempText = "";
 
                         if (Main.npc[k].lifeMax > 1 && !Main.npc[k].dontTakeDamage)
@@ -143,17 +149,20 @@ namespace AnotherRpgMod.Utils
                                 Main.npc[k].defense
                             });
                         }
+
                         panel = new UIText(TempText);
 
 
                         NPCDetails= new NPCInfoUI(TempText, Color.White, new Vector2(Main.mouseX, Main.mouseY));
                     }
+
                     else if (IsOnScreen && ((Config.vConfig.DisplayNpcName && !ActualNPC.townNPC) ||(Config.vConfig.DisplayTownName && ActualNPC.townNPC)))
                     {
                         
                         TempText = ActualNPC.GivenOrTypeName;
                         RPGModule.Entities.ARPGGlobalNPC Rnpc = ActualNPC.GetGlobalNPC<RPGModule.Entities.ARPGGlobalNPC>();
                         string preFix = "";
+
                         if (Rnpc.getLevel >= 0 && ActualNPC.damage>0)
                         {
                             preFix = "Lvl." + (Rnpc.getLevel + Rnpc.getTier);
@@ -179,8 +188,10 @@ namespace AnotherRpgMod.Utils
                                         
                             });
                         }
+
                         int NpcColor = 0;
                         int LevelOffSet = (ActualNPC.GetGlobalNPC<ARPGGlobalNPC>().getLevel + ActualNPC.GetGlobalNPC<RPGModule.Entities.ARPGGlobalNPC>().getTier) - Main.LocalPlayer.GetModPlayer<RPGModule.Entities.RPGPlayer>().GetLevel();
+
                         if (LevelOffSet < -100)
                             NpcColor = 0;
                         else if (LevelOffSet < -50)
@@ -219,24 +230,20 @@ namespace AnotherRpgMod.Utils
                             case 7:
                                 NpcColor+=3;
                                 break;
-
                         }
 
                         if (ActualNPC.townNPC)
                         {
                             NpcColor = 0;
                         }
+
                         NPCName.Add(new NPCInfoUI(TempText, ColorDic[NpcColor],new Vector2(ActualNPC.Bottom.X - Main.screenPosition.X, ActualNPC.Bottom.Y- Main.screenPosition.Y)));
                         
                     }
-
                 }
-
             }
-
         }
     }
-
 
     class NPCNameUI : UIState
     {
@@ -263,7 +270,6 @@ namespace AnotherRpgMod.Utils
             {10,Color.PaleVioletRed },
             {11,Color.Purple },
             {12,Color.BlueViolet }
-
         };
 
         public override void Update(GameTime gameTime)
@@ -281,13 +287,13 @@ namespace AnotherRpgMod.Utils
             for (int i = 0; i < NPCName.Count; i++)
             {
                 if (NPCName[i].Color != Color.Black)
-                    npanel = new UIText(NPCName[i].Text, 0.9f / Mathf.Pow(AnotherRpgMod.zoomValue.Y, 0.5f))
+                    npanel = new UIText(NPCName[i].Text, 0.9f / Mathf.Pow(AnotherRpgModExpanded.zoomValue.Y, 0.5f))
                     {
                         TextColor = NPCName[i].Color
                     };
                 else
                 {
-                    npanel = new UIText(NPCName[i].Text, 0.75f / Mathf.Pow(AnotherRpgMod.zoomValue.Y, 0.5f))
+                    npanel = new UIText(NPCName[i].Text, 0.75f / Mathf.Pow(AnotherRpgModExpanded.zoomValue.Y, 0.5f))
                     {
                         TextColor = Color.DarkGray
                     };
@@ -318,12 +324,12 @@ namespace AnotherRpgMod.Utils
             base.OnInitialize();
         }
 
-
         public void GetDetails()
         {
             PlayerInput.SetZoom_Unscaled();
             PlayerInput.SetZoom_MouseInWorld();
             Rectangle mouseRectangle = new Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);
+
             if (Main.player[Main.myPlayer].gravDir == -1f)
             {
                 mouseRectangle.Y = (int)Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
@@ -340,21 +346,25 @@ namespace AnotherRpgMod.Utils
             for (int k = 0; k < 200; k++)
             {
                 ActualNPC = Main.npc[k];
+
                 if (ActualNPC.active && !ActualNPC.dontCountMe)
                 {
                     int type = Main.npc[k].type;
                     Rectangle NPCPos = new Rectangle((int)ActualNPC.Bottom.X - ActualNPC.frame.Width / 2, (int)ActualNPC.Bottom.Y - ActualNPC.frame.Height, ActualNPC.frame.Width, ActualNPC.frame.Height);
+
                     if (ActualNPC.type >= NPCID.WyvernHead && ActualNPC.type <= NPCID.WyvernTail)
                     {
                         NPCPos = new Rectangle((int)(ActualNPC.position.X + ActualNPC.width * 0.5 - 32.0), (int)(ActualNPC.position.Y + ActualNPC.height * 0.5 - 32.0), 64, 64);
                     }
                     bool IsMouseOver = mouseRectangle.Intersects(NPCPos);
                     bool IsOnScreen = screenRectangle.Intersects(NPCPos);
+
                     if (IsMouseOver)
                     {
 
                         ARPGGlobalNPC Rnpc = ActualNPC.GetGlobalNPC<ARPGGlobalNPC>();
                         string preFix = "";
+
                         if (Rnpc.getLevel >= 0 && ActualNPC.damage > 0)
                         {
                             preFix = "Level : " + (Rnpc.getLevel + Rnpc.getTier) + "\n";
@@ -387,10 +397,12 @@ namespace AnotherRpgMod.Utils
                         TempText = ActualNPC.GivenOrTypeName;
                         RPGModule.Entities.ARPGGlobalNPC Rnpc = ActualNPC.GetGlobalNPC<RPGModule.Entities.ARPGGlobalNPC>();
                         string preFix = "";
+
                         if (Rnpc.getLevel >= 0 && ActualNPC.damage > 0)
                         {
                             preFix = "Lvl." + (Rnpc.getLevel + Rnpc.getTier);
                             /*
+
                             if (NPCUtils.GetWorldTier(ActualNPC, Rnpc.getLevel) > 0)
                                 preFix += "( + " + RPGModule.Entities.NPCUtils.GetWorldTier(ActualNPC, Rnpc.getLevel) + " )";
                             */
@@ -409,11 +421,11 @@ namespace AnotherRpgMod.Utils
                                 Main.npc[k].life,
                                 "/",
                                 Main.npc[k].lifeMax
-
                             });
                         }
                         int NpcColor = 0;
                         int LevelOffSet = (ActualNPC.GetGlobalNPC<ARPGGlobalNPC>().getLevel + ActualNPC.GetGlobalNPC<RPGModule.Entities.ARPGGlobalNPC>().getTier) - Main.LocalPlayer.GetModPlayer<RPGModule.Entities.RPGPlayer>().GetLevel();
+
                         if (LevelOffSet < -100)
                             NpcColor = 0;
                         else if (LevelOffSet < -50)
@@ -452,7 +464,6 @@ namespace AnotherRpgMod.Utils
                             case 7:
                                 NpcColor += 3;
                                 break;
-
                         }
 
                         if (ActualNPC.townNPC)
@@ -460,17 +471,11 @@ namespace AnotherRpgMod.Utils
                             NpcColor = 0;
                         }
                         NPCName.Add(new NPCInfoUI(TempText, ColorDic[NpcColor], new Vector2(ActualNPC.Bottom.X - Main.screenPosition.X, ActualNPC.Bottom.Y - Main.screenPosition.Y)));
-
                     }
-
                 }
-
             }
-
         }
-
     }
-
 
     struct NPCInfoUI
     {

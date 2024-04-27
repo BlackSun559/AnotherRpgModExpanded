@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using AnotherRpgMod.RPGModule.Entities;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.RPGModule.Entities;
+using AnotherRpgModExpanded.Utils;
 using Terraria.ModLoader;
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
 
     //What to save : 
@@ -23,7 +23,9 @@ namespace AnotherRpgMod.Items
         public float rarityWeight = 1;
 
         public List<int> GetNeighboor { get { return m_ID_Neightboor; } }
+
         public ItemSkillTree GetParent { get { return m_SkillTreeParent; } }
+
         public int GetId { get { return m_ID; } }
 
         public float power;
@@ -40,6 +42,7 @@ namespace AnotherRpgMod.Items
         protected bool m_isAscend = false;
 
         virtual public bool IsAscend { get { return m_isAscend; } }
+
         public int GetRequiredPoints { get { return m_RequiredPoints; } }
 
         protected string m_Name = "Blank";
@@ -79,10 +82,10 @@ namespace AnotherRpgMod.Items
         protected Vector2 m_position;
         public Vector2 GetPos { get { return m_position; } }
 
-
         virtual public void Reset()
         {
             m_Level = 0;
+
             if (m_LockState >1)
                 m_LockState = 2;
         }
@@ -93,7 +96,6 @@ namespace AnotherRpgMod.Items
         }
         virtual public void LoadValue(string saveValue)
         {
-
         }
 
         virtual public void ShareNeightboor()
@@ -111,7 +113,6 @@ namespace AnotherRpgMod.Items
                 m_ID_Neightboor.Add(ID);
         }
 
-
         public void ForceLockNode(int lockValue)
         {
             m_LockState = lockValue;
@@ -124,6 +125,7 @@ namespace AnotherRpgMod.Items
             if (m_LockState < Mathf.Clamp(step, MININT, 3))
                 m_LockState = Mathf.Clamp(step, MININT, 3);
             step -= 1;
+
             if (step > 0)
                 foreach (int ID in m_ID_Neightboor)
                 {
@@ -141,8 +143,10 @@ namespace AnotherRpgMod.Items
         {
             if (m_LockState < 3)
                 return ItemReason.Locked;
+
             if (m_Level >= m_MaxLevel)
                 return ItemReason.MaxLevel;
+
             if (Points < m_RequiredPoints)
                 return ItemReason.NotEnougtPoint;
             return ItemReason.CanUpgrade;
@@ -164,7 +168,6 @@ namespace AnotherRpgMod.Items
         /// <param name="item"></param>
         virtual public void Passive(Item item)
         {
-
         }
 
         /// <summary>
@@ -175,7 +178,6 @@ namespace AnotherRpgMod.Items
         /// <param name="Player"></param>
         virtual public void PlayerPassive(Item item, Player Player)
         {
-
         }
 
         //;ID,Neighboor1:2,state,level,maxlevel,required,posx:posy,specificvalue1:2:3:5:7;
@@ -196,7 +198,6 @@ namespace AnotherRpgMod.Items
             m_ID_Neightboor = new List<int>();
             m_SkillTreeParent = new ItemSkillTree();
         }
-
     }
 
     class ItemNodeAdvanced : ItemNode
@@ -204,10 +205,8 @@ namespace AnotherRpgMod.Items
 
         public virtual void OnShoot(Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source, Item item, Player Player, ref Vector2 position, ref Vector2 Velocity, ref int type, ref int damage, ref float knockBack)
         {
-
         }
 
         //virtual public void On
-        
     }
 }

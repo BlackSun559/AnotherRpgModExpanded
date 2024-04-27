@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     class SkillTree
     {
@@ -61,6 +61,7 @@ namespace AnotherRpgMod.RPGModule
        public int GetSummonSlot()
         {
             int slot = 0;
+
             if (ActiveClass == null)
                 return 0;
             slot = JsonCharacterClass.GetJsonCharList.GetClass(ActiveClass.GetClassType).Summons;
@@ -71,29 +72,37 @@ namespace AnotherRpgMod.RPGModule
         {
             float value = 1;
             RPGPlayer pEntity = Main.player[Main.myPlayer].GetModPlayer<RPGPlayer>();
+
             if (ActiveClass == null)
             {
                 return 1;
             }
+
             JsonChrClass actualClass = JsonCharacterClass.GetJsonCharList.GetClass(ActiveClass.GetClassType);
             value *= 1+actualClass.Damage[(int)_type];
+
             if (_type == DamageType.Ranged)
             {
                 if (pEntity.HaveBow())
                     value *= 1+actualClass.Damage[5];
+
                 if(pEntity.HaveRangedWeapon() && !pEntity.HaveBow())
                     value *= 1+actualClass.Damage[6];
             }
+
             return value;
         }
+
         public float GetDamageMult(DamageType _type)
         {
             float value = 0;
 
             value += CalcDamage(nodeList.GetDamageList(_type), false);
             value += GetClassDamage(_type);
+
             return value;
         }
+
         public int GetDamageFlat(DamageType _type)
         {
             float value = 0;
@@ -102,6 +111,7 @@ namespace AnotherRpgMod.RPGModule
 
             return (int)value;
         }
+
         public float GetDamageSpeed(DamageType _type)
         {
             float value = 0;
@@ -223,13 +233,11 @@ namespace AnotherRpgMod.RPGModule
                 foreach (int nbID in actualNode.neigthboorlist)
                 {
                     nodeList.nodeList[i].AddNeighboor(nodeList.nodeList[nbID]);
-
                 }
 
                 i++;
             }
         }
-
 
         public readonly static int SKILLTREEVERSION = 2;
         public void Init()

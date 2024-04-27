@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     [Flags]
     public enum Perk // all togleable

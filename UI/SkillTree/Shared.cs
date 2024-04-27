@@ -4,11 +4,11 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using System;
 using Terraria.ModLoader;
-using AnotherRpgMod.RPGModule;
-using AnotherRpgMod.Items;
+using AnotherRpgModExpanded.RPGModule;
+using AnotherRpgModExpanded.Items;
 using ReLogic.Content;
 
-namespace AnotherRpgMod.UI
+namespace AnotherRpgModExpanded.UI
 {
     class Skill : UIElement
     {
@@ -28,11 +28,13 @@ namespace AnotherRpgMod.UI
             spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, SkillTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
         }
     }
+
     class ItemSkill : UIElement
     {
         public bool Hidden = false;
         private Texture2D _texture;
         public Texture2D SetTexture { set { _texture = value; } }
+
         public Color color = Color.White;
         public ItemSkill(Texture2D texture)
         {
@@ -89,12 +91,12 @@ namespace AnotherRpgMod.UI
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions = GetDimensions();
+
             if (Hidden)
                 return;
             spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, ItemTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
         }
     }
-
 
     class SkillPanel : UIPanel
     {
@@ -118,13 +120,12 @@ namespace AnotherRpgMod.UI
         }
     }
 
-
     class ItemConnection : UIElement
     {
         public bool Hidden = false;
         public int nodeID;
         public int neighboorID;
-        private Texture2D texture = ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
+        private Texture2D texture = ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
         public Color color;
         public Vector2 basePos;
         public bool bg = false;
@@ -137,7 +138,6 @@ namespace AnotherRpgMod.UI
             m_rotation = rotation;
             this.color = Color.White;
         }
-
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -156,7 +156,7 @@ namespace AnotherRpgMod.UI
     {
         public NodeParent node;
         public NodeParent neighboor;
-        private Texture2D texture = ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
+        private Texture2D texture = ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
         public Color color;
         public Vector2 basePos;
         public bool bg = false;
@@ -169,7 +169,6 @@ namespace AnotherRpgMod.UI
             m_rotation = rotation;
             this.color = Color.White;
         }
-
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {

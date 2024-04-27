@@ -1,4 +1,4 @@
-﻿using AnotherRpgMod.Utils;
+﻿using AnotherRpgModExpanded.Utils;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
     class ARPGGlobalNPC : GlobalNPC
     {
@@ -18,8 +18,10 @@ namespace AnotherRpgMod.RPGModule.Entities
         public Dictionary<string, string> specialBuffer = new Dictionary<string, string>();
         private int level = -1;
         public int getLevel { get { return level; } }
+
         private int tier = 0;
         public int getTier { get { return tier; } }
+
         int baseDamage = 0;
         public float dontTakeDamageTime = 0;
         public float debuffDamage = 0;
@@ -45,6 +47,7 @@ namespace AnotherRpgMod.RPGModule.Entities
         {
             npc.life = Mathf.Clamp(npc.life - damage, 0, npc.lifeMax);
             Dust.NewDust(npc.Center - npc.Size * 0.5f, npc.width, npc.height, 90, 0f, 0f, 0, new Color(255, 50, 0), 0.1f);
+
             if (npc.life == 0)
                 npc.checkDead();
         }
@@ -61,6 +64,7 @@ namespace AnotherRpgMod.RPGModule.Entities
             VauraMemory -= value;
             npc.life = Mathf.Clamp(npc.life-value, 0, npc.lifeMax);
             Dust.NewDust(npc.Center- npc.Size*0.5f, npc.width, npc.height, 90, 0f, 0f, 0, new Color(255, 50, 0), 0.1f);
+
             if (npc.life == 0)
                 npc.checkDead();
             return value;
@@ -82,11 +86,11 @@ namespace AnotherRpgMod.RPGModule.Entities
                 float def = target.statDefense;
 
                 float mult = 0.5f;
+
                 if (Main.expertMode)
                     mult = 0.75f;
 
                 modifiers.ArmorPenetration += Mathf.RoundInt(def * 0.3f * mult);
-
             }
             
             base.ModifyHitPlayer(npc, target, ref modifiers);
@@ -100,7 +104,7 @@ namespace AnotherRpgMod.RPGModule.Entities
                 }
                 catch (System.Exception exception)
                 {
-                AnotherRpgMod.Instance.Logger.Error(
+                AnotherRpgModExpanded.Instance.Logger.Error(
                         "[" + this.GetType().FullName + "] GetBufferProperty(" +
                         property + "): " + exception.Message
                     );
@@ -124,7 +128,6 @@ namespace AnotherRpgMod.RPGModule.Entities
                     specialBuffer.Add(property, value);
             }
 
-
         #endregion
 
 
@@ -132,7 +135,6 @@ namespace AnotherRpgMod.RPGModule.Entities
         {
             return ((_modifier & modifier) == _modifier);
         }
-
 
         public void SetLevelTier(int level, int tier,byte rank)
         {
@@ -167,21 +169,26 @@ namespace AnotherRpgMod.RPGModule.Entities
                     }
                     else { 
                         level = Mathf.CeilInt(NPCUtils.GetBaseLevel(npc) * Config.NPCConfig.NpclevelMultiplier);
+
                         if (npc.townNPC || (npc.damage == 0))
                             tier = Mathf.CeilInt(NPCUtils.GetTierAlly(npc, level) * Config.NPCConfig.NpclevelMultiplier);
                         else if (Config.NPCConfig.NPCProgress)
                             tier = Mathf.CeilInt(NPCUtils.GetTier(npc, level) * Config.NPCConfig.NpclevelMultiplier);
                     }
-                    if (!npc.townNPC && !(npc.damage == 0) && (!npc.dontCountMe)) { 
+
+                    if (!npc.townNPC && !(npc.damage == 0) && (!npc.dontCountMe)) {
                         Rank = NPCUtils.GetRank(level+tier,npc.boss);
                         modifier = NPCUtils.GetModifier(Rank,npc);
+
                         if (HaveModifier(NPCModifier.Size))
                         {
                             int maxrng = Main.expertMode ? 50 : 70;
                             int rn = Mathf.RandomInt(0, maxrng);
+
                             if (npc.boss)
                                 rn+=1;
                             /*
+
                             if (rn < 1)
                             {
                                 SetBufferProperty("size", "Growther");
@@ -229,22 +236,22 @@ namespace AnotherRpgMod.RPGModule.Entities
             }
         }
 
-
         public override void PostAI(NPC npc)
         {
 
             base.PostAI(npc);
 
             Effect(npc);
+
             if (npc.dontTakeDamage && dontTakeDamageTime > 0)
             {
                 dontTakeDamageTime -= NPCUtils.DELTATIME;
-                if (dontTakeDamageTime <= 0) { 
+
+                if (dontTakeDamageTime <= 0) {
                     npc.dontTakeDamage = false;
                     dontTakeDamageTime = 0;
                 }
             }
-
 
             if (!StatsCreated && Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -283,10 +290,10 @@ namespace AnotherRpgMod.RPGModule.Entities
                 debuffDamage -= applydamage;
                 npc.life -= applydamage;
                 npc.lifeRegen -= applydamage;
+
                 if (npc.life <= 0)
                     npc.checkDead();
             }
-
 
             if (HaveModifier(NPCModifier.Berserker))
             {
@@ -311,10 +318,7 @@ namespace AnotherRpgMod.RPGModule.Entities
                 npc.life = 0;
             
 
-
-            
         }
-
 
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
@@ -418,6 +422,7 @@ namespace AnotherRpgMod.RPGModule.Entities
             {
                 XPToDrop = (int)(XPToDrop * 1.5f);
             }
+
             if (npc.boss)
             {
                 XPToDrop = XPToDrop * 2;
@@ -439,7 +444,5 @@ namespace AnotherRpgMod.RPGModule.Entities
 
             base.OnKill(npc);
         }
-
-
     }
 }

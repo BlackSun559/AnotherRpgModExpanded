@@ -15,11 +15,11 @@ using System.Collections;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using Terraria.ModLoader.UI;
-using AnotherRpgMod.UI;
+using AnotherRpgModExpanded.UI;
 using Terraria.ID;
 
 
-namespace AnotherRpgMod
+namespace AnotherRpgModExpanded
 {
     [Flags]
     public enum GamePlayFlag
@@ -83,17 +83,18 @@ namespace AnotherRpgMod
 
         public override void OnLoaded()
         {
-            AnotherRpgMod.visualConfig = this;
+            AnotherRpgModExpanded.visualConfig = this;
         }
         public override void OnChanged()
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                AnotherRpgMod.visualConfig = this;
-                if (AnotherRpgMod.Instance!= null) { 
-                    AnotherRpgMod.Instance.healthBar.Reset();
-                    AnotherRpgMod.Instance.OpenST.Reset();
-                    AnotherRpgMod.Instance.openStatMenu.Reset();
+                AnotherRpgModExpanded.visualConfig = this;
+
+                if (AnotherRpgModExpanded.Instance!= null) {
+                    AnotherRpgModExpanded.Instance.healthBar.Reset();
+                    AnotherRpgModExpanded.Instance.OpenST.Reset();
+                    AnotherRpgModExpanded.Instance.openStatMenu.Reset();
                 
                 }
             }
@@ -189,11 +190,11 @@ namespace AnotherRpgMod
 
         public override void OnLoaded()
         {
-            AnotherRpgMod.gpConfig = this;
+            AnotherRpgModExpanded.gpConfig = this;
         }
         public override void OnChanged()
         {
-            AnotherRpgMod.gpConfig = this;
+            AnotherRpgModExpanded.gpConfig = this;
         }
     }
     [Label("AnRPG Enemies config")]
@@ -319,32 +320,30 @@ namespace AnotherRpgMod
 
         public override void OnLoaded()
         {
-            AnotherRpgMod.NPCConfig = this;
+            AnotherRpgModExpanded.NPCConfig = this;
         }
         public override void OnChanged()
         {
-            AnotherRpgMod.NPCConfig = this;
+            AnotherRpgModExpanded.NPCConfig = this;
 
             JsonSkillTree.Load();
             JsonCharacterClass.Load();
         }
     }
 
-
     public class Config
     {
         static public VisualConfig vConfig
         {
-            get { return AnotherRpgMod.visualConfig; }
+            get { return AnotherRpgModExpanded.visualConfig; }
         }
         static public GamePlayConfig gpConfig
         {
-            get { return AnotherRpgMod.gpConfig; }
+            get { return AnotherRpgModExpanded.gpConfig; }
         }
         static public NPCConfig NPCConfig
         {
-            get { return AnotherRpgMod.NPCConfig; }
+            get { return AnotherRpgModExpanded.NPCConfig; }
         }
-
     }
 }

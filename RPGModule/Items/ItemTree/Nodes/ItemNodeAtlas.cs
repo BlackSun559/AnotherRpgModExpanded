@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnotherRpgMod.Items;
+using AnotherRpgModExpanded.Items;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
     class ItemNodeAtlas
     {
@@ -91,6 +91,7 @@ namespace AnotherRpgMod.Utils
                 if (entry.Value.Name == nodeType)
                     return entry.Key;
             }
+
             return 0;
         }
 
@@ -108,17 +109,17 @@ namespace AnotherRpgMod.Utils
                 totalWeight = RarityOffset(power,(GetCorrectNode(AID) as ItemNode).rarityWeight);
             }
 
-
             float rn = Mathf.Random(0, totalWeight);
             float checkingWeight = 0;
             for (int i = 0; i < IDS.Count; i++)
             {
                 int AID = IDS[i];
+
                 if (rn < checkingWeight + RarityOffset(power, (GetCorrectNode(AID) as ItemNode).rarityWeight))
                     return AID;
                 checkingWeight += RarityOffset(power, (GetCorrectNode(AID) as ItemNode).rarityWeight);
-
             }
+
             return 0;
         }
 
@@ -154,13 +155,14 @@ namespace AnotherRpgMod.Utils
                         case WeaponType.Magic:
                             IDS.AddRange(MagicID);
                             break;
-
                     }
+
                     break;
                 case ItemType.Armor:
                     IDS.AddRange(ArmorID);
                     break;
             }
+
             if (!acceptAscent)
             {
                 List<int> IDR = new List<int>();

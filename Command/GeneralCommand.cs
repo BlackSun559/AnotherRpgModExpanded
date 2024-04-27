@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using AnotherRpgMod.RPGModule.Entities;
-using AnotherRpgMod.RPGModule;
-using AnotherRpgMod.Utils;
-using AnotherRpgMod.Items;
+using AnotherRpgModExpanded.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule;
+using AnotherRpgModExpanded.Utils;
+using AnotherRpgModExpanded.Items;
 
-namespace AnotherRpgMod.Command
+namespace AnotherRpgModExpanded.Command
 {
     public class SetLevel : ModCommand
     {
@@ -44,7 +44,6 @@ namespace AnotherRpgMod.Command
 
             character.ResetLevel();
             WorldManager.PlayerLevel = level;
-
 
             for (int i = 0; i < level; i++)
             {
@@ -83,41 +82,41 @@ namespace AnotherRpgMod.Command
 
             character.ResetSkillTree();
 
-            for (int i = 0; i< level; i++)
+            for (int i = 0; i < level; i++)
             {
                 character.commandLevelup();
             }
-            
         }
     }
-        public class ResetCommand : ModCommand
+
+    public class ResetCommand : ModCommand
+    {
+        public override CommandType Type
         {
-            public override CommandType Type
-            {
-                get { return CommandType.Chat; }
-            }
-
-            public override string Command
-            {
-                get { return "reset"; }
-            }
-
-            public override string Usage
-            {
-                get { return "/reset "; }
-            }
-
-            public override string Description
-            {
-                get { return "Reset your points"; }
-            }
-
-            public override void Action(CommandCaller caller, string input, string[] args)
-            {
-                RPGPlayer character = caller.Player.GetModPlayer<RPGPlayer>();
-                character.RecalculateStat();
-            }
+            get { return CommandType.Chat; }
         }
+
+        public override string Command
+        {
+            get { return "reset"; }
+        }
+
+        public override string Usage
+        {
+            get { return "/reset "; }
+        }
+
+        public override string Description
+        {
+            get { return "Reset your points"; }
+        }
+
+        public override void Action(CommandCaller caller, string input, string[] args)
+        {
+            RPGPlayer character = caller.Player.GetModPlayer<RPGPlayer>();
+            character.RecalculateStat();
+        }
+    }
 
     public class RarityReroll : ModCommand
     {
@@ -145,7 +144,7 @@ namespace AnotherRpgMod.Command
         {
             Player Player = caller.Player;
             RPGPlayer character = Player.GetModPlayer<RPGPlayer>();
-            
+
             ItemUpdate item = Player.HeldItem.GetGlobalItem<ItemUpdate>();
             float itemvalue = Player.HeldItem.value;
             int cost = Mathf.RoundInt((itemvalue * 0.33333f));
@@ -154,23 +153,24 @@ namespace AnotherRpgMod.Command
             {
                 Player.BuyItem(cost);
                 int plat = 0;
-                int gold = 0; 
-                int silv = 0; 
-                int copp = 0; 
+                int gold = 0;
+                int silv = 0;
+                int copp = 0;
 
                 int costbuffer = cost;
+
                 if (costbuffer >= 1000000)
                 {
                     plat = costbuffer / 1000000;
                     costbuffer = -plat * 1000000;
                 }
-                    
+
                 if (costbuffer > 10000)
                 {
                     gold = costbuffer / 10000;
                     costbuffer = -gold * 10000;
                 }
-                    
+
                 if (costbuffer > 100)
                 {
                     silv = costbuffer / 100;
@@ -183,26 +183,31 @@ namespace AnotherRpgMod.Command
                 string coststring = "";
 
                 if (plat > 0)
-                {   
+                {
                     coststring += " " + plat + " " + Lang.inter[15].Value;
                 }
+
                 if (gold > 0)
                 {
                     coststring += " " + gold + " " + Lang.inter[16].Value;
                 }
+
                 if (silv > 0)
                 {
                     coststring += " " + silv + " " + Lang.inter[17].Value;
                 }
+
                 if (copp > 0)
                 {
                     coststring += " " + copp + " " + Lang.inter[18].Value;
                 }
+
                 coststring += " used to reroll your item rarity";
                 Main.NewText(coststring);
 
                 item.Roll(caller.Player.HeldItem);
             }
+
             else
             {
                 int plat = 0;
@@ -211,6 +216,7 @@ namespace AnotherRpgMod.Command
                 int copp = 0;
 
                 int costbuffer = cost;
+
                 if (costbuffer >= 1000000)
                 {
                     plat = costbuffer / 1000000;
@@ -238,18 +244,22 @@ namespace AnotherRpgMod.Command
                 {
                     coststring += " " + plat + " " + Lang.inter[15].Value;
                 }
+
                 if (gold > 0)
                 {
                     coststring += " " + gold + " " + Lang.inter[16].Value;
                 }
+
                 if (silv > 0)
                 {
                     coststring += " " + silv + " " + Lang.inter[17].Value;
                 }
+
                 if (copp > 0)
                 {
                     coststring += " " + copp + " " + Lang.inter[18].Value;
                 }
+
                 coststring += " to reroll your item rarity";
                 Main.NewText(coststring);
             }
@@ -285,6 +295,7 @@ namespace AnotherRpgMod.Command
 
             ItemUpdate item = Player.HeldItem.GetGlobalItem<ItemUpdate>();
             int cost = Player.HeldItem.value;
+
             if (Player.CanAfford(cost))
             {
                 Player.BuyItem(cost);
@@ -295,6 +306,7 @@ namespace AnotherRpgMod.Command
                 int copp = 0;
 
                 int costbuffer = cost;
+
                 if (costbuffer >= 1000000)
                 {
                     plat = costbuffer / 1000000;
@@ -322,23 +334,28 @@ namespace AnotherRpgMod.Command
                 {
                     coststring += " " + plat + " " + Lang.inter[15].Value;
                 }
+
                 if (gold > 0)
                 {
                     coststring += " " + gold + " " + Lang.inter[16].Value;
                 }
+
                 if (silv > 0)
                 {
                     coststring += " " + silv + " " + Lang.inter[17].Value;
                 }
+
                 if (copp > 0)
                 {
                     coststring += " " + copp + " " + Lang.inter[18].Value;
                 }
+
                 coststring += " used to reroll your item evolution tree";
                 Main.NewText(coststring);
 
                 item.CompleteReset();
             }
+
             else
             {
                 int plat = 0;
@@ -347,6 +364,7 @@ namespace AnotherRpgMod.Command
                 int copp = 0;
 
                 int costbuffer = cost;
+
                 if (costbuffer >= 1000000)
                 {
                     plat = costbuffer / 1000000;
@@ -374,14 +392,17 @@ namespace AnotherRpgMod.Command
                 {
                     coststring += " " + plat + " " + Lang.inter[15].Value;
                 }
+
                 if (gold > 0)
                 {
                     coststring += " " + gold + " " + Lang.inter[16].Value;
                 }
+
                 if (silv > 0)
                 {
                     coststring += " " + silv + " " + Lang.inter[17].Value;
                 }
+
                 if (copp > 0)
                 {
                     coststring += " " + copp + " " + Lang.inter[18].Value;
@@ -391,9 +412,6 @@ namespace AnotherRpgMod.Command
             }
         }
     }
-
-
-
 
     public class ItemName : ModCommand
     {
@@ -421,11 +439,13 @@ namespace AnotherRpgMod.Command
         {
             Player Player = caller.Player;
             RPGPlayer character = Player.GetModPlayer<RPGPlayer>();
+
             if (args.Length == 0)
             {
                 Main.NewText(Description);
                 return;
             }
+
             if (int.TryParse(args[0], out int slot) == false)
             {
                 Main.NewText("Slot Number invalid");
@@ -434,8 +454,6 @@ namespace AnotherRpgMod.Command
             ItemUpdate item = Player.HeldItem.GetGlobalItem<ItemUpdate>();
             ItemUpdate Source = Player.inventory[slot].GetGlobalItem<ItemUpdate>();
             Main.NewText(Player.inventory[slot].Name);
-
-
         }
     }
 
@@ -465,12 +483,15 @@ namespace AnotherRpgMod.Command
         {
             Player Player = caller.Player;
             RPGPlayer character = Player.GetModPlayer<RPGPlayer>();
+
             if (args.Length == 0)
             {
                 Main.NewText(Description);
                 return;
             }
-            if (int.TryParse(args[0], out int slot) == false) { 
+
+            if (int.TryParse(args[0], out int slot) == false)
+            {
                 Main.NewText("Slot Number invalid");
                 return;
             }
@@ -483,19 +504,17 @@ namespace AnotherRpgMod.Command
                 return;
             }
 
-
-            AnotherRpgMod.source = Source;
-            AnotherRpgMod.Transfer = item;
-            AnotherRpgMod.XPTvalueA = ItemExtraction.GetTotalEarnedXp(Source);
-            AnotherRpgMod.XPTvalueB = ItemExtraction.GetTotalEarnedXp(item);
+            AnotherRpgModExpanded.source = Source;
+            AnotherRpgModExpanded.Transfer = item;
+            AnotherRpgModExpanded.XPTvalueA = ItemExtraction.GetTotalEarnedXp(Source);
+            AnotherRpgModExpanded.XPTvalueB = ItemExtraction.GetTotalEarnedXp(item);
 
             float xp = ItemExtraction.GetExtractedXp(false, Source);
 
-            Main.NewText("Transfering "+ xp + " exp from " + Player.inventory[slot].Name + " to " + Player.HeldItem.Name);
+            Main.NewText("Transfering " + xp + " exp from " + Player.inventory[slot].Name + " to " + Player.HeldItem.Name);
 
             Source.ResetLevelXp();
-            item.xPTransfer(xp,Player,Player.HeldItem);
-
+            item.xPTransfer(xp, Player, Player.HeldItem);
         }
     }
 
@@ -525,25 +544,24 @@ namespace AnotherRpgMod.Command
         {
             Player Player = caller.Player;
             RPGPlayer character = Player.GetModPlayer<RPGPlayer>();
-            if (AnotherRpgMod.source == null)
+
+            if (AnotherRpgModExpanded.source == null)
                 return;
-            if (AnotherRpgMod.Transfer == null)
+
+            if (AnotherRpgModExpanded.Transfer == null)
                 return;
 
-            AnotherRpgMod.source.ResetLevelXp(false);
-            AnotherRpgMod.Transfer.ResetLevelXp(false);
-            AnotherRpgMod.source.SilentxPTransfer(AnotherRpgMod.XPTvalueA);
-            AnotherRpgMod.Transfer.SilentxPTransfer(AnotherRpgMod.XPTvalueB);
+            AnotherRpgModExpanded.source.ResetLevelXp(false);
+            AnotherRpgModExpanded.Transfer.ResetLevelXp(false);
+            AnotherRpgModExpanded.source.SilentxPTransfer(AnotherRpgModExpanded.XPTvalueA);
+            AnotherRpgModExpanded.Transfer.SilentxPTransfer(AnotherRpgModExpanded.XPTvalueB);
 
-            AnotherRpgMod.source = null;
-            AnotherRpgMod.Transfer = null;
-            AnotherRpgMod.XPTvalueA = 0;
-            AnotherRpgMod.XPTvalueB = 0;
-
-
+            AnotherRpgModExpanded.source = null;
+            AnotherRpgModExpanded.Transfer = null;
+            AnotherRpgModExpanded.XPTvalueA = 0;
+            AnotherRpgModExpanded.XPTvalueB = 0;
         }
     }
-
 
     public class WorldLevel : ModCommand
     {
@@ -570,6 +588,7 @@ namespace AnotherRpgMod.Command
         public override void Action(CommandCaller caller, string input, string[] args)
         {
             Main.NewText("is world ascended : " + WorldManager.ascended);
+
             if (WorldManager.ascended)
                 Main.NewText("world ascend level : " + WorldManager.ascendedLevelBonus);
 
@@ -608,10 +627,9 @@ namespace AnotherRpgMod.Command
         {
             WorldManager.ascended = true;
             int level = Int32.Parse(args[0]);
+
             if (level < 250) level = 250;
             WorldManager.ascendedLevelBonus = level;
-
         }
     }
-
 }

@@ -8,13 +8,13 @@ using System;
 using System.Collections.Generic;
 using Terraria.ID;
 using Terraria.Utilities;
-using AnotherRpgMod.RPGModule.Entities;
-using AnotherRpgMod.Utils;
-using AnotherRpgMod.RPGModule;
+using AnotherRpgModExpanded.RPGModule.Entities;
+using AnotherRpgModExpanded.Utils;
+using AnotherRpgModExpanded.RPGModule;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class ItemUpdate : GlobalItem
     {
@@ -25,6 +25,7 @@ namespace AnotherRpgMod.Items
             {
                 return true;
             }
+
             return false;
         }
 
@@ -141,9 +142,6 @@ namespace AnotherRpgMod.Items
             "Also recently I've spent a lot of time working on a Vampire Survivor type of game, I'm still looking for a definitive name but for now it's Idle-wave",
             "Yes the name is quite weird as there is no idle game part... yet, maybe I'll use the idle part for persistent progressions",
             "Infinity +1 ",
-
-
-
         };
 
         public string ItemName;
@@ -159,16 +157,12 @@ namespace AnotherRpgMod.Items
         public int GetMaxEvolutionPoints { get { return m_itemTree.MaxEvolutionPoints; } }
         public int GetMaxAscendPoints { get { return m_itemTree.MaxAscendPoints; } }
 
-
-
-
         public Modifier modifier = Modifier.None;
         public Rarity rarity = Rarity.NONE;
         ItemStats stats = new ItemStats() { Stats = new List<ItemStat>()};
 
         ItemType itemType = ItemType.Other;
         public ItemType Get_ItemType { get { return itemType; } }
-
 
         bool init = false;
         bool AscendLimit = false;
@@ -180,9 +174,6 @@ namespace AnotherRpgMod.Items
         int baseValue = 0;
         Int64 xp = 0;
         int level = 0;
-
-
-
 
         public float DamageBuffer = 0;
         public float DamageFlatBuffer = 0;
@@ -200,7 +191,6 @@ namespace AnotherRpgMod.Items
 
         public int Level { get{ return level; } }
         public int Ascention { get { return ascendedLevel; } }
-
 
         List<TooltipLine> AscendToolTip = new List<TooltipLine>();
 
@@ -222,7 +212,6 @@ namespace AnotherRpgMod.Items
 
         public float GetLifeLeech { get { return lifeLeech; } }
         public float GetManaLeech { get { return manaLeech; } }
-
 
         public static Dictionary<Message, List<ItemDataTag>> itemDataTags = new Dictionary<Message, List<ItemDataTag>>()
         {
@@ -279,8 +268,10 @@ namespace AnotherRpgMod.Items
             {
                 if (item.accessory)
                     return ItemType.Accessory;
+
                 if (item.bodySlot > 0 || item.legSlot > 0 || item.headSlot > 0)
                     return ItemType.Armor;
+
                 if (item.damage > 0)
                     return ItemType.Weapon;
                 return ItemType.Other;
@@ -303,7 +294,6 @@ namespace AnotherRpgMod.Items
             return value;
         }
 
-
         public void UpdatePassive(Item item,Player Player)
         {
             leech = 0;
@@ -320,12 +310,10 @@ namespace AnotherRpgMod.Items
             m_itemTree.ApplyPlayerPassive(item,Player);
         }
 
-
         public int GetDamage(Item item)
         {
             int _damage = baseDamage;
             DamageFlatBuffer = _damage;
-
            
             if (Config.gpConfig.ItemTree)
             {
@@ -367,7 +355,6 @@ namespace AnotherRpgMod.Items
                 _use = Mathf.FloorInt(_use * _useReduction);
             }
             return _use;
-
         }
         public int GetShoot(Item item)
         {
@@ -387,7 +374,6 @@ namespace AnotherRpgMod.Items
                 _use = Mathf.FloorInt(_use * _useReduction);
             }
             return _use;
-
         }
         public int GetDefense(Item item)
         {
@@ -450,7 +436,6 @@ namespace AnotherRpgMod.Items
             }
         }
 
-
         public ItemSkillTree GetItemTree { get { return m_itemTree; } }
         
 
@@ -468,18 +453,16 @@ namespace AnotherRpgMod.Items
         
         #endregion
 
-        
-
-
         private void InitItem(Item item)
         {
 
             m_weaponType = ModifierManager.GetWeaponType(item);
             
-
             if (init)
                 return;
+
             init = true;
+
             if (NeedSavingStatic(item))
             {
                 baseMana = item.mana;
@@ -500,9 +483,6 @@ namespace AnotherRpgMod.Items
                 Roll(item);
 
                 baseCap = GetCapLevel();
-
-                
-
 
                 if (HaveTree(item) && (m_itemTree == null || m_itemTree.GetSize == 0))
                 {
@@ -527,9 +507,6 @@ namespace AnotherRpgMod.Items
                         m_itemTree.ExtendTree(Mathf.Clamp(Mathf.CeilInt(Mathf.Pow(baseCap / 3f, 0.95)), 5, 99) * ascendedLevel);
                     }
                 }
-
-
-
             }
 
             if (item.healLife > 0)
@@ -539,7 +516,6 @@ namespace AnotherRpgMod.Items
                 baseHealMana = item.healMana;
             if (stats.Stats == null)
                 stats.Stats = new List<ItemStat>();
-
         }
 
         #region OverrideFunction
@@ -645,7 +621,6 @@ namespace AnotherRpgMod.Items
                                 item.damage = GetDamage(item);
                         }
 
-
                         level = (int)tags[ItemDataTag.level];
                         xp = (long)tags[ItemDataTag.xp];
                         ascendedLevel = (int)tags[ItemDataTag.ascendedlevel];
@@ -662,28 +637,31 @@ namespace AnotherRpgMod.Items
                         {
                             stats.Stats.Add(ReceivedStat((sbyte)tags[ItemDataTag.statst1], (int)tags[ItemDataTag.stat1]));
                         }
+
                         if ((sbyte)tags[ItemDataTag.statst2] >= 0)
                         {
                             stats.Stats.Add(ReceivedStat((sbyte)tags[ItemDataTag.statst2], (int)tags[ItemDataTag.stat2]));
                         }
+
                         if ((sbyte)tags[ItemDataTag.statst3] >= 0)
                         {
                             stats.Stats.Add(ReceivedStat((sbyte)tags[ItemDataTag.statst3], (int)tags[ItemDataTag.stat3]));
                         }
+
                         if ((sbyte)tags[ItemDataTag.statst4] >= 0)
                         {
                             stats.Stats.Add(ReceivedStat((sbyte)tags[ItemDataTag.statst4], (int)tags[ItemDataTag.stat4]));
                         }
+
                         if ((sbyte)tags[ItemDataTag.statst5] >= 0)
                         {
                             stats.Stats.Add(ReceivedStat((sbyte)tags[ItemDataTag.statst5], (int)tags[ItemDataTag.stat5]));
                         }
+
                         if ((sbyte)tags[ItemDataTag.statst6] >= 0)
                         {
                             stats.Stats.Add(ReceivedStat((sbyte)tags[ItemDataTag.statst6], (int)tags[ItemDataTag.stat6]));
                         }
-
-
 
                         if ((string)tags[ItemDataTag.itemTree] != "")
                             m_itemTree = ItemSkillTree.ConvertToTree((string)tags[ItemDataTag.itemTree], this,level,ascendedLevel);
@@ -704,13 +682,7 @@ namespace AnotherRpgMod.Items
             clonedItem.SetItemTree(m_itemTree);
             clonedItem.AscendToolTip = AscendToolTip;
             return clonedItem;
-
-
-
-
-
         }
-
 
         public override bool Shoot(Item item, Player Player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -740,7 +712,6 @@ namespace AnotherRpgMod.Items
             return base.Shoot(item, Player, source, position, velocity, type, damage, knockback);
         }
 
-
         public override void ModifyHitNPC(Item item, Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
 
@@ -757,8 +728,8 @@ namespace AnotherRpgMod.Items
         public override void LoadData(Item item, TagCompound tag)
         {
             //base.LoadData(item, tag);
-            //AnotherRpgMod.Instance.Logger.Info(tag);
-            //AnotherRpgMod.Instance.Logger.Info("Load Item Data");
+            //AnotherRpgModExpanded.Instance.Logger.Info(tag);
+            //AnotherRpgModExpanded.Instance.Logger.Info("Load Item Data");
             if (init)
                 return;
             //item.r
@@ -875,8 +846,8 @@ namespace AnotherRpgMod.Items
                     healtt = new TooltipLine(Mod, "HealLife", healtt.Text + "( " + baseHealLife + " )");
                     tooltips[iheal] = healtt;
                 }
-
             }
+
             if (item.healMana > 0)
             {
                 TooltipLine healtt = tooltips.Find(x => x.Name == "HealMana");
@@ -954,18 +925,19 @@ namespace AnotherRpgMod.Items
                             }
                         }
                     }
+
                     if (itemType == ItemType.Weapon && Config.gpConfig.ItemRarity)
                     {
                         TooltipLine Stt;
                         RPGPlayer p = Main.LocalPlayer.GetModPlayer<RPGPlayer>();
                         if (ModifierManager.GetRarityDamageBoost(rarity) > 0)
-                            Stt = new TooltipLine(Mod, "statsInfo", Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.Raritybonus") + ModifierManager.GetRarityDamageBoost(rarity) + Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.Damage"))
+                            Stt = new TooltipLine(Mod, "statsInfo", Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.Raritybonus") + ModifierManager.GetRarityDamageBoost(rarity) + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.Damage"))
                             {
                                 OverrideColor = ModifierManager.GetRarityColor(rarity)
                             };
                         else
                         {
-                            Stt = new TooltipLine(Mod, "statsInfo", Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.Raritybonus") + ModifierManager.GetRarityDamageBoost(rarity) + Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.Damage"))
+                            Stt = new TooltipLine(Mod, "statsInfo", Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.Raritybonus") + ModifierManager.GetRarityDamageBoost(rarity) + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.Damage"))
                             {
                                 OverrideColor = ModifierManager.GetRarityColor(rarity)
                             };
@@ -993,15 +965,14 @@ namespace AnotherRpgMod.Items
                 {
                     if (itemType == ItemType.Weapon)
                     {
-                        TooltipLine bt = new TooltipLine(Mod, "BaseDamage", "" + baseDamage + Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.BaseDamage"));
+                        TooltipLine bt = new TooltipLine(Mod, "BaseDamage", "" + baseDamage + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.BaseDamage"));
                         tooltips.Add(bt);
                     }
                     else if (itemType == ItemType.Armor)
                     {
-                        TooltipLine bt = new TooltipLine(Mod, "BaseDefense", "" + baseArmor + Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.BaseDamage"));
+                        TooltipLine bt = new TooltipLine(Mod, "BaseDefense", "" + baseArmor + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.BaseDamage"));
                         tooltips.Add(bt);
                     }
-
 
                     if (itemType == ItemType.Weapon || itemType == ItemType.Armor)
                     {
@@ -1016,6 +987,7 @@ namespace AnotherRpgMod.Items
                         };
                         tooltips.Add(xptt);
                     }
+
                     if (level >= 0)
                     {
                         if (Config.gpConfig.ItemTree && m_itemTree!= null)
@@ -1029,6 +1001,7 @@ namespace AnotherRpgMod.Items
                                 };
                                 tooltips.Add(infott);
                             }
+
                             if (m_itemTree.AscendPoints > 0)
                             {
                                 TooltipLine infotta = new TooltipLine(Mod, "pointsAscendInfo", m_itemTree.AscendPoints + " Ascend Points left !!!")
@@ -1060,8 +1033,8 @@ namespace AnotherRpgMod.Items
                                     };
                                     tooltips.Add(tt);
                                 }
-
                             }
+
                             if (itemType == ItemType.Armor)
                             {
                                 TooltipLine tt = new TooltipLine(Mod, "PrefixDefense", "+" + Mathf.CeilInt(((float)level * 0.25f) + baseArmor * ascendedLevel * 0.25f) + " Defense")
@@ -1069,8 +1042,6 @@ namespace AnotherRpgMod.Items
                                     IsModifier = true
                                 };
                                 tooltips.Add(tt);
-
-
                             }
                         }
                         for (int i = 0; i < AscendToolTip.Count; i++)
@@ -1080,7 +1051,6 @@ namespace AnotherRpgMod.Items
                     }
                 }
             }
-
         }
 
         public string treeToString(ItemSkillTree itemTree)
@@ -1092,7 +1062,7 @@ namespace AnotherRpgMod.Items
 
         public override void SaveData(Item item, TagCompound tag)
         {
-            //AnotherRpgMod.Instance.Logger.Info("Is it saving Item Data ? ....");
+            //AnotherRpgModExpanded.Instance.Logger.Info("Is it saving Item Data ? ....");
             base.SaveData(item, tag);
             int[] statsArray = new int[0];
             if (stats.Stats != null && stats.Stats.Count > 0)
@@ -1104,8 +1074,8 @@ namespace AnotherRpgMod.Items
                     statsArray[(i * 2) + 1] = (int)(stats.Stats[i].value * 100);
                 }
             }
-            //AnotherRpgMod.Instance.Logger.Info(item.Name);
-            //AnotherRpgMod.Instance.Logger.Info(treeToString(m_itemTree));
+            //AnotherRpgModExpanded.Instance.Logger.Info(item.Name);
+            //AnotherRpgModExpanded.Instance.Logger.Info(treeToString(m_itemTree));
 
 
             string treeToStringVal = "";
@@ -1132,7 +1102,6 @@ namespace AnotherRpgMod.Items
             tag.Add("bAscendWorldDrop", bAscendWorldDrop);
             tag.Add("AscendWorldDropLevel",  AscendWorldDropLevel);
         }
-
 
         public override bool CanConsumeAmmo(Item weapon, Item ammo, Player player)
         {
@@ -1176,7 +1145,6 @@ namespace AnotherRpgMod.Items
                 
             }
             InitItem(item);
-
         }
 
         public override void UpdateInventory(Item item, Player Player)
@@ -1186,6 +1154,7 @@ namespace AnotherRpgMod.Items
             {
                 item.SetNameOverride(SetName(item));
             }
+
             if (character == null)
             {
                 return;
@@ -1211,6 +1180,7 @@ namespace AnotherRpgMod.Items
                         AscendToolTip.Add(new TooltipLine(Mod, "Ascding", "Ascending Tier " + ascendedLevel + " : " + AscendName[maxascend]) { IsModifier = true });
                     }
                 }
+
                 if (itemType == ItemType.Weapon)
                 {
                     if (item.pick > 0 || item.axe > 0 || item.hammer > 0)
@@ -1235,7 +1205,6 @@ namespace AnotherRpgMod.Items
                                 item.autoReuse = true;
                             }
 
-
                             if (item.DamageType == DamageClass.Ranged)
                                 AscendToolTip.Add(new TooltipLine(Mod, "ascdProjectile", "+ " + ascendedLevel + " Projectiles") { IsModifier = true });
 
@@ -1245,11 +1214,13 @@ namespace AnotherRpgMod.Items
                                 item.useTime = Mathf.CeilInt(baseUseTime * 0.6f);
                                 item.useAnimation = item.useTime;
                             }
+
                             if (baseMana > 0)
                             {
                                 AscendToolTip.Add(new TooltipLine(Mod, "AscdAManaUse", "50% Mana Reduction") { IsModifier = true });
                                 item.mana = Mathf.CeilInt(baseMana * 0.5f);
                             }
+
                             if (item.DamageType == DamageClass.Summon)
                             {
                                 AscendToolTip.Add(new TooltipLine(Mod, "AscdMaxMinion", "Max minion +" + ascendedLevel) { IsModifier = true });
@@ -1258,7 +1229,6 @@ namespace AnotherRpgMod.Items
                                     Player.maxMinions+=ascendedLevel;
                                     */
                             }
-
 
                             if (ascendedLevel > 1)
                             {
@@ -1269,8 +1239,8 @@ namespace AnotherRpgMod.Items
                                         lifeLeech = i * 0.5f;
                                     }
                                     AscendToolTip.Add(new TooltipLine(Mod, "AscdLifeLeech", "+ " + lifeLeech + "% LifeLeech") { IsModifier = true });
-
                                 }
+
                                 if (item.DamageType == DamageClass.Magic)
                                 {
                                     for (int i = 0; i < ascendedLevel; i++)
@@ -1279,21 +1249,21 @@ namespace AnotherRpgMod.Items
                                     }
                                     AscendToolTip.Add(new TooltipLine(Mod, "AscdManaLeech", "+ " + manaLeech + "% ManaLeech") { IsModifier = true });
                                 }
+
                                 if (item.DamageType == DamageClass.Summon)
                                 {
 
                                     AscendToolTip.Add(new TooltipLine(Mod, "AscdMinionDamage", "+ 50% Minion Damage") { IsModifier = true });
                                     Player.GetDamage(DamageClass.Summon) *= 1.5f;
                                 }
+
                                 if (item.useAmmo > 0)
                                 {
                                     AscendToolTip.Add(new TooltipLine(Mod, "AscdMinionDamage", "50% Chance Not to use ammo") { IsModifier = true });
                                 }
-
                             }
                         }
                     }
-
 
                     int manacostGain = 0;
                     if (Config.gpConfig.RPGPlayer && character.GetskillTree.HavePerk(Perk.ManaOverBurst) && item.DamageType == DamageClass.Magic && item.mana > 0)
@@ -1302,12 +1272,9 @@ namespace AnotherRpgMod.Items
                         manacostGain = Mathf.CeilInt((Player.statMana * (0.1f + ((float)character.GetskillTree.nodeList.GetPerk(Perk.ManaOverBurst).GetLevel - 1) * 0.15f))/ (float)Math.Sqrt(character.GetDamageMult(DamageType.Magic, 2)));
                     }
                     item.mana = baseMana + manacostGain;
-
                 }
             }
-
         }
-
 
         public override void GetHealLife(Item item, Player Player, bool quickHeal, ref int healValue)
         {
@@ -1321,7 +1288,6 @@ namespace AnotherRpgMod.Items
             base.GetHealMana(item, Player, quickHeal, ref healValue);
         }
 
-
         #endregion
 
         #region CustomFunction
@@ -1333,42 +1299,52 @@ namespace AnotherRpgMod.Items
             {
                 return 1;
             }
+
             if(PowerLevel < 90)
             {
                 return 2;
             }
+
             if (PowerLevel < 100)
             {
                 return 3;
             }
+
             if (PowerLevel < 140)
             {
                 return 4;
             }
+
             if ( PowerLevel < 200)
             {
                 return 5;
             }
+
             if (PowerLevel < 300)
             {
                 return 6;
             }
+
             if (PowerLevel < 400)
             {
                 return 8;
             }
+
             if (PowerLevel < 700)
             {
                 return 10;
             }
+
             if (PowerLevel < 1000)
             {
                 return 15;
             }
+
             if (PowerLevel < 1500)
             {
                 return 20;
             }
+
             if(PowerLevel < 2500)
             {
                 return 30;
@@ -1405,7 +1381,7 @@ namespace AnotherRpgMod.Items
             if (ascendedLevel>0)
                 m_itemTree.ExtendTree(Mathf.Clamp(Mathf.CeilInt(Mathf.Pow(baseCap / 3f, 0.95)), 5, 99)*ascendedLevel);
 
-            AnotherRpgMod.Instance.ItemTreeUI.Open(this);
+            AnotherRpgModExpanded.Instance.ItemTreeUI.Open(this);
         }
 
         public void ResetLevelXp(bool ascend = true)
@@ -1423,8 +1399,6 @@ namespace AnotherRpgMod.Items
 
         public void Ascend()
         {
-
-            
             if (ascendedLevel >= WorldManager.GetMaximumAscend())
             {
                 if (!AscendLimit)
@@ -1434,8 +1408,6 @@ namespace AnotherRpgMod.Items
                 }
                 return;
             }
-                
-            
 
             ascendedLevel++;
             m_itemTree.MaxAscendPoints++;
@@ -1444,7 +1416,7 @@ namespace AnotherRpgMod.Items
 
             if (UI.ItemTreeUi.visible)
             {
-                AnotherRpgMod.Instance.ItemTreeUI.Init();
+                AnotherRpgModExpanded.Instance.ItemTreeUI.Init();
             }
             
             //First Ascension = LIMIT BREAK
@@ -1471,6 +1443,7 @@ namespace AnotherRpgMod.Items
                     rarity = info.rarity;
                     stats = info.stats;
                 }
+
                 if (Config.gpConfig.ItemModifier)
                 {
                     modifier = info.modifier;
@@ -1540,9 +1513,9 @@ namespace AnotherRpgMod.Items
 
             xp -= GetExpToNextLevel(level, ascendedLevel);
             if (itemType == ItemType.Armor)
-                CombatText.NewText(Player.getRect(), new Color(255, 26, 255), Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.Armorupgrade"), true);
+                CombatText.NewText(Player.getRect(), new Color(255, 26, 255), Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.Armorupgrade"), true);
             if (itemType == ItemType.Weapon)
-                CombatText.NewText(Player.getRect(), new Color(255, 26, 255), Language.GetTextValue("Mods.AnotherRpgMod.ItemUpdate.Weaponupgrade"), true);
+                CombatText.NewText(Player.getRect(), new Color(255, 26, 255), Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemUpdate.Weaponupgrade"), true);
             level++;
             m_itemTree.MaxEvolutionPoints++;
             m_itemTree.EvolutionPoints++;
@@ -1565,6 +1538,7 @@ namespace AnotherRpgMod.Items
                 _xp *= 1 + (long)ModifierManager.GetModifierBonus(Modifier.SelfLearning, this) * (long)0.01f;
                 _xp *= 1 + (long)bonusXp;
             }
+
             if (!canLevelUpMore())
             {
                 xp = (long)Mathf.Clamp(xp + _xp * Config.gpConfig.ItemXpMultiplier, 0, GetExpToNextLevel(level, ascendedLevel));
@@ -1580,7 +1554,6 @@ namespace AnotherRpgMod.Items
                 }
             }
         }
-
 
         public bool canLevelUpMore()
         {
@@ -1617,6 +1590,7 @@ namespace AnotherRpgMod.Items
             {
                 Player.thorns += ModifierManager.GetModifierBonus(Modifier.Thorny, this) * 0.01f;
             }
+
             if (ModifierManager.HaveModifier(Modifier.VampiricAura, modifier))
             {
                 for (int j = 0; j < Main.npc.Length; j++)
@@ -1635,6 +1609,7 @@ namespace AnotherRpgMod.Items
                     }
                 }
             }
+
             if (ModifierManager.HaveModifier(Modifier.FireLord, modifier))
             {
                 for (int j = 0; j < Main.npc.Length; j++)
@@ -1652,8 +1627,6 @@ namespace AnotherRpgMod.Items
         }
 
         #endregion
-
-
     }
 }
 

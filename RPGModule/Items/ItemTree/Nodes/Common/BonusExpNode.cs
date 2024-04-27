@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class BonusExpNode : ItemNodeAdvanced
     {
@@ -48,7 +48,5 @@ namespace AnotherRpgMod.Items
         {
             return "1,0";
             //return power.ToString();
-        }
-
-    }
+        }    }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using Terraria;
 using Terraria.ModLoader;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria.ID;
 
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
 
     class ARPGGlobalProjectile : GlobalProjectile
@@ -67,6 +67,7 @@ namespace AnotherRpgMod.RPGModule.Entities
 
                 projectile.damage = Mathf.HugeCalc(Mathf.FloorInt(projectile.damage * Mathf.Pow(1 + projectilelevel * 0.02f, 0.95f)), projectile.damage);
             }
+
             base.SetDefaults(projectile);
         }
         */
@@ -77,6 +78,7 @@ namespace AnotherRpgMod.RPGModule.Entities
             
             if (init)
                 return base.PreAI(projectile);
+
             if (projectile.friendly)
                 return base.PreAI(projectile);
 
@@ -93,7 +95,6 @@ namespace AnotherRpgMod.RPGModule.Entities
 
             return base.PreAI(projectile);
         }
-
     }
 
 }

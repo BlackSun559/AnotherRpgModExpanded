@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Terraria;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class AdditionalDamageNode : ItemNode
     {
@@ -18,7 +18,6 @@ namespace AnotherRpgMod.Items
         {
             get
             {
-                
                 return NodeCategory.Flat;
             }
         }
@@ -31,11 +30,13 @@ namespace AnotherRpgMod.Items
             }
         }
 
-        public override string GetDesc { get {
+        public override string GetDesc 
+        { 
+            get 
+            {
                 return "Add " + (FlatDamage * Utils.Mathf.Clamp(GetLevel,1,GetMaxLevel)) + " Damage";
-            } }
-
-        
+            } 
+        }
 
         public int FlatDamage;
 
@@ -60,7 +61,5 @@ namespace AnotherRpgMod.Items
         public override string GetSaveValue()
         {
             return power.ToString();
-        }
-
-    }
+        }    }
 }

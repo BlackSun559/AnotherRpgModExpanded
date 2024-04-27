@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
     [Flags]
     public enum NPCModifier : int

@@ -1,7 +1,7 @@
 ﻿
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 
-namespace AnotherRpgMod.RPGModule.Entities
+namespace AnotherRpgModExpanded.RPGModule.Entities
 {
     class StatData
     {
@@ -10,7 +10,9 @@ namespace AnotherRpgMod.RPGModule.Entities
         private int xp;
 
         public int AddLevel { get { return level; } }
+
         public int NaturalLevel { get { return natural; } }
+
         public int GetLevel { get { return level + natural; } }
         public int GetXP { get { return xp; } }
 
@@ -37,6 +39,5 @@ namespace AnotherRpgMod.RPGModule.Entities
         {
             natural++;
         }
-
     }
 }

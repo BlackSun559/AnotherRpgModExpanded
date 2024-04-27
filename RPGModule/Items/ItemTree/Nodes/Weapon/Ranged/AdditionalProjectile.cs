@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class AdditionalProjectile : ItemNodeAdvanced
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class AdditionalDamageNodePercent : ItemNode
     {
@@ -61,7 +61,5 @@ namespace AnotherRpgMod.Items
         public override string GetSaveValue()
         {
             return power.ToString();
-        }
-
-    }
+        }    }
 }

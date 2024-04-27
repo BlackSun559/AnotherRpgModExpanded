@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnotherRpgMod.RPGModule
+namespace AnotherRpgModExpanded.RPGModule
 {
     public enum ClassType
     {
@@ -99,6 +99,5 @@ namespace AnotherRpgMod.RPGModule
 
         Miner, // Low Damage, Huge Health and mana, Low/Verylow Knockback, Melee speed bonus
         */
-
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class AscendedAdditionalDamageNode : ItemNode
     {
@@ -71,8 +71,5 @@ namespace AnotherRpgMod.Items
         {
             return power.ToString();
         }
-
-
-
     }
 }

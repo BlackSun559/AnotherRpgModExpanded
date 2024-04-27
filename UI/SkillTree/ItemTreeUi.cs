@@ -8,72 +8,53 @@ using Terraria;
 using System;
 using Terraria.ModLoader;
 using System.Collections.Generic;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 using System.Reflection;
 using Terraria.GameInput;
 using Terraria.Localization;
-using AnotherRpgMod.RPGModule;
-using AnotherRpgMod.Utils;
-using AnotherRpgMod.Items;
+using AnotherRpgModExpanded.RPGModule;
+using AnotherRpgModExpanded.Utils;
+using AnotherRpgModExpanded.Items;
 using Terraria.Audio;
 using ReLogic.Content;
 using Terraria.Localization;
 
 
-namespace AnotherRpgMod.UI
+namespace AnotherRpgModExpanded.UI
 {
     class ItemTreeUi : UIState
     {
-
         UIPanel backGround;
         UIPanel toolTip;
-
         List<ItemConnection> allConnection;
         List<ItemSkillPanel> allBasePanel;
         List<ItemSkillText> allText;
-
         UIText ResetText;
         float zoomMax = 2f;
         float zoomMin = 0.5f;
-
         float iZoom = 1;
         static float uIScale = 1;
         float screenMult = (Main.screenHeight / 1080f);
-
-
-
-
-
-
-
-
         public float sizeMultplier;
+
         private void ResetTextHover(UIMouseEvent evt, UIElement listeningElement)
         {
             ResetText.TextColor = Color.White;
         }
+
         private void ResetTextOut(UIMouseEvent evt, UIElement listeningElement)
         {
             ResetText.TextColor = Color.Gray;
         }
 
         public static ItemTreeUi Instance;
-
         private UIText skillPointsLeft;
-
         protected ItemUpdate m_itemSource;
-
         public static bool visible = false;
 
         public Vector2 offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.vConfig.UI_Scale;
         const int SKILL_SIZE = 64;
         const int CONNECTION_WIDTH = 8;
-
-
-
-
-
-
 
         public override void OnInitialize()
         {
@@ -99,8 +80,8 @@ namespace AnotherRpgMod.UI
 
                 allConnection[i].Hidden = (m_itemSource.GetItemTree.GetNode(allConnection[i].neighboorID).GetState == 0 || m_itemSource.GetItemTree.GetNode(allConnection[i].nodeID).GetState == 0);
             }
-            listSize = allBasePanel.Count;
 
+            listSize = allBasePanel.Count;
 
             for (int i = 0; i < listSize; i++)
             {
@@ -109,14 +90,8 @@ namespace AnotherRpgMod.UI
                 allBasePanel[i].Hidden = false;
                 allBasePanel[i].skill.Hidden = false;
                 switch (allBasePanel[i].node.GetState)
-
-
-
-
-
                 {
                     case 1:
-
                         allBasePanel[i].skill.color = new Color(255, 255, 255, 255);
                         allBasePanel[i].color = new Color(255, 255, 255, 255);
                         break;
@@ -125,7 +100,6 @@ namespace AnotherRpgMod.UI
                         allBasePanel[i].color = new Color(160, 180, 50, 255);
                         break;
                     case 3:
-
                         allBasePanel[i].skill.color = new Color(220, 220, 220, 255);
                         allBasePanel[i].color = new Color(120, 120, 120, 255);
                         break;
@@ -158,9 +132,7 @@ namespace AnotherRpgMod.UI
             m_itemSource.ResetTree();
             Init();
 
-
             dragging = false;
-
         }
 
         public void Open(ItemUpdate _item)
@@ -170,18 +142,10 @@ namespace AnotherRpgMod.UI
             Init();
         }
 
-
-
-
         public void Init()
         {
             //Erase all previous value
             Erase();
-
-
-
-
-
 
             if (m_itemSource == null)
             {
@@ -198,9 +162,6 @@ namespace AnotherRpgMod.UI
 
             backGround = new UIPanel();
 
-
-
-
             backGround.OnLeftMouseDown += new UIElement.MouseEvent(DragStart);
             backGround.OnLeftMouseUp += new UIElement.MouseEvent(DragEnd);
             backGround.OnMiddleClick += new MouseEvent(ResetOffset);
@@ -214,10 +175,11 @@ namespace AnotherRpgMod.UI
             backGround.BackgroundColor = new Color(73, 94, 171, 150);
             Append(backGround);
 
-            string points = Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.EvolutionPoints") + " : " + m_itemSource.GetEvolutionPoints + " / " + m_itemSource.GetMaxEvolutionPoints;
+            string points = Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.EvolutionPoints") + " : " + m_itemSource.GetEvolutionPoints + " / " + m_itemSource.GetMaxEvolutionPoints;
+
             if (m_itemSource.Ascention > 0)
             {
-                points += "\n" + Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.AscendencePoints") + " : " + m_itemSource.GetAscendPoints + " / " + m_itemSource.GetMaxAscendPoints;
+                points += "\n" + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.AscendencePoints") + " : " + m_itemSource.GetAscendPoints + " / " + m_itemSource.GetMaxAscendPoints;
             }
 
             skillPointsLeft = new UIText(points);
@@ -225,7 +187,7 @@ namespace AnotherRpgMod.UI
             skillPointsLeft.Top.Set(150, 0f);
             backGround.Append(skillPointsLeft);
 
-            ResetText = new UIText(Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.RESET"), 1 * screenMult, true)
+            ResetText = new UIText(Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.RESET"), 1 * screenMult, true)
             {
                 TextColor = Color.Gray
             };
@@ -249,26 +211,20 @@ namespace AnotherRpgMod.UI
             {
 
                 SkillInit(m_itemSource.GetItemTree.GetNode(i));
-
-
-
-
-
             }
-
 
             int listSize = allConnection.Count;
             for (int i = 0; i < listSize; i++)
             {
                 backGround.Append(allConnection[i]);
             }
+
             listSize = allBasePanel.Count;
             for (int i = 0; i < listSize; i++)
             {
                 backGround.Append(allBasePanel[i]);
             }
         }
-
 
         public override void Update(GameTime gameTime)
         {
@@ -285,11 +241,11 @@ namespace AnotherRpgMod.UI
                 allBasePanel[i].Top.Set((allBasePanel[i].basePos.Y + offSet.Y) * sizeMultplier, 0);
             }
 
+            string points = Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.EvolutionPoints") + " : " + m_itemSource.GetEvolutionPoints + " / " + m_itemSource.GetMaxEvolutionPoints;
 
-            string points = Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.EvolutionPoints") + " : " + m_itemSource.GetEvolutionPoints + " / " + m_itemSource.GetMaxEvolutionPoints;
             if (m_itemSource.Ascention > 0)
             {
-                points += "\n"  +Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.AscendencePoints") + " : " + m_itemSource.GetAscendPoints + " / " + m_itemSource.GetMaxAscendPoints;
+                points += "\n"  +Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.AscendencePoints") + " : " + m_itemSource.GetAscendPoints + " / " + m_itemSource.GetMaxAscendPoints;
             }
             skillPointsLeft.SetText(points);
 
@@ -307,6 +263,7 @@ namespace AnotherRpgMod.UI
             for (int j = 0; j < node.GetNeighboor.Count; j++)
             {
                 neightboor = node.GetParent.GetNode(node.GetNeighboor[j]);
+
                 if (neightboor != null)
                 {
                     Color ConnectionColor = (neightboor.GetState == 4 || node.GetState == 4) ? Color.GreenYellow : Color.DarkRed;
@@ -321,17 +278,6 @@ namespace AnotherRpgMod.UI
                     DrawConnection(ConnectionColor, node.GetPos, neightboor.GetPos, node, neightboor, (neightboor.GetState == 0 || node.GetState == 0));
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
         }
 
         public void DrawSkill(ItemNode node) //Vector2 pos, Texture2D tex,int state)
@@ -339,11 +285,12 @@ namespace AnotherRpgMod.UI
 
 
 
-            ItemSkillPanel basePanel = new ItemSkillPanel(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/UI/skill_blank", AssetRequestMode.ImmediateLoad).Value);
+            ItemSkillPanel basePanel = new ItemSkillPanel(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/skill_blank", AssetRequestMode.ImmediateLoad).Value);
             basePanel.SetPadding(0);
             basePanel.Width.Set(SKILL_SIZE * sizeMultplier, 0f);
             basePanel.Height.Set(SKILL_SIZE * sizeMultplier, 0f);
-            ItemSkill skillIcon = new ItemSkill(ModContent.Request<Texture2D>("AnotherRpgMod/Textures/ItemTree/unknow", AssetRequestMode.ImmediateLoad).Value);
+            ItemSkill skillIcon = new ItemSkill(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/ItemTree/unknow", AssetRequestMode.ImmediateLoad).Value);
+
             if (node.GetState > 1)
                 skillIcon = new ItemSkill(ModContent.Request<Texture2D>(SkillTextures.GetItemTexture(node)).Value);
 
@@ -388,6 +335,7 @@ namespace AnotherRpgMod.UI
             basePanel.node = node;
             basePanel.skill = skillIcon;
             ItemSkillText levelText = new ItemSkillText(node.GetLevel + " / " + node.GetMaxLevel, node, sizeMultplier, false);
+
             if (basePanel.Hidden)
                 levelText.SetText("");
             levelText.Left.Set(SKILL_SIZE * 0.2f * sizeMultplier, 0);
@@ -414,7 +362,6 @@ namespace AnotherRpgMod.UI
             {
                 color = Color.DarkSlateGray,
                 Hidden = hiden
-
             };
 
             ItemConnection connection = new ItemConnection(angle, distance, 6)
@@ -432,9 +379,7 @@ namespace AnotherRpgMod.UI
 
 
             allConnection.Add(connection);
-
         }
-
 
         private void iScrollUpDown(UIScrollWheelEvent evt, UIElement listeningElement)
         {
@@ -445,15 +390,14 @@ namespace AnotherRpgMod.UI
             if (evt.ScrollWheelValue > 0)
             {
                 iZoom = Mathf.Clamp(1.1f * iZoom, zoomMin, zoomMax);
-
             }
             else if (evt.ScrollWheelValue < 0)
             {
                 iZoom = Mathf.Clamp(0.85f * iZoom, zoomMin, zoomMax);
-
             }
             float ratio = iZoom / preZoom;
             offSet /= ratio;
+
             if (ratio != 1)
             {
                 if (evt.ScrollWheelValue > 0)
@@ -501,10 +445,12 @@ namespace AnotherRpgMod.UI
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Vector2 MousePosition = new Vector2((float)Main.mouseX, (float)Main.mouseY);
+
             if (backGround.ContainsPoint(MousePosition))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+
             if (dragging)
             {
                 offSet.X += (MousePosition.X - regOffSet.X);
@@ -552,14 +498,14 @@ namespace AnotherRpgMod.UI
 
 
 
-            Name.SetText(node.GetName + Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.Level") + node.GetLevel + " / " + node.GetMaxLevel);
+            Name.SetText(node.GetName + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.Level") + node.GetLevel + " / " + node.GetMaxLevel);
 
-            string costText = Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.State") + node.GetState;
+            string costText = Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.State") + node.GetState;
 
             if (node.IsAscend)
-                costText += Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.AscendencePoints");
+                costText += Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.AscendencePoints");
             else
-                costText += Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.EvolutionPoints");
+                costText += Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.EvolutionPoints");
 
             UIText info = new UIText(costText);
             info.Left.Set(50 * unzoomMult, 0);
@@ -601,6 +547,7 @@ namespace AnotherRpgMod.UI
         private void OnClickNode(UIMouseEvent evt, UIElement listeningElement, ItemNode node)
         {
             int points = 0;
+
             if (node.IsAscend)
                 points = m_itemSource.GetAscendPoints;
             else
@@ -619,7 +566,6 @@ namespace AnotherRpgMod.UI
                     SoundEngine.PlaySound(SoundID.MenuClose);
                     break;
             }
-
         }
 
         private void ResetOffset(UIMouseEvent evt, UIElement listeningElement)
@@ -635,6 +581,7 @@ namespace AnotherRpgMod.UI
             {
                 return;
             }
+
             if (Hidden)
                 return;
             toolTip = new UIPanel();
@@ -665,19 +612,21 @@ namespace AnotherRpgMod.UI
             UIText Name = new UIText("", 0.5f, true);
             Name.Left.Set(10, 0);
             Name.Top.Set(10, 0);
-            if (node.GetState <= 1)
-                Name.SetText(Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.Unknown") + Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.Level") + Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.LevelUnknown"));
-            else
-                Name.SetText(node.GetName + Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.Level") + node.GetLevel + " / " + node.GetMaxLevel);
 
-            string costText = Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.Cost") + node.GetRequiredPoints;
+            if (node.GetState <= 1)
+                Name.SetText(Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.Unknown") + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.Level") + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.LevelUnknown"));
+            else
+                Name.SetText(node.GetName + Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.Level") + node.GetLevel + " / " + node.GetMaxLevel);
+
+            string costText = Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.Cost") + node.GetRequiredPoints;
+
             if (node.IsAscend)
-                costText += Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.AscendencePoints");
+                costText += Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.AscendencePoints");
             else
-                costText += Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.EvolutionPoints");
+                costText += Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.EvolutionPoints");
 
             if (node.GetState <= 1)
-                costText = Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.CostUnknown");
+                costText = Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.CostUnknown");
 
 
 
@@ -699,7 +648,7 @@ namespace AnotherRpgMod.UI
             string desc = node.GetDesc;
 
             if (node.GetState <= 1)
-                desc = Language.GetTextValue("Mods.AnotherRpgMod.ItemTreeUi.UnknownDesc");
+                desc = Language.GetTextValue("Mods.AnotherRpgModExpanded.ItemTreeUi.UnknownDesc");
             UIText description = new UIText(desc);
             description.Left.Set(50 * unzoomMult, 0);
             description.Top.Set(170 * unzoomMult, 0);
@@ -721,10 +670,6 @@ namespace AnotherRpgMod.UI
 
             Recalculate();
         }
-
-
     }
-
-
 
 }

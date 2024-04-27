@@ -4,9 +4,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
-using AnotherRpgMod.RPGModule.Entities;
+using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgMod.Utils
+namespace AnotherRpgModExpanded.Utils
 {
     class MPPacketHandler
     {
@@ -33,8 +33,6 @@ namespace AnotherRpgMod.Utils
             }
         }
 
-
-
         static public string ParseBuffer(Dictionary<string, string> buffer)
         {
            string parsed = "";
@@ -52,6 +50,7 @@ namespace AnotherRpgMod.Utils
         static public Dictionary<string, string> Unparse(string parsed)
         {
             Dictionary<string, string> unparsed = new Dictionary<string, string>();
+
             if (parsed == "")
                 return unparsed;
             String[] KVString = parsed.Split(',');
@@ -60,6 +59,7 @@ namespace AnotherRpgMod.Utils
                 KeyValuePair<string, string> KVPair = new KeyValuePair<string, string>(KVString[i].Split(':')[0], KVString[i].Split(':')[1]);
                 unparsed.Add(KVPair.Key, KVPair.Value);
             }
+
             return unparsed;
         }
 
@@ -101,7 +101,7 @@ namespace AnotherRpgMod.Utils
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                //AnotherRpgMod.Instance.Logger.Info("ask npc to server");
+                //AnotherRpgModExpanded.Instance.Logger.Info("ask npc to server");
                 ModPacket packet = mod.GetPacket();
                 packet.Write((byte)Message.AskNpc);
                 packet.Write((byte)playerindex);
@@ -130,13 +130,11 @@ namespace AnotherRpgMod.Utils
                 packet.Send(ignoreClient: ignore);
                 
             }
+
             else if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 AskNpcInfo(mod, npc, playerindex, ignore);
             }
-
-
-
         }
 
         static public void HandlePacket(BinaryReader reader, int whoAmI)
@@ -152,6 +150,7 @@ namespace AnotherRpgMod.Utils
                     byte playerID = (byte)tags[DataTag.PlayerId];
                     RPGPlayer p = Main.player[playerID].GetModPlayer<RPGPlayer>();
                     /*
+
                     if (p.baseName == "")
                         p.baseName = Main.player[(int)tags[DataTag.playerId]].name;
                     */
@@ -166,6 +165,7 @@ namespace AnotherRpgMod.Utils
                         {
                             Main.player[playerID].statLife = (int)tags[DataTag.life];
                             Main.player[playerID].statLifeMax2 = (int)tags[DataTag.maxLife];
+
                             if (WorldManager.instance != null)
                             {
                                 WorldManager.instance.NetUpdateWorld();
@@ -181,6 +181,7 @@ namespace AnotherRpgMod.Utils
                     Main.LocalPlayer.GetModPlayer<RPGPlayer>().AddXp((int)tags[DataTag.amount], (int)tags[DataTag.level]);
                     break;
                 case Message.SyncNPCSpawn:
+
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                         break;
                         
@@ -190,7 +191,7 @@ namespace AnotherRpgMod.Utils
                     ARPGGlobalNPC rpgNPC;
 
                     if (npc.TryGetGlobalNPC<ARPGGlobalNPC>(out rpgNPC))
-                        AnotherRpgMod.Instance.Logger.Info("Sync NPC Spawn | name :" + npc.GivenName);
+                        AnotherRpgModExpanded.Instance.Logger.Info("Sync NPC Spawn | name :" + npc.GivenName);
                     else 
                     //Request this npc again in a few frame
 
@@ -206,7 +207,7 @@ namespace AnotherRpgMod.Utils
 
                     NPCModifier modifiers = (NPCModifier)tags[DataTag.modifiers];
                         
-                    AnotherRpgMod.Instance.Logger.Info(npc.GivenOrTypeName + "\nTier : " + tier + "   Level : " + level + "   rank : " + rank + "   Modifier  : " + modifiers + " \n Buffer : " + (string)tags[DataTag.buffer]);
+                    AnotherRpgModExpanded.Instance.Logger.Info(npc.GivenOrTypeName + "\nTier : " + tier + "   Level : " + level + "   rank : " + rank + "   Modifier  : " + modifiers + " \n Buffer : " + (string)tags[DataTag.buffer]);
 
                     Dictionary<string, string> bufferStack = Unparse((string)tags[DataTag.buffer]);
 
@@ -223,12 +224,13 @@ namespace AnotherRpgMod.Utils
                     npc.life = npc.lifeMax;
                         
 
-                    //AnotherRpgMod.Instance.Logger.Info("NPC created with id : " + npc.whoAmI);
-                    //AnotherRpgMod.Instance.Logger.Info( "Client Side : \n" + npc.GetGivenOrTypeNetName() + "\nLvl." + (npc.GetGlobalNPC<ARPGGlobalNPC>().getLevel + npc.GetGlobalNPC<ARPGGlobalNPC>().getTier) + "\nHealth : " + npc.life + " / " + npc.lifeMax + "\nDamage : " + npc.damage + "\nDef : " + npc.defense + "\nTier : " + npc.GetGlobalNPC<ARPGGlobalNPC>().getRank + "\n\n");
+                    //AnotherRpgModExpanded.Instance.Logger.Info("NPC created with id : " + npc.whoAmI);
+                    //AnotherRpgModExpanded.Instance.Logger.Info( "Client Side : \n" + npc.GetGivenOrTypeNetName() + "\nLvl." + (npc.GetGlobalNPC<ARPGGlobalNPC>().getLevel + npc.GetGlobalNPC<ARPGGlobalNPC>().getTier) + "\nHealth : " + npc.life + " / " + npc.lifeMax + "\nDamage : " + npc.damage + "\nDef : " + npc.defense + "\nTier : " + npc.GetGlobalNPC<ARPGGlobalNPC>().getRank + "\n\n");
 
                     break;
 
                 case Message.SyncNPCUpdate:
+
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
 
@@ -243,21 +245,25 @@ namespace AnotherRpgMod.Utils
 
                         if (npcu.lifeMax != (int)tags[DataTag.maxLife])
                         {
-                            AskNpcInfo(AnotherRpgMod.Instance, npcu, Main.myPlayer);
+                            AskNpcInfo(AnotherRpgModExpanded.Instance, npcu, Main.myPlayer);
                         }
+
                         npcu.lifeMax = (int)tags[DataTag.maxLife];
                         npcu.life = (int)tags[DataTag.life];
                         npcu.damage = (int)tags[DataTag.damage];
                     }
+
                     break;
                 case Message.Log:
+
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        AnotherRpgMod.Instance.Logger.Info((string)tags[DataTag.buffer]);
+                        AnotherRpgModExpanded.Instance.Logger.Info((string)tags[DataTag.buffer]);
                     }
 
                     break;
                 case Message.AskNpc:
+
                     if (Main.netMode == NetmodeID.Server)
                     {
                         int askplayerID = (byte)tags[DataTag.PlayerId];
@@ -265,9 +271,10 @@ namespace AnotherRpgMod.Utils
                         NPC asknpc = Main.npc[(byte)tags[DataTag.npcId]];
                         
                         ARPGGlobalNPC askrpgnpc;
+
                         if (!asknpc.TryGetGlobalNPC<ARPGGlobalNPC>(out askrpgnpc))
                         {
-                            MPDebug.Log(AnotherRpgMod.Instance, "Couldn't find Global NPC of asked NPC");
+                            MPDebug.Log(AnotherRpgModExpanded.Instance, "Couldn't find Global NPC of asked NPC");
 
                             return;
                         }
@@ -275,7 +282,7 @@ namespace AnotherRpgMod.Utils
                         int asktier = askrpgnpc.getTier;
                         int asklevel = askrpgnpc.getLevel;
                         int askrank = askrpgnpc.getRank;
-                        Mod mod = AnotherRpgMod.Instance;
+                        Mod mod = AnotherRpgModExpanded.Instance;
                         //MPDebug.Log(mod, "Server Side : \n" + npc.GetGivenOrTypeNetName() + " ID : " + npc.whoAmI + "\nLvl." + (npc.GetGlobalNPC<ARPGGlobalNPC>().getLevel + npc.GetGlobalNPC<ARPGGlobalNPC>().getTier) + "\nHealth : " + npc.life + " / " + npc.lifeMax + "\nDamage : " + npc.damage + "\nDef : " + npc.defense + "\nTier : " + npc.GetGlobalNPC<ARPGGlobalNPC>().getRank + "\n");
 
                         SendNpcSpawn(mod, askplayerID, asknpc, asktier, asklevel, askrpgnpc);
@@ -296,6 +303,7 @@ namespace AnotherRpgMod.Utils
                     Player player = Main.player[pID];
                     player.statLife = (int)tags[DataTag.life];
                     player.statLifeMax = (int)tags[DataTag.maxLife];
+
                     if (player.statLifeMax < 100)
                         player.statLifeMax = 100;
                     player.dead = player.statLife <= 0;
@@ -305,7 +313,7 @@ namespace AnotherRpgMod.Utils
 
                     try
                     {
-                        SendPlayerHealthSync(AnotherRpgMod.Instance, pID, whoAmI);
+                        SendPlayerHealthSync(AnotherRpgModExpanded.Instance, pID, whoAmI);
                     }
                     catch (Exception ex)
                     {

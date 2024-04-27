@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class UseTimeNode : ItemNode
     {
@@ -29,6 +29,7 @@ namespace AnotherRpgMod.Items
                 return "+ " + (UseTimeReduction * Utils.Mathf.Clamp(GetLevel, 1, GetMaxLevel)) + "% Attack Speed"; 
             }
         }
+
         public int UseTimeReduction;
 
         public override void Passive(Item item)
@@ -38,7 +39,6 @@ namespace AnotherRpgMod.Items
 
         public UseTimeNode()
         {
-
         }
 
         public override void SetPower(float value)

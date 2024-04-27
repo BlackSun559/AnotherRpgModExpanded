@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Terraria;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class RarityWeightManager
     {
@@ -34,7 +34,8 @@ namespace AnotherRpgMod.Items
                 else
                     rn *= (Mathf.Pow(0.95f, bossKilled));
             }
-            else { 
+
+            else {
                 if (Main.hardMode)
                     rn *= (Mathf.Pow(0.95f, bossKilled));
                 else
@@ -45,13 +46,13 @@ namespace AnotherRpgMod.Items
             for (int i = weights.Length -1; i >= 0 ; i--)
             {
                 actualWeight += weights[i].weight;
+
                 if (rn < actualWeight)
                     return weights[i].rarity;
                 
             }
+
             return weights[0].rarity;
-
-
         }
     }
 }

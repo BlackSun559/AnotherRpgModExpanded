@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     static class ItemExtraction
     {
@@ -31,10 +31,12 @@ namespace AnotherRpgMod.Items
             {
                 exp = GetTotalEarnedXp(item) * 0.5f;
             }
+
             else
             {
                 exp = GetTotalEarnedXp(item) * 0.25f;
             }
+
             return exp;
         }
     }

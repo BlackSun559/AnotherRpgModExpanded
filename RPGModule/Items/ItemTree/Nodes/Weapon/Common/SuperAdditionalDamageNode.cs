@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnotherRpgMod.Utils;
+using AnotherRpgModExpanded.Utils;
 using Terraria;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items
 {
     class SuperAdditionalDamageNode : ItemNode
     {
@@ -61,7 +61,5 @@ namespace AnotherRpgMod.Items
         public override string GetSaveValue()
         {
             return power.ToString();
-        }
-
-    }
+        }    }
 }
