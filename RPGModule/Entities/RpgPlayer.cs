@@ -826,6 +826,7 @@ internal class RpgPlayer : ModPlayer
         return false;
     }
 
+    [JITWhenModsEnabled("MetroidMod")]
     public static bool HaveHunterWeapon(DamageClass damageClass)
     {
         return damageClass.GetType() == typeof(HunterDamageClass);
@@ -882,7 +883,7 @@ internal class RpgPlayer : ModPlayer
                     return (GetStatImproved(Stat.Spr) * MainStatsMultiplier + GetStatImproved(Stat.Str) * SecondaryStatsMultiplier) *
                         StatMultiplier + 0.8f;
                 case DamageType.Hunter:
-                    return (GetStatImproved(Stat.Agi) * MainStatsMultiplier + GetStatImproved(Stat.Dex) * SecondaryStatsMultiplier) *
+                    return (GetStatImproved(Stat.Agi)  * 0.5f * MainStatsMultiplier + GetStatImproved(Stat.Dex) * SecondaryStatsMultiplier) *
                         StatMultiplier + 0.8f;
                 default:
                     return (GetStatImproved(Stat.Str) * MainStatsMultiplier + GetStatImproved(Stat.Agi) * SecondaryStatsMultiplier) *

@@ -30,8 +30,10 @@ internal class MPPacketHandler
             Message.SyncNpcUpdate,
             new List<DataTag> { DataTag.PlayerId, DataTag.npcId, DataTag.life, DataTag.maxLife, DataTag.damage }
         },
+        { Message.SyncWeapon, new List<DataTag> {}},
         { Message.AskNpc, new List<DataTag> { DataTag.PlayerId, DataTag.npcId } },
-        { Message.Log, new List<DataTag> { DataTag.buffer } }
+        { Message.Log, new List<DataTag> { DataTag.buffer } },
+        { Message.SyncWorld, new List<DataTag> {}}
     };
 
     public static void SendXPPacket(Mod mod, int XPToDrop, int xplevel)

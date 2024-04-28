@@ -524,6 +524,7 @@ internal class ItemUpdate : GlobalItem
             writer.Write(Ascension);
             writer.Write((int)Modifier);
             writer.Write((int)Rarity);
+            writer.Write(Migrated);
 
             if (_stats.Stats == null)
                 _stats.Stats = new List<ItemStat>();
