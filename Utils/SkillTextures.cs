@@ -1,67 +1,62 @@
-﻿
+﻿using AnotherRpgModExpanded.Items;
 using AnotherRpgModExpanded.RPGModule;
-using AnotherRpgModExpanded.Items;
 
-namespace AnotherRpgModExpanded.Utils
+namespace AnotherRpgModExpanded.Utils;
+
+public enum DamageNameTree : byte
 {
+    Melee,
+    Ranged,
+    Throw,
+    Magic,
+    Summon,
+    Bow, //thorium
+    Gun //thorium
+}
 
-    public enum DamageNameTree : byte
+internal class SkillTextures
+{
+    public static string GetItemTexture(ItemNode node)
     {
-        Melee,
-        Ranged,
-        Throw,
-        Magic,
-        Summon,
-        Bow, //thorium
-        Gun //thorium
+        var path = "AnotherRpgModExpanded/Textures/ItemTree/" + node.GetName;
+        return path;
     }
 
-    class SkillTextures
+    public static string GetTexture(Node node)
     {
+        var path = "AnotherRpgModExpanded/Textures/SkillTree/" + node.GetNodeType + "/";
 
-        static public string GetItemTexture(ItemNode node)
+        var additional = "";
+
+        switch (node.GetNodeType)
         {
-            string path = "AnotherRpgModExpanded/Textures/ItemTree/" + node.GetName;
-            return path;
+            case NodeType.Class:
+                additional += (node as ClassNode).GetClassType;
+                break;
+            case NodeType.Damage:
+                additional += (node as DamageNode).GetDamageType;
+                break;
+            case NodeType.Speed:
+                additional += (node as SpeedNode).GetDamageType;
+                break;
+            case NodeType.Leech:
+                additional += (node as LeechNode).GetLeechType;
+                break;
+            case NodeType.Perk:
+                additional += (node as PerkNode).GetPerk;
+                break;
+            case NodeType.Immunity:
+                additional += (node as ImmunityNode).GetImmunity;
+                break;
+            case NodeType.Stats:
+                additional += (node as StatNode).GetStatType;
+                break;
+            case NodeType.LimitBreak:
+                additional += (node as LimitBreakNode).LimitBreakType;
+                break;
         }
 
-        static public string GetTexture(Node node)
-        {
-            string path = "AnotherRpgModExpanded/Textures/SkillTree/" + node.GetNodeType + "/";
-
-            string additional = "";
-
-            switch (node.GetNodeType)
-            {
-                case NodeType.Class:
-                    additional += (node as ClassNode).GetClassType;
-                    break;
-                case NodeType.Damage:
-                    additional += (node as DamageNode).GetDamageType;
-                    break;
-                case NodeType.Speed:
-                    additional += (node as SpeedNode).GetDamageType;
-                    break;
-                case NodeType.Leech:
-                    additional += (node as LeechNode).GetLeechType;
-                    break;
-                case NodeType.Perk:
-                    additional += (node as PerkNode).GetPerk;
-                    break;
-                case NodeType.Immunity:
-                    additional += (node as ImmunityNode).GetImmunity;
-                    break;
-                case NodeType.Stats:
-                    additional += (node as StatNode).GetStatType;
-                    break;
-                case NodeType.LimitBreak:
-                    additional += (node as LimitBreakNode).LimitBreakType;
-                    break;
-            }
-
-            path += additional;
-            return path;
-        }
+        path += additional;
+        return path;
     }
-    
 }

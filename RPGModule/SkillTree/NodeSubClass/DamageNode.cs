@@ -1,40 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Terraria;
-using AnotherRpgModExpanded.RPGModule.Entities;
-namespace AnotherRpgModExpanded.RPGModule
+﻿namespace AnotherRpgModExpanded.RPGModule;
+
+internal class DamageNode : Node
 {
-    class DamageNode : Node
+    public DamageNode(DamageType _damageType, bool _flat, NodeType _type, bool _unlocked = false, float _value = 1,
+        int _levelrequirement = 0, int _maxLevel = 1, int _pointsPerLevel = 1, bool _ascended = false) : base(_type,
+        _unlocked, _value, _levelrequirement, _maxLevel, _pointsPerLevel, _ascended)
     {
-        DamageType damageType;
-        bool flat;
+        GetDamageType = _damageType;
+        GetFlat = _flat;
+    }
 
-        public bool GetFlat
-        {
-            get
-            {
-                return flat;
-            }
-        }
+    public bool GetFlat { get; }
 
-        public DamageType GetDamageType
-        {
-            get
-            {
-                return damageType;
-            }
-        }
+    public DamageType GetDamageType { get; }
 
-        public DamageNode(DamageType _damageType, bool _flat, NodeType _type, bool _unlocked = false, float _value = 1, int _levelrequirement = 0, int _maxLevel = 1, int _pointsPerLevel = 1, bool _ascended = false) : base(_type, _unlocked, _value, _levelrequirement, _maxLevel, _pointsPerLevel,_ascended)
-        {
-            damageType = _damageType;
-            flat = _flat;
-        }
-
-        public float GetDamage()
-        {
-            return value * level;
-        }
+    public float GetDamage()
+    {
+        return value * level;
     }
 }

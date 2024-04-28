@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-using System.IO;
-using AnotherRpgModExpanded.RPGModule.Entities;
+﻿using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
-namespace AnotherRpgModExpanded.Utils
+namespace AnotherRpgModExpanded.Utils;
+
+internal class MPDebug
 {
-    class MPDebug
+    public static void Log(Mod mod, object message)
     {
-        static public void Log(Mod mod, object message)
-        {
-            Log(mod, message.ToString());
-        }
+        Log(mod, message.ToString());
+    }
 
-        static public void Log(Mod mod, string message)
+    public static void Log(Mod mod, string message)
+    {
+        if (Main.netMode == NetmodeID.Server)
         {
-            if (Main.netMode == NetmodeID.Server)
-            {
-                ModPacket packet = mod.GetPacket();
-                packet.Write((byte)Message.Log);
-                packet.Write(message);
-                packet.Send();
-            }
+            var packet = mod.GetPacket();
+            packet.Write((byte)Message.Log);
+            packet.Write(message);
+            packet.Send();
         }
     }
 }

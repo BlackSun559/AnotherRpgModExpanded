@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AnotherRpgModExpanded.Items;
 
-namespace AnotherRpgModExpanded.Items
+internal enum NodeCategory
 {
-    enum NodeCategory
-    {
-        Flat,
-        Multiplier,
-        Other
-    }
+    Flat,
+    Multiplier,
+    Other
 }

@@ -1,183 +1,202 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent.UI.Elements;
-using Terraria.UI;
-using System;
-using Terraria.ModLoader;
-using AnotherRpgModExpanded.RPGModule;
+﻿using System;
 using AnotherRpgModExpanded.Items;
+using AnotherRpgModExpanded.RPGModule;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
+using Terraria.UI;
 
-namespace AnotherRpgModExpanded.UI
+namespace AnotherRpgModExpanded.UI;
+
+internal class Skill : UIElement
 {
-    class Skill : UIElement
+    private readonly Texture2D _texture;
+    public Color color = Color.White;
+
+    public Skill(Texture2D texture)
     {
-        private Texture2D _texture;
-        public Color color = Color.White;
-        public Skill(Texture2D texture)
-        {
-            _texture = texture;
-            Width.Set(_texture.Width * SkillTreeUi.Instance.sizeMultplier, 0f);
-            Height.Set(_texture.Height * SkillTreeUi.Instance.sizeMultplier, 0f);
-        }
-
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            CalculatedStyle dimensions = GetDimensions();
-
-            spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, SkillTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
-        }
+        _texture = texture;
+        Width.Set(_texture.Width * SkillTreeUi.Instance.sizeMultplier, 0f);
+        Height.Set(_texture.Height * SkillTreeUi.Instance.sizeMultplier, 0f);
     }
 
-    class ItemSkill : UIElement
+    protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        public bool Hidden = false;
-        private Texture2D _texture;
-        public Texture2D SetTexture { set { _texture = value; } }
+        var dimensions = GetDimensions();
 
-        public Color color = Color.White;
-        public ItemSkill(Texture2D texture)
-        {
-            _texture = texture;
-            Width.Set(_texture.Width * SkillTreeUi.Instance.sizeMultplier, 0f);
-            Height.Set(_texture.Height * SkillTreeUi.Instance.sizeMultplier, 0f);
-        }
+        spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero,
+            SkillTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
+    }
+}
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            if (Hidden)
-                return;
-            CalculatedStyle dimensions = GetDimensions();
+internal class ItemSkill : UIElement
+{
+    private Texture2D _texture;
 
-            spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, ItemTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
-        }
+    public Color color = Color.White;
+    public bool Hidden = false;
+
+    public ItemSkill(Texture2D texture)
+    {
+        _texture = texture;
+        Width.Set(_texture.Width * SkillTreeUi.Instance.sizeMultplier, 0f);
+        Height.Set(_texture.Height * SkillTreeUi.Instance.sizeMultplier, 0f);
     }
 
-    class SkillText : UIText
+    public Texture2D SetTexture
     {
-        public NodeParent node;
-
-        public SkillText(string text, NodeParent node, float textScale = 1, bool large = false) : base(text, textScale, large)
-        {
-            this.node = node;
-        }
+        set => _texture = value;
     }
 
-    class ItemSkillText : UIText
+    protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        public ItemNode node;
+        if (Hidden)
+            return;
+        var dimensions = GetDimensions();
 
-        public ItemSkillText(string text, ItemNode node, float textScale = 1, bool large = false) : base(text, textScale, large)
-        {
-            this.node = node;
-        }
+        spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero,
+            ItemTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
+    }
+}
+
+internal class SkillText : UIText
+{
+    public NodeParent node;
+
+    public SkillText(string text, NodeParent node, float textScale = 1, bool large = false) : base(text, textScale,
+        large)
+    {
+        this.node = node;
+    }
+}
+
+internal class ItemSkillText : UIText
+{
+    public ItemNode node;
+
+    public ItemSkillText(string text, ItemNode node, float textScale = 1, bool large = false) : base(text, textScale,
+        large)
+    {
+        this.node = node;
+    }
+}
+
+internal class ItemSkillPanel : UIPanel
+{
+    private readonly Texture2D _texture;
+    public Vector2 basePos;
+    public Color color = Color.White;
+    public bool Hidden = false;
+    public ItemNode node;
+    public ItemSkill skill;
+
+    public ItemSkillPanel(Texture2D texture)
+    {
+        _texture = texture;
+        Width.Set(_texture.Width * ItemTreeUi.Instance.sizeMultplier, 0f);
+        Height.Set(_texture.Height * ItemTreeUi.Instance.sizeMultplier, 0f);
     }
 
-    class ItemSkillPanel : UIPanel
+    protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        public ItemNode node;
-        public ItemSkill skill;
-        public Vector2 basePos;
-        private Texture2D _texture;
-        public Color color = Color.White;
-        public bool Hidden = false;
-        public ItemSkillPanel(Texture2D texture)
-        {
-            _texture = texture;
-            Width.Set(_texture.Width * ItemTreeUi.Instance.sizeMultplier, 0f);
-            Height.Set(_texture.Height * ItemTreeUi.Instance.sizeMultplier, 0f);
-        }
+        var dimensions = GetDimensions();
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            CalculatedStyle dimensions = GetDimensions();
+        if (Hidden)
+            return;
+        spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero,
+            ItemTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
+    }
+}
 
-            if (Hidden)
-                return;
-            spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, ItemTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
-        }
+internal class SkillPanel : UIPanel
+{
+    private readonly Texture2D _texture;
+    public Vector2 basePos;
+    public Color color = Color.White;
+    public NodeParent node;
+    public Skill skill;
+
+    public SkillPanel(Texture2D texture)
+    {
+        _texture = texture;
+        Width.Set(_texture.Width * SkillTreeUi.Instance.sizeMultplier, 0f);
+        Height.Set(_texture.Height * SkillTreeUi.Instance.sizeMultplier, 0f);
     }
 
-    class SkillPanel : UIPanel
+    protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        public NodeParent node;
-        public Skill skill;
-        public Vector2 basePos;
-        private Texture2D _texture;
-        public Color color = Color.White;
-        public SkillPanel(Texture2D texture)
-        {
-            _texture = texture;
-            Width.Set(_texture.Width * SkillTreeUi.Instance.sizeMultplier, 0f);
-            Height.Set(_texture.Height * SkillTreeUi.Instance.sizeMultplier, 0f);
-        }
+        var dimensions = GetDimensions();
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            CalculatedStyle dimensions = GetDimensions();
+        spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero,
+            SkillTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
+    }
+}
 
-            spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, SkillTreeUi.Instance.sizeMultplier, SpriteEffects.None, 0f);
-        }
+internal class ItemConnection : UIElement
+{
+    public Vector2 basePos;
+    public bool bg = false;
+    public Color color;
+    public bool Hidden = false;
+    public float m_rotation;
+    public int neighboorID;
+    public int nodeID;
+
+    private readonly Texture2D texture = ModContent
+        .Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
+
+    public ItemConnection(float rotation, float distance, float height)
+    {
+        Width.Set(distance * ItemTreeUi.Instance.sizeMultplier, 0f);
+        Height.Set(height * ItemTreeUi.Instance.sizeMultplier, 0f);
+        m_rotation = rotation;
+        color = Color.White;
     }
 
-    class ItemConnection : UIElement
+    protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        public bool Hidden = false;
-        public int nodeID;
-        public int neighboorID;
-        private Texture2D texture = ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
-        public Color color;
-        public Vector2 basePos;
-        public bool bg = false;
-        public float m_rotation;
+        if (Hidden)
+            return;
+        var dimensions = GetDimensions();
+        var point1 = new Point((int)dimensions.X, (int)dimensions.Y);
+        var width = (int)Math.Ceiling(dimensions.Width);
+        var height = (int)Math.Ceiling(dimensions.Height);
 
-        public ItemConnection(float rotation, float distance, float height)
-        {
-            Width.Set(distance * ItemTreeUi.Instance.sizeMultplier, 0f);
-            Height.Set(height * ItemTreeUi.Instance.sizeMultplier, 0f);
-            m_rotation = rotation;
-            this.color = Color.White;
-        }
+        spriteBatch.Draw(texture, dimensions.Position(), new Rectangle(point1.X, point1.Y, width, height), color,
+            m_rotation, bg ? new Vector2(0, 5) : new Vector2(0, 3), 1, SpriteEffects.None, 0f);
+    }
+}
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            if (Hidden)
-                return;
-            CalculatedStyle dimensions = GetDimensions();
-            Point point1 = new Point((int)dimensions.X, (int)dimensions.Y);
-            int width = (int)Math.Ceiling(dimensions.Width);
-            int height = (int)Math.Ceiling(dimensions.Height);
+internal class Connection : UIElement
+{
+    public Vector2 basePos;
+    public bool bg = false;
+    public Color color;
+    public float m_rotation;
+    public NodeParent neighboor;
+    public NodeParent node;
 
-            spriteBatch.Draw(texture, dimensions.Position(), new Rectangle(point1.X, point1.Y, width, height), color, m_rotation, bg ? new Vector2(0, 5) : new Vector2(0, 3), 1, SpriteEffects.None, 0f);
-        }
+    private readonly Texture2D texture = ModContent
+        .Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
+
+    public Connection(float rotation, float distance, float height)
+    {
+        Width.Set(distance * SkillTreeUi.Instance.sizeMultplier, 0f);
+        Height.Set(height * SkillTreeUi.Instance.sizeMultplier, 0f);
+        m_rotation = rotation;
+        color = Color.White;
     }
 
-    class Connection : UIElement
+    protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        public NodeParent node;
-        public NodeParent neighboor;
-        private Texture2D texture = ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/Blank", AssetRequestMode.ImmediateLoad).Value;
-        public Color color;
-        public Vector2 basePos;
-        public bool bg = false;
-        public float m_rotation;
+        var dimensions = GetDimensions();
+        var point1 = new Point((int)dimensions.X, (int)dimensions.Y);
+        var width = (int)Math.Ceiling(dimensions.Width);
+        var height = (int)Math.Ceiling(dimensions.Height);
 
-        public Connection(float rotation, float distance, float height)
-        {
-            Width.Set(distance * SkillTreeUi.Instance.sizeMultplier, 0f);
-            Height.Set(height * SkillTreeUi.Instance.sizeMultplier, 0f);
-            m_rotation = rotation;
-            this.color = Color.White;
-        }
-
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            CalculatedStyle dimensions = GetDimensions();
-            Point point1 = new Point((int)dimensions.X, (int)dimensions.Y);
-            int width = (int)Math.Ceiling(dimensions.Width);
-            int height = (int)Math.Ceiling(dimensions.Height);
-
-            spriteBatch.Draw(texture, dimensions.Position(), new Rectangle(point1.X, point1.Y, width, height), color, m_rotation, bg ? new Vector2(0, 5) : new Vector2(0, 3), 1, SpriteEffects.None, 0f);
-        }
+        spriteBatch.Draw(texture, dimensions.Position(), new Rectangle(point1.X, point1.Y, width, height), color,
+            m_rotation, bg ? new Vector2(0, 5) : new Vector2(0, 3), 1, SpriteEffects.None, 0f);
     }
 }

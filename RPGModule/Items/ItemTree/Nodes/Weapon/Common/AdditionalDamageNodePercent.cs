@@ -1,65 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
+﻿using AnotherRpgModExpanded.RPGModule.Items;
 using AnotherRpgModExpanded.Utils;
+using Terraria;
 
-namespace AnotherRpgModExpanded.Items
+namespace AnotherRpgModExpanded.Items;
+
+internal class AdditionalDamageNodePercent : ItemNode
 {
-    class AdditionalDamageNodePercent : ItemNode
+    public float Damage;
+    protected new string m_Desc = "+ XX% damage";
+
+    protected new string m_Name = "Bonus Damage";
+    public new float rarityWeight = 0.8f;
+
+    public override NodeCategory GetNodeCategory => NodeCategory.Multiplier;
+
+    public override string GetName => m_Name;
+
+    public override string GetDesc => "Add " + Damage * GetLevel.Clamp(1, GetMaxLevel) + "% Damage ";
+
+    public override void Passive(Item item)
     {
+        item.GetGlobalItem<ItemUpdate>().DamageBuffer +=
+            item.GetGlobalItem<ItemUpdate>().DamageFlatBuffer * (Damage * GetLevel) * 0.01f;
+    }
 
-        new protected string m_Name = "Bonus Damage";
-        new protected string m_Desc = "+ XX% damage";
-        new public float rarityWeight = 0.8f;
+    public override void SetPower(float value)
+    {
+        Damage = Mathf.Round(Mathf.Pow(value, 0.7f), 2).Clamp(2.5f, 10);
+        power = value;
+    }
 
-        public override NodeCategory GetNodeCategory
-        {
-            get
-            {
-                return NodeCategory.Multiplier;
-            }
-        }
+    public override void LoadValue(string saveValue)
+    {
+        power = saveValue.SafeFloatParse();
+        SetPower(power);
+    }
 
-        public override string GetName
-        {
-            get
-            {
-                return m_Name;
-            }
-        }
-
-        public override string GetDesc
-        {
-            get
-            {
-                return "Add " + (Damage * Utils.Mathf.Clamp(GetLevel, 1, GetMaxLevel)) + "% Damage ";
-            }
-        }
-
-        public float Damage;
-
-        public override void Passive(Item item)
-        {
-            item.GetGlobalItem<ItemUpdate>().DamageBuffer += item.GetGlobalItem<ItemUpdate>().DamageFlatBuffer * (Damage * GetLevel) * 0.01f;
-        }
-
-        public override void SetPower(float value)
-        {
-            Damage = Utils.Mathf.Clamp(Utils.Mathf.Round(Utils.Mathf.Pow(value,0.7f),2), 2.5f, 10);
-            power = value;
-        }
-
-        public override void LoadValue(string saveValue)
-        {
-            power = saveValue.SafeFloatParse();
-            SetPower(power);
-        }
-
-        public override string GetSaveValue()
-        {
-            return power.ToString();
-        }    }
+    public override string GetSaveValue()
+    {
+        return power.ToString();
+    }
 }

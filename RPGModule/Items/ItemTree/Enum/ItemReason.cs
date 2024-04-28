@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace AnotherRpgModExpanded.Items;
 
-namespace AnotherRpgModExpanded.Items
+internal enum ItemReason
 {
-    enum ItemReason
-    {
-        Locked,
-        NotEnougtPoint,
-        MaxLevel,
-        CanUpgrade
-    }
+    Locked,
+    NotEnougtPoint,
+    MaxLevel,
+    CanUpgrade
 }

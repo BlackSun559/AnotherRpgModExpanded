@@ -1,153 +1,98 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Terraria;
-using AnotherRpgModExpanded.RPGModule.Entities;
 
-namespace AnotherRpgModExpanded.RPGModule
+namespace AnotherRpgModExpanded.RPGModule;
+
+internal class NodeParent
 {
-    class NodeParent
+    private static ushort TotalID;
+
+    public readonly ushort ID;
+    public List<NodeParent> connectedNeighboor; //used to check for drawing connection lines between neighboor
+
+    public Vector2 menuPos;
+
+    public NodeParent(Node node, Vector2 pos)
     {
-        Node actualNode;
-        List<NodeParent> neighboorNode;
-        public List<NodeParent> connectedNeighboor; //used to check for drawing connection lines between neighboor
-        public List<NodeParent> GetNeightboor
-        {
-            get
-            {
-                return neighboorNode;
-            }
-        }
-        public Node GetNode
-        {
-            get
-            {
-                return actualNode;
-            }
-        }
+        GetNeightboor = new List<NodeParent>();
+        connectedNeighboor = new List<NodeParent>();
+        GetNode = node;
+        menuPos = pos;
+        ID = TotalID;
+        TotalID++;
+    }
 
-        public Reason CanUpgrade(int points, int level)
-        {
-            if (level < actualNode.GetLevelRequirement)
-                return Reason.LevelRequirement;
-            return actualNode.CanUpgrade(points);
-        }
-        public bool GetEnable { get { return actualNode.GetEnable; } }
-        static ushort TotalID = 0;
+    public List<NodeParent> GetNeightboor { get; }
 
-        public readonly ushort ID;
+    public Node GetNode { get; }
 
-        public static void ResetID()
-        {
-            TotalID = 0;
-        } 
+    public bool GetEnable => GetNode.GetEnable;
 
-        public Vector2 menuPos;
-        //comment to my future self as I will surely forget it : 
-        // type var => var
-        // is equal to 
-        // type var {get{return var;}}
-        public NodeType GetNodeType
-        {
-            get
-            {
-                return actualNode.GetNodeType;
-            }
-        }
-        public int GetLevel
-        {
-            get
-            {
-                return actualNode.GetLevel;
-            }
-        }
-        public int GetMaxLevel
-        {
-            get
-            {
-                return actualNode.GetMaxLevel;
-            }
-        }
-        public int GetCostPerLevel
-        {
-            get
-            {
-                return actualNode.GetCostPerLevel;
-            }
-        }
-        public int GetLevelRequirement
-        {
-            get
-            {
-                return actualNode.GetLevelRequirement;
-            }
-        }
-        public bool GetUnlock
-        {
-            get
-            {
-                return actualNode.GetUnlock;
-            }
-        }
-        public bool GetActivate
-        {
-            get
-            {
-                return actualNode.GetActivate;
-            }
-        }
+    //comment to my future self as I will surely forget it : 
+    // type var => var
+    // is equal to 
+    // type var {get{return var;}}
+    public NodeType GetNodeType => GetNode.GetNodeType;
 
-        public NodeParent(Node node, Vector2 pos)
-        {
-            neighboorNode = new List<NodeParent>();
-            connectedNeighboor = new List<NodeParent>();
-            actualNode = node;
-            menuPos = pos;
-            ID = TotalID;
-            TotalID++;
-        }
+    public int GetLevel => GetNode.GetLevel;
 
-        public bool CanBeDisable()
-        {
-            if (actualNode.GetNodeType == NodeType.Class || actualNode.GetNodeType == NodeType.Perk)
-                return true;
-            return false;
-        }
+    public int GetMaxLevel => GetNode.GetMaxLevel;
 
-        public void ToggleEnable()
-        {
-            actualNode.ToggleEnable();
-        }
+    public int GetCostPerLevel => GetNode.GetCostPerLevel;
 
-        public void Unlock()
-        {
-            actualNode.Unlock();
-        }
+    public int GetLevelRequirement => GetNode.GetLevelRequirement;
 
-        public void AddNeighboor(NodeParent neighboor)
-        {
-            neighboorNode.Add(neighboor);
-            neighboor.AddNeighboorSimple(this);
-        }
+    public bool GetUnlock => GetNode.GetUnlock;
 
-        public void AddNeighboorSimple(NodeParent neighboor)
-        {
-            neighboorNode.Add(neighboor);
-        }
+    public bool GetActivate => GetNode.GetActivate;
 
-        public void Upgrade(bool loading = false)
-        {
-            if (loading && actualNode.GetNodeType == NodeType.Class)
-            {
-                (actualNode as ClassNode).loadingUpgrade();
-            }
-            else
-                actualNode.Upgrade();
+    public Reason CanUpgrade(int points, int level)
+    {
+        if (level < GetNode.GetLevelRequirement)
+            return Reason.LevelRequirement;
+        return GetNode.CanUpgrade(points);
+    }
 
-            for (int i = 0; i < neighboorNode.Count; i++)
-            {
-                neighboorNode[i].Unlock();
-            }
-        }
+    public static void ResetID()
+    {
+        TotalID = 0;
+    }
+
+    public bool CanBeDisable()
+    {
+        if (GetNode.GetNodeType == NodeType.Class || GetNode.GetNodeType == NodeType.Perk)
+            return true;
+        return false;
+    }
+
+    public void ToggleEnable()
+    {
+        GetNode.ToggleEnable();
+    }
+
+    public void Unlock()
+    {
+        GetNode.Unlock();
+    }
+
+    public void AddNeighboor(NodeParent neighboor)
+    {
+        GetNeightboor.Add(neighboor);
+        neighboor.AddNeighboorSimple(this);
+    }
+
+    public void AddNeighboorSimple(NodeParent neighboor)
+    {
+        GetNeightboor.Add(neighboor);
+    }
+
+    public void Upgrade(bool loading = false)
+    {
+        if (loading && GetNode.GetNodeType == NodeType.Class)
+            (GetNode as ClassNode).loadingUpgrade();
+        else
+            GetNode.Upgrade();
+
+        for (var i = 0; i < GetNeightboor.Count; i++) GetNeightboor[i].Unlock();
     }
 }

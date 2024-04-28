@@ -1,15 +1,13 @@
-﻿
-namespace AnotherRpgModExpanded.Items
-{
-    struct RarityWeight
-    {
-        public Rarity rarity;
-        public float weight;
+﻿namespace AnotherRpgModExpanded.Items;
 
-        public RarityWeight(Rarity rarity, float weight)
-        {
-            this.rarity = rarity;
-            this.weight = weight;
-        }
+internal struct RarityWeight
+{
+    public Rarity rarity;
+    public float weight;
+
+    public RarityWeight(Rarity rarity, float weight)
+    {
+        this.rarity = rarity;
+        this.weight = weight;
     }
 }

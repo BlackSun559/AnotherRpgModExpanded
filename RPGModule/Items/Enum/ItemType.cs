@@ -1,12 +1,10 @@
-﻿
-namespace AnotherRpgModExpanded.Items
+﻿namespace AnotherRpgModExpanded.Items;
+
+internal enum ItemType
 {
-    internal enum ItemType
-    {
-        Other,
-        Healing,
-        Accessory,
-        Weapon,
-        Armor
-    }
+    Other,
+    Healing,
+    Accessory,
+    Weapon,
+    Armor
 }

@@ -1,58 +1,52 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AnotherRpgModExpanded.Utils;
+﻿using AnotherRpgModExpanded.Utils;
 using Terraria;
 
-namespace AnotherRpgModExpanded.Items
+namespace AnotherRpgModExpanded.Items;
+
+internal class RarityWeightManager
 {
-    class RarityWeightManager
+    public RarityWeight[] weights;
+
+    public RarityWeightManager(RarityWeight[] weights)
     {
-        public RarityWeight[] weights;
+        this.weights = weights;
+    }
 
-        public RarityWeightManager(RarityWeight[] weights)
+    public Rarity DrawRarity()
+    {
+        var bossKilled = WorldManager.BossDefeated;
+
+        float Weight = 0;
+        for (var i = 0; i < weights.Length; i++)
+            Weight += weights[i].weight;
+
+        var rn = Mathf.Random(0, Weight);
+
+        if (WorldManager.ascended)
         {
-            this.weights = weights;
+            if (Main.hardMode)
+                rn *= Mathf.Pow(0.9f, bossKilled);
+            else
+                rn *= Mathf.Pow(0.95f, bossKilled);
         }
 
-        public Rarity DrawRarity()
+        else
         {
-            int bossKilled = WorldManager.BossDefeated;
-
-                float Weight = 0;
-            for (int i = 0; i < weights.Length; i++)
-                Weight += weights[i].weight;
-
-            float rn = Mathf.Random(0, Weight);
-
-            if (WorldManager.ascended)
-            {
-                if (Main.hardMode)
-                    rn *= (Mathf.Pow(0.9f, bossKilled));
-                else
-                    rn *= (Mathf.Pow(0.95f, bossKilled));
-            }
-
-            else {
-                if (Main.hardMode)
-                    rn *= (Mathf.Pow(0.95f, bossKilled));
-                else
-                    rn *= (Mathf.Pow(0.975f,bossKilled));
-            }
-
-            float actualWeight = 0;
-            for (int i = weights.Length -1; i >= 0 ; i--)
-            {
-                actualWeight += weights[i].weight;
-
-                if (rn < actualWeight)
-                    return weights[i].rarity;
-                
-            }
-
-            return weights[0].rarity;
+            if (Main.hardMode)
+                rn *= Mathf.Pow(0.95f, bossKilled);
+            else
+                rn *= Mathf.Pow(0.975f, bossKilled);
         }
+
+        float actualWeight = 0;
+        for (var i = weights.Length - 1; i >= 0; i--)
+        {
+            actualWeight += weights[i].weight;
+
+            if (rn < actualWeight)
+                return weights[i].rarity;
+        }
+
+        return weights[0].rarity;
     }
 }

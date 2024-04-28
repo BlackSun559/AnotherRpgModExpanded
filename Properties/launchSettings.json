@@ -11,5 +11,6 @@
       "executablePath": "$(DotNetName)",
       "commandLineArgs": "$(tMLServerPath)",
       "workingDirectory": "$(tMLSteamPath)"
-    }  }
+    }
+  }
 }
