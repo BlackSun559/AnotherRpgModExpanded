@@ -1,67 +1,56 @@
-﻿using System.IO;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using System;
-using System.Collections.Generic;
-using Terraria.ID;
-using Terraria.Utilities;
-using AnotherRpgMod.RPGModule.Entities;
-using AnotherRpgMod.Utils;
-using AnotherRpgMod.RPGModule;
+﻿using System;
+using System.IO;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.RPGModule.Items;
+
+public class ItemDataTag
 {
-    public class ItemDataTag
+    public static ItemDataTag level = new(reader => reader.ReadInt32());
+    public static ItemDataTag xp = new(reader => reader.ReadInt64());
+    public static ItemDataTag ascendedlevel = new(reader => reader.ReadInt32());
+    public static ItemDataTag modifier = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag init = new(reader => reader.ReadBoolean());
+
+    public static ItemDataTag rarity = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statsamm = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statst1 = new(reader => reader.ReadSByte());
+    public static ItemDataTag stat1 = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statst2 = new(reader => reader.ReadSByte());
+    public static ItemDataTag stat2 = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statst3 = new(reader => reader.ReadSByte());
+    public static ItemDataTag stat3 = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statst4 = new(reader => reader.ReadSByte());
+    public static ItemDataTag stat4 = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statst5 = new(reader => reader.ReadSByte());
+    public static ItemDataTag stat5 = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag statst6 = new(reader => reader.ReadSByte());
+    public static ItemDataTag stat6 = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag baseDamage = new(reader => reader.ReadInt32());
+    public static ItemDataTag baseArmor = new(reader => reader.ReadInt32());
+    public static ItemDataTag baseAutoReuse = new(reader => reader.ReadBoolean());
+    public static ItemDataTag baseName = new(reader => reader.ReadString());
+    public static ItemDataTag baseUseTime = new(reader => reader.ReadInt32());
+    public static ItemDataTag baseMana = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag itemTree = new(reader => reader.ReadString());
+    public static ItemDataTag bWorldAscendDrop = new(reader => reader.ReadBoolean());
+    public static ItemDataTag WorldAscendDropLevel = new(reader => reader.ReadInt32());
+
+    public static ItemDataTag migrated = new(reader => reader.ReadBoolean());
+
+    public Func<BinaryReader, object> read;
+
+    public ItemDataTag(Func<BinaryReader, object> read)
     {
-        public static ItemDataTag level = new ItemDataTag(reader => reader.ReadInt32());
-        public static ItemDataTag xp = new ItemDataTag(reader => reader.ReadInt64());
-        public static ItemDataTag ascendedlevel = new ItemDataTag(reader => reader.ReadInt32());
-        public static ItemDataTag modifier = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag init = new ItemDataTag(reader => reader.ReadBoolean());
-
-        public static ItemDataTag rarity = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statsamm = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statst1 = new ItemDataTag(reader => reader.ReadSByte());
-        public static ItemDataTag stat1 = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statst2 = new ItemDataTag(reader => reader.ReadSByte());
-        public static ItemDataTag stat2 = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statst3 = new ItemDataTag(reader => reader.ReadSByte());
-        public static ItemDataTag stat3 = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statst4 = new ItemDataTag(reader => reader.ReadSByte());
-        public static ItemDataTag stat4 = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statst5 = new ItemDataTag(reader => reader.ReadSByte());
-        public static ItemDataTag stat5 = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag statst6 = new ItemDataTag(reader => reader.ReadSByte());
-        public static ItemDataTag stat6 = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag baseDamage = new ItemDataTag(reader => reader.ReadInt32());
-        public static ItemDataTag baseArmor = new ItemDataTag(reader => reader.ReadInt32());
-        public static ItemDataTag baseAutoReuse = new ItemDataTag(reader => reader.ReadBoolean());
-        public static ItemDataTag baseName = new ItemDataTag(reader => reader.ReadString());
-        public static ItemDataTag baseUseTime = new ItemDataTag(reader => reader.ReadInt32());
-        public static ItemDataTag baseMana = new ItemDataTag(reader => reader.ReadInt32());
-
-        public static ItemDataTag itemTree = new ItemDataTag(reader => reader.ReadString());
-        public static ItemDataTag bWorldAscendDrop = new ItemDataTag(reader => reader.ReadBoolean());
-        public static ItemDataTag WorldAscendDropLevel = new ItemDataTag(reader => reader.ReadInt32());
-
-        public Func<BinaryReader, object> read;
-
-        public ItemDataTag(Func<BinaryReader, object> read)
-        {
-            this.read = read;
-        }
+        this.read = read;
     }
-
 }

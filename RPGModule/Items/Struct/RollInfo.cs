@@ -1,10 +1,8 @@
-﻿
-namespace AnotherRpgMod.Items
+﻿namespace AnotherRpgModExpanded.Items;
+
+public struct RollInfo
 {
-    public struct RollInfo
-    {
-        public Rarity rarity;
-        public Modifier modifier;
-        public ItemStats stats;
-    }
+    public Rarity rarity;
+    public Modifier modifier;
+    public ItemStats stats;
 }

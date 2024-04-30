@@ -1,5 +1,4 @@
-heavily customizable Rpg mod that add Level, Stats, Skill tree, Item leveling, ennemies rank, modifier !
+Heavily customizable Rpg mod that adds levels, stats, a skill tree, ltem leveling, enemy ranks, and enemy modifiers!
 
-Expect some bug in multi-player as of now
-
-Join Discord : https://discord.gg/UQueeQE ! (link also on webpage)
+Originally written by Plexus
+Expanded by BlackSun559

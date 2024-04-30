@@ -1,5 +1,5 @@
 Mods: {
-	AnotherRpgMod: {
+	AnotherRpgModExpanded: {
 		Configs: {
 			GamePlayConfig: {
 				ItemModifier: {
@@ -67,8 +67,7 @@ Mods: {
 				UseCustomSkillTree: {
 					Label: 使用自定义技能树
 					Tooltip: '''当为true时，它将使用json技能树 "Documents\My Games\Terraria\ModLoader\Mod Configs\AnRPG" '''
-				}
-			}
+				}			}
 
 			NPCConfig: {
 				DisplayName: AnRPG敌人配置
@@ -161,8 +160,7 @@ Mods: {
 				NPCGrowthHardModePercent: {
 					Label: NPC困难模式成长百分比
 					Tooltip: 将世界等级乘以这个值(在“NPC增长OnHardMode”之前应用)
-				}
-			}
+				}			}
 
 			VisualConfig: {
 				DisplayName: AnRPG显示配置
@@ -195,8 +193,7 @@ Mods: {
 				HideVanillaHB: {
 					Label: 隐藏生命条
 					Tooltip: 隐藏原版游戏的生命条
-				}
-			}
+				}			}
 		}
 
 		Keybinds: {
@@ -630,7 +627,6 @@ Mods: {
 					允许在1000级后获得经验
 
 					'''
-			}
-		}
+			}		}
 	}
 }

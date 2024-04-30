@@ -1,12 +1,10 @@
-﻿
-namespace AnotherRpgMod.RPGModule
+﻿namespace AnotherRpgModExpanded.RPGModule;
+
+public enum Reason
 {
-    public enum Reason
-    {
-        CanUpgrade,
-        NoEnoughtPoints,
-        MaxLevelReach,
-        NotUnlocked,
-        LevelRequirement
-    }
+    CanUpgrade,
+    NoEnoughtPoints,
+    MaxLevelReach,
+    NotUnlocked,
+    LevelRequirement
 }

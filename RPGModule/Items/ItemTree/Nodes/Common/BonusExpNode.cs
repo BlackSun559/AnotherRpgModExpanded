@@ -1,54 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AnotherRpgModExpanded.RPGModule.Items;
+using AnotherRpgModExpanded.Utils;
 using Terraria;
-using AnotherRpgMod.Utils;
 
-namespace AnotherRpgMod.Items
+namespace AnotherRpgModExpanded.Items;
+
+internal class BonusExpNode : ItemNodeAdvanced
 {
-    class BonusExpNode : ItemNodeAdvanced
+    protected new string m_Desc = "Add";
+    protected new string m_Name = "Bonus Experience";
+    protected new NodeCategory m_NodeCategory = NodeCategory.Other;
+
+    public int PercentBonus;
+    public new float rarityWeight = 0.4f;
+
+    public override string GetName => m_Name;
+
+    public override string GetDesc => "Add " + PercentBonus * GetLevel.Clamp(1, GetMaxLevel) + " % bonus Item Exp";
+
+    public override void Passive(Item item)
     {
-        new protected string m_Name = "Bonus Experience";
-        new protected string m_Desc = "Add";
-        new protected NodeCategory m_NodeCategory = NodeCategory.Other;
-        new public float rarityWeight = 0.4f;
-        public override string GetName
-        {
-            get
-            {
-                return m_Name;
-            }
-        }
+        item.GetGlobalItem<ItemUpdate>().BonusXp += 0.01f * PercentBonus * GetLevel;
+    }
 
-        public override string GetDesc { get {
-                return "Add " + (PercentBonus * Utils.Mathf.Clamp(GetLevel,1,GetMaxLevel)) + " % bonus Item Exp";
-            } }
+    public override void SetPower(float value)
+    {
+        PercentBonus = ((int)value * 10).Clamp(5, 150);
+    }
 
-        public override void Passive(Item item)
-        {
-            item.GetGlobalItem<ItemUpdate>().bonusXp +=  0.01f * PercentBonus * GetLevel;
-        }
+    public override void LoadValue(string saveValue)
+    {
+        power = saveValue.SafeFloatParse();
+        SetPower(power);
+    }
 
-        public int PercentBonus;    
-
-        public override void SetPower(float value)
-        {
-            PercentBonus = Utils.Mathf.Clamp((int)value*10, 5, 150);
-        }
-
-        public override void LoadValue(string saveValue)
-        {
-            power = saveValue.SafeFloatParse();
-            SetPower(power);
-        }
-
-        public override string GetSaveValue()
-        {
-            return "1,0";
-            //return power.ToString();
-        }
-
+    public override string GetSaveValue()
+    {
+        return "1,0";
+        //return power.ToString();
     }
 }
