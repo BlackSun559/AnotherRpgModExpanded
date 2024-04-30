@@ -170,7 +170,7 @@ internal class MPPacketHandler
                         Main.player[playerID].statLife = (int)tags[DataTag.life];
                         Main.player[playerID].statLifeMax2 = (int)tags[DataTag.maxLife];
 
-                        if (WorldManager.instance != null) WorldManager.instance.NetUpdateWorld();
+                        if (WorldManager.Instance != null) WorldManager.Instance.NetUpdateWorld();
                     }
                 }
 

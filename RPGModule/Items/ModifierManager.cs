@@ -410,7 +410,7 @@ internal class ModifierManager
 
         if (rarity >= -1)
         {
-            if (WorldManager.ascended)
+            if (WorldManager.Ascended)
             {
                 rarity += 2;
                 rarity += Mathf.CeilInt(Mathf.Logx(1 + AscendWorldDropLevel * 0.1f, 10));

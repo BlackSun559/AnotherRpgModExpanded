@@ -62,7 +62,7 @@ internal class NPCUtils
 
     public static int GetExp(NPC npc)
     {
-        if (!WorldManager.ascended)
+        if (!WorldManager.Ascended)
             return Mathf.CeilInt(Math.Pow(npc.lifeMax / 8 + npc.damage * 1.2 + npc.defense * 1.7f, 0.9f));
         return Mathf.CeilInt(Math.Pow(npc.lifeMax / 5 + npc.damage * 1.3 + npc.defense * 1.9f, 1.05f) * 1.5f);
     }
@@ -693,7 +693,6 @@ internal class NPCUtils
 
         baselevel -= 10;
 
-
         baselevel = WorldManager.GetWorldLevelMultiplier(baselevel);
 
         if (baselevel < -1)
@@ -743,7 +742,7 @@ internal class NPCUtils
     //get actual rank of the monster
     public static NPCRank GetRank(int level, bool boss = false)
     {
-        if (!WorldManager.ascended)
+        if (!WorldManager.Ascended)
         {
             if (!Config.NPCConfig.NPCRarity)
                 return NPCRank.Normal;

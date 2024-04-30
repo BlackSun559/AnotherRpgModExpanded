@@ -22,7 +22,7 @@ internal class RarityWeightManager
 
         var rn = Mathf.Random(0, Weight);
 
-        if (WorldManager.ascended)
+        if (WorldManager.Ascended)
         {
             if (Main.hardMode)
                 rn *= Mathf.Pow(0.9f, bossKilled);

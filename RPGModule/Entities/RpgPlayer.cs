@@ -325,8 +325,8 @@ internal class RpgPlayer : ModPlayer
         if (_basename == "")
             _basename = Player.name;
         SendClientChanges(this);
-        if (WorldManager.instance != null)
-            WorldManager.instance.NetUpdateWorld();
+        if (WorldManager.Instance != null)
+            WorldManager.Instance.NetUpdateWorld();
         base.SyncPlayer(toWho, fromWho, newPlayer);
     }
 

@@ -44,10 +44,10 @@ internal class ItemUpdate : GlobalItem
             _baseArmor = item.defense;
             BaseDamage = item.damage;
 
-            if (WorldManager.ascended)
+            if (WorldManager.Ascended)
             {
                 _bAscendWorldDrop = true;
-                _ascendWorldDropLevel = WorldManager.ascendedLevelBonus;
+                _ascendWorldDropLevel = WorldManager.AscendedLevelBonus;
             }
 
             Roll(item);
@@ -60,10 +60,10 @@ internal class ItemUpdate : GlobalItem
                 _mItemTree.Init(this);
             }
 
-            if (WorldManager.ascended)
+            if (WorldManager.Ascended)
             {
-                var ascendLevel = 1 + Mathf.CeilInt(WorldManager.ascendedLevelBonus / 250);
-                float baseLevel = Mathf.CeilInt(WorldManager.ascendedLevelBonus / 2500);
+                var ascendLevel = 1 + Mathf.CeilInt(WorldManager.AscendedLevelBonus / 250);
+                float baseLevel = Mathf.CeilInt(WorldManager.AscendedLevelBonus / 2500);
                 if (baseLevel > 0.4f) baseLevel = 0.4f;
                 baseLevel += 0.1f;
                 Ascension = ascendLevel;
@@ -524,7 +524,6 @@ internal class ItemUpdate : GlobalItem
             writer.Write(Ascension);
             writer.Write((int)Modifier);
             writer.Write((int)Rarity);
-            writer.Write(Migrated);
 
             if (_stats.Stats == null)
                 _stats.Stats = new List<ItemStat>();
@@ -557,6 +556,7 @@ internal class ItemUpdate : GlobalItem
 
             writer.Write(_bAscendWorldDrop);
             writer.Write(_ascendWorldDropLevel);
+            writer.Write(Migrated);
         }
         
         base.NetSend(item, writer);
@@ -605,7 +605,6 @@ internal class ItemUpdate : GlobalItem
                     Ascension = (int)tags[ItemDataTag.ascendedlevel];
                     Modifier = (Modifier)tags[ItemDataTag.modifier];
                     Rarity = (Rarity)tags[ItemDataTag.rarity];
-                    Migrated = (bool)tags[ItemDataTag.migrated];
 
                     _stats = new ItemStats
                     {
@@ -636,6 +635,7 @@ internal class ItemUpdate : GlobalItem
 
                     _bAscendWorldDrop = (bool)tags[ItemDataTag.bWorldAscendDrop];
                     _ascendWorldDropLevel = (int)tags[ItemDataTag.WorldAscendDropLevel];
+                    Migrated = (bool)tags[ItemDataTag.migrated];
                     _init = true;
                     break;
             }
@@ -1081,7 +1081,8 @@ internal class ItemUpdate : GlobalItem
         tag.Add("stats", statsArray);
         tag.Add("tree", treeToStringVal);
         tag.Add("evolutionInfo", evInfo);
-        tag.Add("bAscendWorldDrop", _bAscendWorldDrop);
+        //tag.Add("bAscendWorldDrop", _bAscendWorldDrop);
+        tag.Add("bAscendWorldDrop", false);
         tag.Add("AscendWorldDropLevel", _ascendWorldDropLevel);
         tag.Add("Migrated", Migrated);
     }

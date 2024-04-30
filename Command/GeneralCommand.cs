@@ -417,10 +417,10 @@ public class WorldLevel : ModCommand
 
     public override void Action(CommandCaller caller, string input, string[] args)
     {
-        Main.NewText("is world ascended : " + WorldManager.ascended);
+        Main.NewText("is world ascended : " + WorldManager.Ascended);
 
-        if (WorldManager.ascended)
-            Main.NewText("world ascend level : " + WorldManager.ascendedLevelBonus);
+        if (WorldManager.Ascended)
+            Main.NewText("world ascend level : " + WorldManager.AscendedLevelBonus);
 
         Main.NewText("Number of boss defeated : " + WorldManager.BossDefeated);
         Main.NewText("Number of boss defeated for the first time : " + WorldManager.FirstBossDefeated);
@@ -443,20 +443,20 @@ public class AscentWorld : ModCommand
 
     public override void Action(CommandCaller caller, string input, string[] args)
     {
-        WorldManager.ascended = true;
+        WorldManager.Ascended = true;
         var level = int.Parse(args[0]);
 
         if (level < 250) level = 250;
-        WorldManager.ascendedLevelBonus = level;
+        WorldManager.AscendedLevelBonus = level;
     }
 }
 
 public class MigrateLevels : ModCommand
 {
     public override CommandType Type => CommandType.Chat;
-    public override string Command => "migrate";
+    public override string Command => "migrateAnRpg";
 
-    public override string Usage => "/migrate";
+    public override string Usage => "/migrateAnRpg";
 
     public override string Description =>
         "Migrates levels from existing items to the new mod. Use on an existing character that had previously played with AnRPG mod.";
@@ -473,9 +473,7 @@ public class MigrateLevels : ModCommand
         {
             var original = player.GetModPlayer<RpgPlayer>();
             if (!original.Migrated)
-            {
                 foreach (var tag in savedPlayers)
-                {
                     if (tag.GetString("mod") == "AnotherRpgMod")
                     {
                         var rpgPlayer = new RpgPlayer();
@@ -483,24 +481,22 @@ public class MigrateLevels : ModCommand
                         rpgPlayer.LoadData(tag.Get<TagCompound>("data"));
                         original.MigrateData(rpgPlayer);
                     }
-                }
-            }
         }
 
         var fullInventory = new Item[player.inventory.Length + player.armor.Length + player.bank.item.Length +
                                      player.bank2.item.Length + player.bank3.item.Length + player.bank4.item.Length];
         var count = 0;
-        
+
         player.inventory.CopyTo(fullInventory, count);
         count += player.inventory.Length;
         player.armor.CopyTo(fullInventory, count);
-        count += player.armor.Length; 
+        count += player.armor.Length;
         player.bank.item.CopyTo(fullInventory, count);
         count += player.bank.item.Length;
         player.bank2.item.CopyTo(fullInventory, count);
         count += player.bank2.item.Length;
         player.bank3.item.CopyTo(fullInventory, count);
-        count += player.bank3.item.Length; 
+        count += player.bank3.item.Length;
         player.bank4.item.CopyTo(fullInventory, count);
 
         foreach (var item in fullInventory)
@@ -511,21 +507,60 @@ public class MigrateLevels : ModCommand
                 {
                     var original = item.GetGlobalItem<ItemUpdate>();
                     if (!original.Migrated)
+                    {
                         if (unloaded.GetType()
                                 .GetField("data", BindingFlags.Instance | BindingFlags.NonPublic)
                                 ?.GetValue(unloaded) is List<TagCompound> { Count: > 0 } savedTags)
+                        {
                             foreach (var tag in savedTags)
+                            {
                                 if (tag.GetString("mod") == "AnotherRpgMod")
                                 {
                                     var update = new ItemUpdate();
                                     update.LoadData(item, tag.Get<TagCompound>("data"));
                                     original.MigrateData(update);
                                 }
+                            }
+                        }
+                    }
                 }
                 catch
                 {
                     // ignored
                 }
             }
+    }
+}
+
+public class MigrateWorld : ModCommand
+{
+    public override CommandType Type => CommandType.Chat;
+    public override string Command => "migrateAnRpgWorld";
+
+    public override string Usage => "/migrateAnRpgWorld";
+
+    public override string Description =>
+        "Migrates settings from old world settings to new.";
+
+    public override void Action(CommandCaller caller, string input, string[] args)
+    {
+        var unloadedSystem = ModContent.GetInstance<UnloadedSystem>();
+
+        if (unloadedSystem.GetType().GetField("data", BindingFlags.Instance | BindingFlags.NonPublic)?
+                .GetValue(unloadedSystem) is List<TagCompound> { Count: > 0 } savedData)
+        {
+            var original = ModContent.GetInstance<WorldManager>();
+            
+            if (!WorldManager.Migrated)
+            {
+                foreach (var tag in savedData)
+                {
+                    if (tag.GetString("mod") == "AnotherRpgMod")
+                    {
+                        original.MigrateData(tag.Get<TagCompound>("data"));
+                    }
+                }
+            }
+        }
     }
 }

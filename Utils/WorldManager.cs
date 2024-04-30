@@ -14,13 +14,13 @@ namespace AnotherRpgModExpanded.Utils;
 
 internal class WorldManager : ModSystem
 {
-    public static readonly Dictionary<Message, List<WorldDataTag>> worldDataTag = new()
+    private static readonly Dictionary<Message, List<WorldDataTag>> WorldDataTag = new()
     {
         {
             Message.SyncWorld, new List<WorldDataTag>
             {
-                WorldDataTag.Day, WorldDataTag.FirstBossDefeated, WorldDataTag.BossDefeated, WorldDataTag.lastDayTime,
-                WorldDataTag.ascended, WorldDataTag.ascendedLevel, WorldDataTag.PlayerLevel
+                Utils.WorldDataTag.Day, Utils.WorldDataTag.FirstBossDefeated, Utils.WorldDataTag.BossDefeated, Utils.WorldDataTag.LastDayTime,
+                Utils.WorldDataTag.Ascended, Utils.WorldDataTag.AscendedLevel, Utils.WorldDataTag.PlayerLevel
             }
         }
     };
@@ -28,16 +28,18 @@ internal class WorldManager : ModSystem
     public static int BossDefeated;
     public static int FirstBossDefeated;
     public static int Day = 1;
-    private static bool lastDayTime = true;
+    private static bool _lastDayTime = true;
 
-    public static bool ascended;
-    public static int ascendedLevelBonus;
+    public static bool Ascended;
+    public static int AscendedLevelBonus;
 
     public static int PlayerLevel = 1;
 
-    public static List<int> BossDefeatedList;
+    private static List<int> _bossDefeatedList;
 
-    public static WorldManager instance;
+    public static WorldManager Instance;
+    
+    public static bool Migrated { get; private set; }
 
     public static void OnBossDefeated(NPC npc)
     {
@@ -46,21 +48,21 @@ internal class WorldManager : ModSystem
 
         BossDefeated++;
 
-        if (BossDefeatedList.Exists(x => x == npc.type)) return;
+        if (_bossDefeatedList.Exists(x => x == npc.type)) return;
 
-        BossDefeatedList.Add(npc.type);
+        _bossDefeatedList.Add(npc.type);
         FirstBossDefeated++;
         Main.NewText("The world grow stronger..", 144, 32, 185);
     }
 
     public override void PostWorldGen()
     {
-        instance = this;
+        Instance = this;
         BossDefeated = 0;
-        BossDefeatedList = new List<int>();
+        _bossDefeatedList = new List<int>();
     }
 
-    public static int GetWorldLevelMultiplier(int Level)
+    public static int GetWorldLevelMultiplier(int level)
     {
         var baseLevelMult = 0.6f;
 
@@ -70,7 +72,7 @@ internal class WorldManager : ModSystem
 
         if (!Main.expertMode) baseLevelMult.Clamp(0, 1);
 
-        return Mathf.FloorInt(baseLevelMult * Level) + ascendedLevelBonus;
+        return Mathf.FloorInt(baseLevelMult * level) + AscendedLevelBonus;
     }
 
     public static int GetMaximumAscend()
@@ -116,9 +118,9 @@ internal class WorldManager : ModSystem
 
     public override void PostUpdateTime()
     {
-        if (Main.dayTime != lastDayTime)
+        if (Main.dayTime != _lastDayTime)
         {
-            lastDayTime = Main.dayTime;
+            _lastDayTime = Main.dayTime;
 
             if (Main.dayTime) Day++;
         }
@@ -151,15 +153,16 @@ internal class WorldManager : ModSystem
         //AnotherRpgModExpanded.Instance.Logger.Info("Is it saving World Data ? ....");
         base.SaveWorldData(tag);
 
-        if (BossDefeatedList == null) BossDefeatedList = new List<int>();
+        if (_bossDefeatedList == null) _bossDefeatedList = new List<int>();
 
         tag.Add("BossDefeated", BossDefeated);
         tag.Add("FirstBossDefeated", FirstBossDefeated);
-        tag.Add("BossDefeatedList", ConvertToInt(BossDefeatedList));
+        tag.Add("BossDefeatedList", ConvertToInt(_bossDefeatedList));
         tag.Add("day", Day);
-        tag.Add("ascended", ascended);
-        tag.Add("ascendedLevel", ascendedLevelBonus);
+        tag.Add("ascended", Ascended);
+        tag.Add("ascendedLevel", AscendedLevelBonus);
         tag.Add("PlayerLevel", PlayerLevel);
+        tag.Add("migrated", Migrated);
     }
 
     private int[] ConvertToInt(List<int> list)
@@ -172,26 +175,33 @@ internal class WorldManager : ModSystem
 
     private void ConvertToList(int[] list)
     {
-        for (var i = 0; i < list.Length; i++) BossDefeatedList.Add(list[i]);
+        for (var i = 0; i < list.Length; i++) _bossDefeatedList.Add(list[i]);
     }
 
     public override void LoadWorldData(TagCompound tag)
     {
-        instance = this;
+        Instance = this;
         //AnotherRpgModExpanded.Instance.Logger.Info(tag);
         //AnotherRpgModExpanded.Instance.Logger.Info("Load World Data");
-        BossDefeatedList = new List<int>();
+        _bossDefeatedList = new List<int>();
         FirstBossDefeated = tag.GetInt("FirstBossDefeated");
         BossDefeated = tag.GetInt("BossDefeated");
         Day = tag.GetInt("day");
         ConvertToList(tag.GetIntArray("BossDefeatedList"));
-        ascended = tag.GetBool("ascended");
-        ascendedLevelBonus = tag.GetInt("ascendedLevel");
+        Ascended = tag.GetBool("ascended");
+        AscendedLevelBonus = tag.GetInt("ascendedLevel");
+        Migrated = tag.GetBool("migrated");
 
         if (Main.netMode == NetmodeID.SinglePlayer)
             PlayerLevel = tag.GetInt("PlayerLevel");
         else
             PlayerLevel = 0;
+    }
+
+    public void MigrateData(TagCompound tag)
+    {
+        LoadWorldData(tag);
+        Migrated = true;
     }
 
     public void NetUpdateWorld()
@@ -203,9 +213,9 @@ internal class WorldManager : ModSystem
             packet.Write(Day);
             packet.Write(FirstBossDefeated);
             packet.Write(BossDefeated);
-            packet.Write(lastDayTime);
-            packet.Write(ascended);
-            packet.Write(ascendedLevelBonus);
+            packet.Write(_lastDayTime);
+            packet.Write(Ascended);
+            packet.Write(AscendedLevelBonus);
             packet.Write(PlayerLevel);
             packet.Send();
         }
@@ -217,9 +227,9 @@ internal class WorldManager : ModSystem
         writer.Write(Day);
         writer.Write(FirstBossDefeated);
         writer.Write(BossDefeated);
-        writer.Write(lastDayTime);
-        writer.Write(ascended);
-        writer.Write(ascendedLevelBonus);
+        writer.Write(_lastDayTime);
+        writer.Write(Ascended);
+        writer.Write(AscendedLevelBonus);
         writer.Write(PlayerLevel);
         base.NetSend(writer);
     }
@@ -232,14 +242,14 @@ internal class WorldManager : ModSystem
         if (msg == Message.SyncWorld)
         {
             var tags = new Dictionary<WorldDataTag, object>();
-            foreach (var tag in worldDataTag[msg]) tags.Add(tag, tag.read(reader));
-            Day = (int)tags[WorldDataTag.Day];
-            FirstBossDefeated = (int)tags[WorldDataTag.FirstBossDefeated];
-            BossDefeated = (int)tags[WorldDataTag.BossDefeated];
-            lastDayTime = (bool)tags[WorldDataTag.lastDayTime];
-            ascended = (bool)tags[WorldDataTag.ascended];
-            ascendedLevelBonus = (int)tags[WorldDataTag.ascendedLevel];
-            PlayerLevel = (int)tags[WorldDataTag.PlayerLevel];
+            foreach (var tag in WorldDataTag[msg]) tags.Add(tag, tag.Read(reader));
+            Day = (int)tags[Utils.WorldDataTag.Day];
+            FirstBossDefeated = (int)tags[Utils.WorldDataTag.FirstBossDefeated];
+            BossDefeated = (int)tags[Utils.WorldDataTag.BossDefeated];
+            _lastDayTime = (bool)tags[Utils.WorldDataTag.LastDayTime];
+            Ascended = (bool)tags[Utils.WorldDataTag.Ascended];
+            AscendedLevelBonus = (int)tags[Utils.WorldDataTag.AscendedLevel];
+            PlayerLevel = (int)tags[Utils.WorldDataTag.PlayerLevel];
         }
 
         base.NetReceive(reader);
@@ -278,10 +288,10 @@ internal class WorldManager : ModSystem
             AnotherRpgModExpanded.Instance.Customstats.Update(gameTime);
     }
 
-    public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform)
+    public override void ModifyTransformMatrix(ref SpriteViewMatrix transform)
     {
-        AnotherRpgModExpanded.ZoomValue = Transform.Zoom;
-        base.ModifyTransformMatrix(ref Transform);
+        AnotherRpgModExpanded.ZoomValue = transform.Zoom;
+        base.ModifyTransformMatrix(ref transform);
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -418,18 +428,18 @@ internal class WorldManager : ModSystem
 
 public class WorldDataTag
 {
-    public static WorldDataTag Day = new(reader => reader.ReadInt32());
-    public static WorldDataTag FirstBossDefeated = new(reader => reader.ReadInt32());
-    public static WorldDataTag BossDefeated = new(reader => reader.ReadInt32());
-    public static WorldDataTag lastDayTime = new(reader => reader.ReadBoolean());
-    public static WorldDataTag ascended = new(reader => reader.ReadBoolean());
-    public static WorldDataTag ascendedLevel = new(reader => reader.ReadInt32());
-    public static WorldDataTag PlayerLevel = new(reader => reader.ReadInt32());
+    public static readonly WorldDataTag Day = new(reader => reader.ReadInt32());
+    public static readonly WorldDataTag FirstBossDefeated = new(reader => reader.ReadInt32());
+    public static readonly WorldDataTag BossDefeated = new(reader => reader.ReadInt32());
+    public static readonly WorldDataTag LastDayTime = new(reader => reader.ReadBoolean());
+    public static readonly WorldDataTag Ascended = new(reader => reader.ReadBoolean());
+    public static readonly WorldDataTag AscendedLevel = new(reader => reader.ReadInt32());
+    public static readonly WorldDataTag PlayerLevel = new(reader => reader.ReadInt32());
 
-    public Func<BinaryReader, object> read;
+    public readonly Func<BinaryReader, object> Read;
 
-    public WorldDataTag(Func<BinaryReader, object> read)
+    private WorldDataTag(Func<BinaryReader, object> read)
     {
-        this.read = read;
+        this.Read = read;
     }
 }

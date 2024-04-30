@@ -196,7 +196,7 @@ internal class AnotherRpgModExpanded : Mod
         JsonSkillTree.Init();
         JsonCharacterClass.Init();
         LoadedMods[SupportedMod.Thorium] = ModLoader.HasMod("ThoriumMod");
-        LoadedMods[SupportedMod.Calamity] = ModLoader.HasMod("CalamityMod");
+        // LoadedMods[SupportedMod.Calamity] = ModLoader.HasMod("CalamityMod");
         LoadedMods[SupportedMod.Dbzmod] = ModLoader.HasMod("DBZMOD");
         LoadedMods[SupportedMod.Metroid] = ModLoader.HasMod("MetroidMod");
 
