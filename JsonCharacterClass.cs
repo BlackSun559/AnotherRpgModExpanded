@@ -477,7 +477,7 @@ internal class JsonCharacterClass
             if (File.Exists(cPath))
                 using (var reader = new StreamReader(cPath))
                 {
-                    if (Config.gpConfig.UseCustomSkillTree)
+                    if (Config.GpConfig.UseCustomSkillTree)
                         GetJsonCharList = JsonConvert.DeserializeObject<JsonChrClassList>(reader.ReadToEnd());
                 }
 

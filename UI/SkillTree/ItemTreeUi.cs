@@ -34,7 +34,7 @@ internal class ItemTreeUi : UIState
     private float iZoom = 1;
     protected ItemUpdate m_itemSource;
 
-    public Vector2 offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.vConfig.UI_Scale;
+    public Vector2 offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.VConfig.UiScale;
     private Vector2 regOffSet;
     private UIText ResetText;
     private readonly float screenMult = Main.screenHeight / 1080f;
@@ -157,7 +157,7 @@ internal class ItemTreeUi : UIState
             return;
         }
 
-        uIScale = Config.vConfig.UI_Scale;
+        uIScale = Config.VConfig.UiScale;
 
         sizeMultplier = iZoom * uIScale * screenMult;
         allConnection = new List<ItemConnection>();
@@ -506,7 +506,7 @@ internal class ItemTreeUi : UIState
 
     private void ResetOffset(UIMouseEvent evt, UIElement listeningElement)
     {
-        offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.vConfig.UI_Scale;
+        offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.VConfig.UiScale;
         iZoom = 1;
         Init();
     }

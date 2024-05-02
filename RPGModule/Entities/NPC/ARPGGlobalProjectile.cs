@@ -16,8 +16,8 @@ internal class ARPGGlobalProjectile : GlobalProjectile
     public override void ModifyHitPlayer(Projectile projectile, Player target, ref Player.HurtModifiers modifiers)
     {
         var projectilelevel =
-            (int)((WorldManager.GetWorldLevelMultiplier(Config.NPCConfig.NPCProjectileDamageLevel) +
-                   WorldManager.GetWorldAdditionalLevel()) * Config.NPCConfig.NpclevelMultiplier);
+            (int)((WorldManager.GetWorldLevelMultiplier(Config.NpcConfig.NpcProjectileDamageLevel) +
+                   WorldManager.GetWorldAdditionalLevel()) * Config.NpcConfig.NpcLevelMultiplier);
 
 
         /*debug
@@ -36,7 +36,7 @@ internal class ARPGGlobalProjectile : GlobalProjectile
         projectile.damage =
             Mathf.HugeCalc(
                 Mathf.FloorInt(projectile.damage * (1 + projectilelevel * 0.05f) *
-                               Config.NPCConfig.NpcDamageMultiplier), projectile.damage);
+                               Config.NpcConfig.NpcDamageMultiplier), projectile.damage);
     }
 
 
@@ -45,13 +45,13 @@ internal class ARPGGlobalProjectile : GlobalProjectile
         if (projectile.npcProj)
         {
             var projectilelevel =
-                (int)(WorldManager.GetWorldLevelMultiplier(Config.NPCConfig.NPCProjectileDamageLevel) *
-                      Config.NPCConfig.NpclevelMultiplier);
+                (int)(WorldManager.GetWorldLevelMultiplier(Config.NpcConfig.NpcProjectileDamageLevel) *
+                      Config.NpcConfig.NpcLevelMultiplier);
 
             projectile.damage =
                 Mathf.HugeCalc(
                     Mathf.FloorInt(projectile.damage * Mathf.Pow(1 + projectilelevel * 0.02f, 0.95f) *
-                                   Config.NPCConfig.NpcDamageMultiplier), projectile.damage);
+                                   Config.NpcConfig.NpcDamageMultiplier), projectile.damage);
         }
 
         base.ModifyHitNPC(projectile, target, ref modifiers);

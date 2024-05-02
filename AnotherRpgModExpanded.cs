@@ -63,7 +63,7 @@ internal class AnotherRpgModExpanded : Mod
     public static ModKeybind LegsItemTreeHotKey;
 
     internal static GamePlayConfig GpConfig;
-    internal static NPCConfig NpcConfig;
+    internal static NpcConfig NpcConfig;
     internal static VisualConfig VisualConfig;
 
     public static ItemUpdate Source;
@@ -98,7 +98,7 @@ internal class AnotherRpgModExpanded : Mod
 
     public ReworkMouseOver NpcInfo;
     public NPCNameUI NpcName;
-    public OpenSTButton OpenSt;
+    public OpenStButton OpenSt;
 
     public OpenStatsButton OpenStatMenu;
 
@@ -221,27 +221,27 @@ internal class AnotherRpgModExpanded : Mod
 
             CustomResources = new UserInterface();
             HealthBar = new HealthBar();
-            HealthBar.visible = true;
+            HealthBar.Visible = true;
             CustomResources.SetState(HealthBar);
 
             Customstats = new UserInterface();
             StatMenu = new Stats();
-            Stats.visible = false;
+            Stats.Visible = false;
             Customstats.SetState(StatMenu);
 
             CustomOpenstats = new UserInterface();
             OpenStatMenu = new OpenStatsButton();
-            OpenStatsButton.visible = true;
+            OpenStatsButton.Visible = true;
             CustomOpenstats.SetState(OpenStatMenu);
 
             CustomOpenSt = new UserInterface();
-            OpenSt = new OpenSTButton();
-            OpenSTButton.visible = true;
+            OpenSt = new OpenStButton();
+            OpenStButton.Visible = true;
             CustomOpenSt.SetState(OpenSt);
 
             CustomSkillTree = new UserInterface();
             SkillTreeUi = new SkillTreeUi();
-            OpenStatsButton.visible = true;
+            OpenStatsButton.Visible = true;
             CustomSkillTree.SetState(SkillTreeUi);
 
             CustomItemTree = new UserInterface();
@@ -256,122 +256,5 @@ internal class AnotherRpgModExpanded : Mod
             customstats.SetState(statMenu);
             */
         }
-    }
-
-    private void DrawInterface_Resources_ClearBuffs()
-    {
-        Main.buffString = "";
-        Main.bannerMouseOver = false;
-
-        if (!Main.recBigList) Main.recStart = 0;
-    }
-
-    public void DrawInterface_Resources_Buffs()
-    {
-        Main.recBigList = false;
-        var buffId = -1;
-        var num1 = 11;
-        for (var buffSlot = 0; buffSlot < Player.MaxBuffs; buffSlot++)
-            if (Main.player[Main.myPlayer].buffType[buffSlot] <= 0)
-            {
-                Main.buffAlpha[buffSlot] = 0.4f;
-            }
-            else
-            {
-                var x = 32 + buffSlot * 38;
-                var y = 76;
-
-                if (buffSlot >= num1)
-                {
-                    x = 32 + Math.Abs(buffSlot % 11) * 38;
-                    y = y + 50 * (buffSlot / 11);
-                }
-
-                buffId = Main.DrawBuffIcon(buffId, buffSlot, x, y);
-            }
-
-        if (buffId >= 0)
-        {
-            var num5 = Main.player[Main.myPlayer].buffType[buffId];
-
-            if (num5 > 0)
-            {
-                var buffName = Lang.GetBuffName(num5);
-                var buffTooltip = Main.GetBuffTooltip(Main.player[Main.myPlayer], num5);
-
-                if (num5 == 147) Main.bannerMouseOver = true;
-                var rarity = 0;
-
-                if (Main.meleeBuff[num5]) rarity = -10;
-                Main.instance.MouseText(buffName, buffTooltip, rarity);
-            }
-        }
-    }
-
-    public static int DrawBuffIcon(int drawBuffText, int buffSlotOnPlayer, int x, int y)
-    {
-        int num1;
-        var buffId = Main.player[Main.myPlayer].buffType[buffSlotOnPlayer];
-
-        if (buffId != 0)
-        {
-            var color = new Color(Main.buffAlpha[buffSlotOnPlayer], Main.buffAlpha[buffSlotOnPlayer],
-                Main.buffAlpha[buffSlotOnPlayer], Main.buffAlpha[buffSlotOnPlayer]);
-            var spriteBatch = Main.spriteBatch;
-            var value = TextureAssets.Buff[buffId].Value;
-            var position = new Vector2(x, y);
-            var nullable = new Rectangle(0, 0, TextureAssets.Buff[buffId].Width(), TextureAssets.Buff[buffId].Height());
-            var origin = new Vector2();
-            spriteBatch.Draw(value, position, nullable, color, 0f, origin, 1f, 0, 0f);
-
-            if (Main.TryGetBuffTime(buffSlotOnPlayer, out var buffTimeValue) && buffTimeValue > 2)
-            {
-                var str = Lang.LocalizedDuration(new TimeSpan(0, 0, buffTimeValue / 60), true, false);
-                var buffTimerBatch = Main.spriteBatch;
-                var dynamicSpriteFont = FontAssets.ItemStack.Value;
-                var timerPosition = new Vector2(x, y + TextureAssets.Buff[buffId].Height());
-                origin = new Vector2();
-                buffTimerBatch.DrawString(dynamicSpriteFont, str, timerPosition, color, 0f, origin, 0.8f, 0, 0f);
-            }
-
-            if (Main.mouseX >= x + TextureAssets.Buff[buffId].Width() ||
-                Main.mouseY >= y + TextureAssets.Buff[buffId].Height() || Main.mouseX <= x || Main.mouseY <= y)
-            {
-                Main.buffAlpha[buffSlotOnPlayer] -= 0.05f;
-            }
-            else
-            {
-                drawBuffText = buffSlotOnPlayer;
-                Main.buffAlpha[buffSlotOnPlayer] += 0.1f;
-                var flag = Main.mouseRight && Main.mouseRightRelease;
-
-                if (!PlayerInput.UsingGamepad)
-                {
-                    Main.player[Main.myPlayer].mouseInterface = true;
-                }
-                else
-                {
-                    flag = Main.mouseLeft && Main.mouseLeftRelease && Main.playerInventory;
-
-                    if (Main.playerInventory) Main.player[Main.myPlayer].mouseInterface = true;
-                }
-
-                if (flag) Main.TryRemovingBuff(buffSlotOnPlayer, buffId);
-            }
-
-            if (Main.buffAlpha[buffSlotOnPlayer] > 1f)
-                Main.buffAlpha[buffSlotOnPlayer] = 1f;
-            else if (Main.buffAlpha[buffSlotOnPlayer] < 0.4) Main.buffAlpha[buffSlotOnPlayer] = 0.4f;
-
-            if (PlayerInput.UsingGamepad && !Main.playerInventory) drawBuffText = -1;
-
-            num1 = drawBuffText;
-        }
-        else
-        {
-            num1 = drawBuffText;
-        }
-
-        return num1;
     }
 }

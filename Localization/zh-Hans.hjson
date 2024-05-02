@@ -67,7 +67,28 @@ Mods: {
 				UseCustomSkillTree: {
 					Label: 使用自定义技能树
 					Tooltip: '''当为true时，它将使用json技能树 "Documents\My Games\Terraria\ModLoader\Mod Configs\AnRPG" '''
-				}			}
+				}
+
+				LifeLeechCd: {
+					// Label: Life Leech Cd
+					// Tooltip: ""
+				}
+
+				RpgPlayer: {
+					// Label: Rpg Player
+					// Tooltip: ""
+				}
+
+				XpReduction: {
+					// Label: Xp Reduction
+					// Tooltip: ""
+				}
+
+				XpReductionDelta: {
+					// Label: Xp Reduction Delta
+					// Tooltip: ""
+				}
+			}
 
 			NPCConfig: {
 				DisplayName: AnRPG敌人配置
@@ -160,7 +181,63 @@ Mods: {
 				NPCGrowthHardModePercent: {
 					Label: NPC困难模式成长百分比
 					Tooltip: 将世界等级乘以这个值(在“NPC增长OnHardMode”之前应用)
-				}			}
+				}
+
+				LimitNpcGrowth: {
+					// Label: Limit Npc Growth
+					// Tooltip: ""
+				}
+
+				LimitNpcGrowthPercent: {
+					// Label: Limit Npc Growth Percent
+					// Tooltip: ""
+				}
+
+				LimitNpcGrowthValue: {
+					// Label: Limit Npc Growth Value
+					// Tooltip: ""
+				}
+
+				NpcGrowthHardMode: {
+					// Label: Npc Growth Hard Mode
+					// Tooltip: ""
+				}
+
+				NpcGrowthHardModePercent: {
+					// Label: Npc Growth Hard Mode Percent
+					// Tooltip: ""
+				}
+
+				NpcGrowthValue: {
+					// Label: Npc Growth Value
+					// Tooltip: ""
+				}
+
+				NpcLevelMultiplier: {
+					// Label: Npc Level Multiplier
+					// Tooltip: ""
+				}
+
+				NpcModifier: {
+					// Label: Npc Modifier
+					// Tooltip: ""
+				}
+
+				NpcProgress: {
+					// Label: Npc Progress
+					// Tooltip: ""
+				}
+
+				NpcProjectileDamageLevel: {
+					// Label: Npc Projectile Damage Level
+					// Tooltip: ""
+				}
+
+				NpcRarity: {
+					// Label: Npc Rarity
+					// Tooltip: ""
+				}
+			}
 
 			VisualConfig: {
 				DisplayName: AnRPG显示配置
@@ -193,7 +270,117 @@ Mods: {
 				HideVanillaHB: {
 					Label: 隐藏生命条
 					Tooltip: 隐藏原版游戏的生命条
-				}			}
+				}
+
+				HealthBarYOffSet: {
+					// Label: Health Bar Y Off Set
+					// Tooltip: ""
+				}
+
+				HideVanillaHb: {
+					// Label: Hide Vanilla Hb
+					// Tooltip: ""
+				}
+
+				UiScale: {
+					// Label: Ui Scale
+					// Tooltip: ""
+				}
+			}
+
+			NpcConfig: {
+				// DisplayName: Npc Config
+
+				BossClustered: {
+					// Label: Boss Clustered
+					// Tooltip: ""
+				}
+
+				BossHealthMultiplier: {
+					// Label: Boss Health Multiplier
+					// Tooltip: ""
+				}
+
+				BossKillLevelIncrease: {
+					// Label: Boss Kill Level Increase
+					// Tooltip: ""
+				}
+
+				BossModifier: {
+					// Label: Boss Modifier
+					// Tooltip: ""
+				}
+
+				BossRarity: {
+					// Label: Boss Rarity
+					// Tooltip: ""
+				}
+
+				LimitNpcGrowth: {
+					// Label: Limit Npc Growth
+					// Tooltip: ""
+				}
+
+				LimitNpcGrowthPercent: {
+					// Label: Limit Npc Growth Percent
+					// Tooltip: ""
+				}
+
+				LimitNpcGrowthValue: {
+					// Label: Limit Npc Growth Value
+					// Tooltip: ""
+				}
+
+				NpcDamageMultiplier: {
+					// Label: Npc Damage Multiplier
+					// Tooltip: ""
+				}
+
+				NpcGrowthHardMode: {
+					// Label: Npc Growth Hard Mode
+					// Tooltip: ""
+				}
+
+				NpcGrowthHardModePercent: {
+					// Label: Npc Growth Hard Mode Percent
+					// Tooltip: ""
+				}
+
+				NpcGrowthValue: {
+					// Label: Npc Growth Value
+					// Tooltip: ""
+				}
+
+				NpcHealthMultiplier: {
+					// Label: Npc Health Multiplier
+					// Tooltip: ""
+				}
+
+				NpcLevelMultiplier: {
+					// Label: Npc Level Multiplier
+					// Tooltip: ""
+				}
+
+				NpcModifier: {
+					// Label: Npc Modifier
+					// Tooltip: ""
+				}
+
+				NpcProgress: {
+					// Label: Npc Progress
+					// Tooltip: ""
+				}
+
+				NpcProjectileDamageLevel: {
+					// Label: Npc Projectile Damage Level
+					// Tooltip: ""
+				}
+
+				NpcRarity: {
+					// Label: Npc Rarity
+					// Tooltip: ""
+				}
+			}
 		}
 
 		Keybinds: {
@@ -627,6 +814,7 @@ Mods: {
 					允许在1000级后获得经验
 
 					'''
-			}		}
+			}
+		}
 	}
 }

@@ -371,7 +371,7 @@ internal class ItemUpdate : GlobalItem
         var damage = BaseDamage;
         DamageFlatBuffer = damage;
 
-        if (Config.gpConfig.ItemTree)
+        if (Config.GpConfig.ItemTree)
         {
             if (_mItemTree == null || item == null)
                 return damage;
@@ -398,7 +398,7 @@ internal class ItemUpdate : GlobalItem
     {
         var use = _baseUseTime;
         UseTimeBuffer = use;
-        if (Config.gpConfig.ItemTree)
+        if (Config.GpConfig.ItemTree)
         {
             if (_mItemTree == null || item == null)
                 return use;
@@ -419,7 +419,7 @@ internal class ItemUpdate : GlobalItem
     {
         var use = BaseShootTime;
         _shootTimeBuffer = use;
-        if (Config.gpConfig.ItemTree)
+        if (Config.GpConfig.ItemTree)
         {
             if (_mItemTree == null || item == null)
                 return use;
@@ -441,7 +441,7 @@ internal class ItemUpdate : GlobalItem
         var defense = _baseArmor;
         _defenceBuffer = defense;
         DefenceFlatBuffer = defense;
-        if (Config.gpConfig.ItemTree)
+        if (Config.GpConfig.ItemTree)
         {
             if (_mItemTree == null || item == null)
                 return defense;
@@ -856,7 +856,7 @@ internal class ItemUpdate : GlobalItem
                     tooltips.Add(awtt);
                 }
 
-                if (Config.gpConfig.ItemRarity)
+                if (Config.GpConfig.ItemRarity)
                 {
                     TooltipLine rtt;
                     if (Rarity != Rarity.NONE)
@@ -873,7 +873,7 @@ internal class ItemUpdate : GlobalItem
                 }
 
                 if ((GetItemType == ItemType.Accessory || GetItemType == ItemType.Armor) &&
-                    Config.gpConfig.ItemRarity)
+                    Config.GpConfig.ItemRarity)
                     if (_stats.Stats.Count > 0)
                         for (var i = 0; i < _stats.Stats.Count; i++)
                         {
@@ -899,7 +899,7 @@ internal class ItemUpdate : GlobalItem
                             tooltips.Add(stt);
                         }
 
-                if (GetItemType == ItemType.Weapon && Config.gpConfig.ItemRarity)
+                if (GetItemType == ItemType.Weapon && Config.GpConfig.ItemRarity)
                 {
                     TooltipLine stt;
                     var p = Main.LocalPlayer.GetModPlayer<RpgPlayer>();
@@ -920,7 +920,7 @@ internal class ItemUpdate : GlobalItem
                     tooltips.Add(stt);
                 }
 
-                if (Config.gpConfig.ItemModifier)
+                if (Config.GpConfig.ItemModifier)
                 {
                     var sList = ModifierManager.GetModifierDesc(this);
 
@@ -968,7 +968,7 @@ internal class ItemUpdate : GlobalItem
 
                 if (Level >= 0)
                 {
-                    if (Config.gpConfig.ItemTree && _mItemTree != null)
+                    if (Config.GpConfig.ItemTree && _mItemTree != null)
                     {
                         if (_mItemTree.EvolutionPoints > 0)
                         {
@@ -1169,7 +1169,7 @@ internal class ItemUpdate : GlobalItem
                     _ascendToolTip.Add(new TooltipLine(Mod, "Ascending",
                         "Ascending Tier " + Ascension + " : " + AscendName[maxascend]) { IsModifier = true });
 
-                    if (!Config.gpConfig.ItemTree)
+                    if (!Config.GpConfig.ItemTree)
                     {
                         if (!_baseAutoReuse && item.DamageType != DamageClass.Magic &&
                             item.DamageType != DamageClass.Summon)
@@ -1238,7 +1238,7 @@ internal class ItemUpdate : GlobalItem
                 }
 
                 var manacostGain = 0;
-                if (Config.gpConfig.RPGPlayer && character.GetSkillTree.HavePerk(Perk.ManaOverBurst) &&
+                if (Config.GpConfig.RpgPlayer && character.GetSkillTree.HavePerk(Perk.ManaOverBurst) &&
                     item.DamageType == DamageClass.Magic && item.mana > 0)
                     manacostGain = Mathf.CeilInt(player.statMana *
                         (0.1f + ((float)character.GetSkillTree.nodeList.GetPerk(Perk.ManaOverBurst).GetLevel - 1) *
@@ -1300,7 +1300,7 @@ internal class ItemUpdate : GlobalItem
 
         if (_baseAutoReuse)
             powerLevel *= 1.2f;
-        if (Config.gpConfig.ItemRarity)
+        if (Config.GpConfig.ItemRarity)
             powerLevel *= 1 - Mathf.Log2((float)Rarity) * 0.05f;
         return 5 * GetTier(powerLevel);
     }
@@ -1373,17 +1373,17 @@ internal class ItemUpdate : GlobalItem
 
     public void Roll(Item item)
     {
-        if (Config.gpConfig.ItemRarity || Config.gpConfig.ItemModifier)
+        if (Config.GpConfig.ItemRarity || Config.GpConfig.ItemModifier)
         {
             var info = ModifierManager.RollItem(this, item, _bAscendWorldDrop, _ascendWorldDropLevel);
             
-            if (Config.gpConfig.ItemRarity)
+            if (Config.GpConfig.ItemRarity)
             {
                 Rarity = info.rarity;
                 _stats = info.stats;
             }
 
-            if (Config.gpConfig.ItemModifier) Modifier = info.modifier;
+            if (Config.GpConfig.ItemModifier) Modifier = info.modifier;
         }
     }
 
@@ -1396,7 +1396,7 @@ internal class ItemUpdate : GlobalItem
     {
         var maxAscend = Ascension.Clamp(0, AscendName.Length - 1);
         var prefix = "";
-        if (Rarity != Rarity.NONE && Config.gpConfig.ItemRarity)
+        if (Rarity != Rarity.NONE && Config.GpConfig.ItemRarity)
             prefix += Enum.GetName(typeof(Rarity), Rarity) + " ";
         prefix += AscendName[maxAscend];
         var sufix = "";
@@ -1459,10 +1459,10 @@ internal class ItemUpdate : GlobalItem
         }
 
         if (!CanLevelUpMore())
-            GetXp = (long)(GetXp + xp * Config.gpConfig.ItemXpMultiplier).Clamp(0,
+            GetXp = (long)(GetXp + xp * Config.GpConfig.ItemXpMultiplier).Clamp(0,
                 GetExpToNextLevel(Level, Ascension));
         else
-            GetXp += (long)(xp * Config.gpConfig.ItemXpMultiplier).Clamp(0, long.MaxValue);
+            GetXp += (long)(xp * Config.GpConfig.ItemXpMultiplier).Clamp(0, long.MaxValue);
 
         while (GetXp >= GetExpToNextLevel(Level, Ascension) && CanLevelUpMore())
         {

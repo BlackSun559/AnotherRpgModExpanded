@@ -90,10 +90,10 @@ internal class NPCUtils
         if (npc.dontCountMe)
             return NPCModifier.None;
 
-        if (!Config.NPCConfig.NPCModifier)
+        if (!Config.NpcConfig.NpcModifier)
             return NPCModifier.None;
 
-        if (npc.boss && !Config.NPCConfig.BossModifier)
+        if (npc.boss && !Config.NpcConfig.BossModifier)
             return NPCModifier.None;
 
         var maxModifier = 1;
@@ -146,7 +146,7 @@ internal class NPCUtils
             modifiersPool.Remove(NPCModifier.Size);
             if (maxModifier == (Enum.GetValues(typeof(NPCModifier)) as NPCModifier[]).Length)
                 maxModifier -= 1;
-            if (!Config.NPCConfig.BossClustered)
+            if (!Config.NpcConfig.BossClustered)
             {
                 modifiersPool.Remove(NPCModifier.Cluster);
                 if (maxModifier + 1 == (Enum.GetValues(typeof(NPCModifier)) as NPCModifier[]).Length)
@@ -469,7 +469,7 @@ internal class NPCUtils
         if (npc == null)
             return npc;
 
-        if (!Config.NPCConfig.NPCProgress)
+        if (!Config.NpcConfig.NpcProgress)
         {
             npc = SetRankStat(npc, rank);
             npc = SetModifierStat(npc);
@@ -508,20 +508,20 @@ internal class NPCUtils
                 {
                     if (Mathf.HugeCalc(
                             Mathf.FloorInt(npc.damage * (0.35f + level * 0.015f + tier * 0.025f) *
-                                           Config.NPCConfig.NpcDamageMultiplier * 0.75f), 1) < 250000)
+                                           Config.NpcConfig.NpcDamageMultiplier * 0.75f), 1) < 250000)
                         npc.damage =
                             Mathf.HugeCalc(
                                 Mathf.FloorInt(npc.damage * (0.35f + level * 0.015f + tier * 0.025f) *
-                                               Config.NPCConfig.NpcDamageMultiplier * 0.75f), 1);
+                                               Config.NpcConfig.NpcDamageMultiplier * 0.75f), 1);
                     else
                         npc.damage = Mathf.FloorInt(250000 * Mathf.Logx(1 + level * 0.025f + tier * 0.05f, 7.5f) *
-                                                    Config.NPCConfig.NpcDamageMultiplier);
+                                                    Config.NpcConfig.NpcDamageMultiplier);
                 }
 
                 npc.lifeMax =
                     Mathf.HugeCalc(
                         Mathf.FloorInt(Mathf.Pow(npc.lifeMax * (level * 0.025f + tier * 0.035f), 1.05f) *
-                                       Config.NPCConfig.BossHealthMultiplier * Config.NPCConfig.NpcHealthMultiplier),
+                                       Config.NpcConfig.BossHealthMultiplier * Config.NpcConfig.NpcHealthMultiplier),
                         1);
             }
             else
@@ -530,11 +530,11 @@ internal class NPCUtils
                     npc.damage =
                         Mathf.HugeCalc(
                             Mathf.FloorInt(npc.damage * (0.75f + level * 0.015f + tier * 0.025f) *
-                                           Config.NPCConfig.NpcDamageMultiplier), 1);
+                                           Config.NpcConfig.NpcDamageMultiplier), 1);
                 npc.lifeMax =
                     Mathf.HugeCalc(
                         Mathf.FloorInt(Mathf.Pow(npc.lifeMax * (level * 0.10f + tier * 0.15f), power) *
-                                       Config.NPCConfig.NpcHealthMultiplier), 1);
+                                       Config.NpcConfig.NpcHealthMultiplier), 1);
             }
 
             npc.value = npc.value * (1 + (level + tier) * 0.001f) * (1 + (int)rank * 0.1f);
@@ -556,20 +556,20 @@ internal class NPCUtils
                 {
                     if (Mathf.HugeCalc(
                             Mathf.FloorInt(npc.damage * (0.35f + level * 0.04f + tier * 0.06f) *
-                                           Config.NPCConfig.NpcDamageMultiplier * 0.75f), 1) < 250000)
+                                           Config.NpcConfig.NpcDamageMultiplier * 0.75f), 1) < 250000)
                         npc.damage =
                             Mathf.HugeCalc(
                                 Mathf.FloorInt(npc.damage * (0.35f + level * 0.04f + tier * 0.06f) *
-                                               Config.NPCConfig.NpcDamageMultiplier * 0.75f), 1);
+                                               Config.NpcConfig.NpcDamageMultiplier * 0.75f), 1);
                     else
                         npc.damage = Mathf.FloorInt(250000 * Mathf.Logx(1 + level * 0.10f + tier * 0.30f, 7.5f) *
-                                                    Config.NPCConfig.NpcDamageMultiplier);
+                                                    Config.NpcConfig.NpcDamageMultiplier);
                 }
 
                 npc.lifeMax =
                     Mathf.HugeCalc(
                         Mathf.FloorInt(Mathf.Pow(npc.lifeMax * (level * 0.05f + tier * 0.070), 1.08f) *
-                                       Config.NPCConfig.BossHealthMultiplier * Config.NPCConfig.NpcHealthMultiplier),
+                                       Config.NpcConfig.BossHealthMultiplier * Config.NpcConfig.NpcHealthMultiplier),
                         1);
             }
             else
@@ -578,11 +578,11 @@ internal class NPCUtils
                     npc.damage =
                         Mathf.HugeCalc(
                             Mathf.FloorInt(npc.damage * (0.75f + level * 0.035f + tier * 0.05f) *
-                                           Config.NPCConfig.NpcDamageMultiplier), 1);
+                                           Config.NpcConfig.NpcDamageMultiplier), 1);
                 npc.lifeMax =
                     Mathf.HugeCalc(
                         Mathf.FloorInt(Mathf.Pow(npc.lifeMax * (level * 0.20f + tier * 0.30f), power) *
-                                       Config.NPCConfig.NpcHealthMultiplier), 1);
+                                       Config.NpcConfig.NpcHealthMultiplier), 1);
             }
 
             npc.value = npc.value * (1 + (level + tier) * 0.001f) * (1 + (int)rank * 0.1f);
@@ -698,7 +698,7 @@ internal class NPCUtils
         if (baselevel < -1)
             return 1;
 
-        if (Config.NPCConfig.LimitNPCGrowth) baselevel = baselevel.Clamp(10, maxLevel);
+        if (Config.NpcConfig.LimitNpcGrowth) baselevel = baselevel.Clamp(10, maxLevel);
 
 
         baselevel = baselevel.Clamp(10, int.MaxValue);
@@ -707,8 +707,8 @@ internal class NPCUtils
 
     public static int GetMaxLevel()
     {
-        var maxLevel = Mathf.CeilInt(WorldManager.PlayerLevel + Config.NPCConfig.LimitNPCGrowthValue +
-                                     WorldManager.PlayerLevel * Config.NPCConfig.LimitNPCGrowthPercent * 0.01f);
+        var maxLevel = Mathf.CeilInt(WorldManager.PlayerLevel + Config.NpcConfig.LimitNpcGrowthValue +
+                                     WorldManager.PlayerLevel * Config.NpcConfig.LimitNpcGrowthPercent * 0.01f);
 
         if (maxLevel < 1)
             maxLevel = 1;
@@ -744,10 +744,10 @@ internal class NPCUtils
     {
         if (!WorldManager.Ascended)
         {
-            if (!Config.NPCConfig.NPCRarity)
+            if (!Config.NpcConfig.NpcRarity)
                 return NPCRank.Normal;
 
-            if (boss && !Config.NPCConfig.BossRarity)
+            if (boss && !Config.NpcConfig.BossRarity)
                 return NPCRank.Normal;
 
             if (level < 1)
@@ -779,7 +779,7 @@ internal class NPCUtils
         }
         else
         {
-            if (!Config.NPCConfig.NPCRarity)
+            if (!Config.NpcConfig.NpcRarity)
                 return NPCRank.Raised;
 
             if (level < 1)

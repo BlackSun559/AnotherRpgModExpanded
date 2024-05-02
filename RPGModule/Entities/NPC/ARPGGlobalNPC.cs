@@ -89,20 +89,20 @@ internal class ARPGGlobalNPC : GlobalNPC
         if (Main.netMode != NetmodeID.MultiplayerClient)
             if (getLevel < 0)
             {
-                if (!Config.NPCConfig.NPCProgress)
+                if (!Config.NpcConfig.NpcProgress)
                 {
                     getLevel = 0;
                     getTier = 0;
                 }
                 else
                 {
-                    getLevel = Mathf.CeilInt(NPCUtils.GetBaseLevel(npc) * Config.NPCConfig.NpclevelMultiplier);
+                    getLevel = Mathf.CeilInt(NPCUtils.GetBaseLevel(npc) * Config.NpcConfig.NpcLevelMultiplier);
 
                     if (npc.townNPC || npc.damage == 0)
                         getTier = Mathf.CeilInt(NPCUtils.GetTierAlly(npc, getLevel) *
-                                                Config.NPCConfig.NpclevelMultiplier);
-                    else if (Config.NPCConfig.NPCProgress)
-                        getTier = Mathf.CeilInt(NPCUtils.GetTier(npc, getLevel) * Config.NPCConfig.NpclevelMultiplier);
+                                                Config.NpcConfig.NpcLevelMultiplier);
+                    else if (Config.NpcConfig.NpcProgress)
+                        getTier = Mathf.CeilInt(NPCUtils.GetTier(npc, getLevel) * Config.NpcConfig.NpcLevelMultiplier);
                 }
 
                 if (!npc.townNPC && !(npc.damage == 0) && !npc.dontCountMe)
@@ -344,7 +344,7 @@ internal class ARPGGlobalNPC : GlobalNPC
             WorldManager.OnBossDefeated(npc);
         }
 
-        XPToDrop = Mathf.CeilInt(XPToDrop * Config.gpConfig.XpMultiplier);
+        XPToDrop = Mathf.CeilInt(XPToDrop * Config.GpConfig.XpMultiplier);
 
         var xplevel = getLevel + getTier;
 

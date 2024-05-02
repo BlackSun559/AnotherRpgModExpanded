@@ -333,7 +333,7 @@ internal class JsonSkillTree
             if (File.Exists(cPath))
                 using (var reader = new StreamReader(cPath))
                 {
-                    if (Config.gpConfig.UseCustomSkillTree)
+                    if (Config.GpConfig.UseCustomSkillTree)
                         GetJsonNodeList = JsonConvert.DeserializeObject<JsonNodeList>(reader.ReadToEnd());
                 }
 

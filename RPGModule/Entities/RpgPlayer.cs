@@ -290,10 +290,10 @@ internal class RpgPlayer : ModPlayer
     private float GetStatImprovementItem(Stat s)
     {
         float value = 1;
-        if (!Config.gpConfig.ItemRarity)
+        if (!Config.GpConfig.ItemRarity)
             return value;
         var maxSlot = Player.armor.Length;
-        if (!Config.gpConfig.VanityGiveStat) maxSlot = 9;
+        if (!Config.GpConfig.VanityGiveStat) maxSlot = 9;
 
         for (var i = 0; i < maxSlot; i++)
         {
@@ -348,7 +348,7 @@ internal class RpgPlayer : ModPlayer
             classname = "" + GetSkillTree.ActiveClass.GetClassType;
         var name = _basename + " the lvl." + _level + " " + classname;
 
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             var packet = Mod.GetPacket();
             packet.Write((byte)Message.SyncLevel);
@@ -367,7 +367,7 @@ internal class RpgPlayer : ModPlayer
     {
         if (_basename == "")
             _basename = Player.name;
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             if (!_initiated)
             {
@@ -415,7 +415,7 @@ internal class RpgPlayer : ModPlayer
 
                 Player.maxMinions += GetSkillTree.GetSummonSlot();
 
-                if (!Config.gpConfig.ItemTree)
+                if (!Config.GpConfig.ItemTree)
                     Player.maxMinions += GetMaxMinion();
 
                 Player.lifeRegen = Mathf.FloorInt(GetHealthRegen());
@@ -504,7 +504,7 @@ internal class RpgPlayer : ModPlayer
 
     public override void PostUpdateEquips()
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             if (Main.netMode != NetmodeID.Server)
             {
@@ -672,14 +672,14 @@ internal class RpgPlayer : ModPlayer
 
     private void HandleTrigger()
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             if (AnotherRpgModExpanded.StatsHotKey.JustPressed)
             {
                 SoundEngine.PlaySound(SoundID.MenuOpen);
 
                 UI.Stats.Instance.LoadChar();
-                UI.Stats.visible = !UI.Stats.visible;
+                UI.Stats.Visible = !UI.Stats.Visible;
             }
 
             if (AnotherRpgModExpanded.SkillTreeHotKey.JustPressed)
@@ -692,7 +692,7 @@ internal class RpgPlayer : ModPlayer
             }
         }
 
-        if (AnotherRpgModExpanded.ItemTreeHotKey.JustPressed && Config.gpConfig.ItemTree)
+        if (AnotherRpgModExpanded.ItemTreeHotKey.JustPressed && Config.GpConfig.ItemTree)
         {
             if (ItemUpdate.NeedSavingStatic(Player.HeldItem))
             {
@@ -712,7 +712,7 @@ internal class RpgPlayer : ModPlayer
             }
         }
 
-        if (AnotherRpgModExpanded.HelmetItemTreeHotKey.JustPressed && Config.gpConfig.ItemTree)
+        if (AnotherRpgModExpanded.HelmetItemTreeHotKey.JustPressed && Config.GpConfig.ItemTree)
         {
             if (ItemUpdate.NeedSavingStatic(Player.armor[0]))
             {
@@ -732,7 +732,7 @@ internal class RpgPlayer : ModPlayer
             }
         }
 
-        if (AnotherRpgModExpanded.ChestItemTreeHotKey.JustPressed && Config.gpConfig.ItemTree)
+        if (AnotherRpgModExpanded.ChestItemTreeHotKey.JustPressed && Config.GpConfig.ItemTree)
         {
             if (ItemUpdate.NeedSavingStatic(Player.armor[1]))
             {
@@ -752,7 +752,7 @@ internal class RpgPlayer : ModPlayer
             }
         }
 
-        if (AnotherRpgModExpanded.LegsItemTreeHotKey.JustPressed && Config.gpConfig.ItemTree)
+        if (AnotherRpgModExpanded.LegsItemTreeHotKey.JustPressed && Config.GpConfig.ItemTree)
         {
             if (ItemUpdate.NeedSavingStatic(Player.armor[2]))
             {
@@ -780,14 +780,14 @@ internal class RpgPlayer : ModPlayer
 
     public float GetBonusHeal()
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
             return GetHealthPerHeart() / 20;
         return 1;
     }
 
     public float GetBonusHealMana()
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
             return (float)Math.Sqrt(GetManaPerStar() / 20);
         return 1;
     }
@@ -911,7 +911,7 @@ internal class RpgPlayer : ModPlayer
     {
         var exp = xp;
 
-        if (level <= this._level - Config.gpConfig.XPReductionDelta)
+        if (level <= this._level - Config.GpConfig.XpReductionDelta)
         {
             var expMult = 1 - (this._level - level) * 0.1f;
             exp = (int)(exp * expMult);
@@ -925,11 +925,11 @@ internal class RpgPlayer : ModPlayer
 
     public void AddXp(int exp, int level)
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             exp = (int)(exp * GetXpMult());
 
-            if (Config.gpConfig.XPReduction) exp = ReduceExp(exp, level);
+            if (Config.GpConfig.XpReduction) exp = ReduceExp(exp, level);
 
             if (this._level >= 1000 && !GetSkillTree.IsLimitBreak())
             {
@@ -986,14 +986,14 @@ internal class RpgPlayer : ModPlayer
             var Item = Player.HeldItem.GetGlobalItem<ItemUpdate>();
             if (Item != null && ItemUpdate.NeedSavingStatic(Player.HeldItem))
             {
-                if (Config.gpConfig.ItemTree)
+                if (Config.GpConfig.ItemTree)
                     value = Item.Leech;
                 else
                     value = Item.GetLifeLeech * 0.01f;
             }
         }
 
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             if (GetSkillTree.HavePerk(Perk.Vampire) && !Main.dayTime)
                 switch (GetSkillTree.nodeList.GetPerk(Perk.Vampire).GetLevel)
@@ -1023,11 +1023,11 @@ internal class RpgPlayer : ModPlayer
         {
             var item = Player.HeldItem.GetGlobalItem<ItemUpdate>();
             if (item != null && ItemUpdate.NeedSavingStatic(Player.HeldItem))
-                if (!Config.gpConfig.ItemTree)
+                if (!Config.GpConfig.ItemTree)
                     value = item.GetManaLeech * 0.01f;
         }
 
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
             value += GetSkillTree.GetLeech(LeechType.Magic) + GetSkillTree.GetLeech(LeechType.Both);
         return value;
     }
@@ -1149,7 +1149,7 @@ internal class RpgPlayer : ModPlayer
 
     private int GetActiveClassId()
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
             return -1;
 
         if (GetSkillTree.ActiveClass == null) return -1;
@@ -1314,7 +1314,7 @@ internal class RpgPlayer : ModPlayer
 
     public void Leech(int damage)
     {
-        var cd = TimeSpan.FromSeconds(Config.gpConfig.LifeLeechCD);
+        var cd = TimeSpan.FromSeconds(Config.GpConfig.LifeLeechCd);
 
         if (_lastLeech + cd < DateTime.Now)
         {
@@ -1403,7 +1403,7 @@ internal class RpgPlayer : ModPlayer
     {
         var maxslot = Player.armor.Length;
 
-        if (!Config.gpConfig.VanityGiveStat) maxslot = 9;
+        if (!Config.GpConfig.VanityGiveStat) maxslot = 9;
 
         for (var i = 0; i <= maxslot; i++)
         {
@@ -1546,7 +1546,7 @@ internal class RpgPlayer : ModPlayer
 
         var damage = hit.Damage;
 
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             //CupidonPerk
             float cupidOnChance = 0;
@@ -1572,7 +1572,7 @@ internal class RpgPlayer : ModPlayer
 
     private void ModifyHitGeneralModifiers(Item item, NPC target, ref NPC.HitModifiers modifiers, int pen)
     {
-        if (Config.gpConfig.RPGPlayer) modifiers.CritDamage *= GetCriticalDamage() * 0.5f;
+        if (Config.GpConfig.RpgPlayer) modifiers.CritDamage *= GetCriticalDamage() * 0.5f;
 
         modifiers.FinalDamage *= DamageMultiplierFromModifier(target,
             Mathf.RoundInt(modifiers.FinalDamage.Additive * modifiers.FinalDamage.Multiplicative));
@@ -1631,7 +1631,7 @@ internal class RpgPlayer : ModPlayer
 
     private void ModifyHitByGeneral(ref Player.HurtModifiers modifiers)
     {
-        if (Config.gpConfig.RPGPlayer)
+        if (Config.GpConfig.RpgPlayer)
         {
             var damage = Mathf.RoundInt(modifiers.FinalDamage.Additive * modifiers.FinalDamage.Multiplicative);
 

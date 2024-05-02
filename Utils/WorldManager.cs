@@ -77,16 +77,16 @@ internal class WorldManager : ModSystem
 
     public static int GetMaximumAscend()
     {
-        if (!Config.gpConfig.AscendLimit) return 999;
+        if (!Config.GpConfig.AscendLimit) return 999;
 
         float limit = 0;
 
 
-        if (Config.NPCConfig.BossKillLevelIncrease)
-            limit = BossDefeated * Config.gpConfig.AscendLimitPerBoss;
+        if (Config.NpcConfig.BossKillLevelIncrease)
+            limit = BossDefeated * Config.GpConfig.AscendLimitPerBoss;
 
         else
-            limit = FirstBossDefeated * Config.gpConfig.AscendLimitPerBoss;
+            limit = FirstBossDefeated * Config.GpConfig.AscendLimitPerBoss;
 
 
         if (Main.hardMode && limit < 5)
@@ -107,11 +107,11 @@ internal class WorldManager : ModSystem
     {
         float limit = 0;
 
-        if (Config.NPCConfig.BossKillLevelIncrease)
-            limit = BossDefeated * Config.gpConfig.AscendLimitPerBoss;
+        if (Config.NpcConfig.BossKillLevelIncrease)
+            limit = BossDefeated * Config.GpConfig.AscendLimitPerBoss;
 
         else
-            limit = FirstBossDefeated * Config.gpConfig.AscendLimitPerBoss;
+            limit = FirstBossDefeated * Config.GpConfig.AscendLimitPerBoss;
 
         return 1 + Mathf.FloorInt(limit) * 0.5f;
     }
@@ -132,17 +132,17 @@ internal class WorldManager : ModSystem
     {
         var bonuslevel = 0;
 
-        if (Config.NPCConfig.BossKillLevelIncrease)
-            bonuslevel = BossDefeated * Config.NPCConfig.NPCGrowthValue;
+        if (Config.NpcConfig.BossKillLevelIncrease)
+            bonuslevel = BossDefeated * Config.NpcConfig.NpcGrowthValue;
 
         else
-            bonuslevel = FirstBossDefeated * Config.NPCConfig.NPCGrowthValue;
+            bonuslevel = FirstBossDefeated * Config.NpcConfig.NpcGrowthValue;
 
 
         if (Main.hardMode)
         {
-            bonuslevel = Mathf.CeilInt(bonuslevel * Config.NPCConfig.NPCGrowthHardModePercent);
-            bonuslevel += Config.NPCConfig.NPCGrowthHardMode;
+            bonuslevel = Mathf.CeilInt(bonuslevel * Config.NpcConfig.NpcGrowthHardModePercent);
+            bonuslevel += Config.NpcConfig.NpcGrowthHardMode;
         }
 
         return bonuslevel;
@@ -257,7 +257,7 @@ internal class WorldManager : ModSystem
 
     public override void PreSaveAndQuit()
     {
-        Stats.visible = false;
+        Stats.Visible = false;
         base.PreSaveAndQuit();
     }
 
@@ -302,7 +302,7 @@ internal class WorldManager : ModSystem
             return;
 
 
-        if (HealthBar.visible && Config.gpConfig.RPGPlayer && Config.vConfig.HideVanillaHB)
+        if (HealthBar.Visible && Config.GpConfig.RpgPlayer && Config.VConfig.HideVanillaHb)
         {
             var ressourceid = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
             layers.RemoveAt(ressourceid);
@@ -346,9 +346,9 @@ internal class WorldManager : ModSystem
                 "AnotherRpgMod: StatWindows",
                 delegate
                 {
-                    if (Stats.visible) AnotherRpgModExpanded.Instance.StatMenu.Draw(Main.spriteBatch);
+                    if (Stats.Visible) AnotherRpgModExpanded.Instance.StatMenu.Draw(Main.spriteBatch);
 
-                    if (OpenStatsButton.visible)
+                    if (OpenStatsButton.Visible)
                     {
                         AnotherRpgModExpanded.Instance.CustomOpenstats.Update(Main._drawInterfaceGameTime);
                         AnotherRpgModExpanded.Instance.OpenStatMenu.Draw(Main.spriteBatch);
@@ -363,7 +363,7 @@ internal class WorldManager : ModSystem
                 "AnotherRpgMod: Skill Tree",
                 delegate
                 {
-                    if (OpenSTButton.visible)
+                    if (OpenStButton.Visible)
                     {
                         AnotherRpgModExpanded.Instance.CustomOpenSt.Update(Main._drawInterfaceGameTime);
                         AnotherRpgModExpanded.Instance.OpenSt.Draw(Main.spriteBatch);
@@ -411,7 +411,7 @@ internal class WorldManager : ModSystem
                 "AnotherRpgMod: Custom Health Bar",
                 delegate
                 {
-                    if (HealthBar.visible)
+                    if (HealthBar.Visible)
                     {
                         //Update CustomBars
                         AnotherRpgModExpanded.Instance.CustomOpenSt.Update(Main._drawInterfaceGameTime);

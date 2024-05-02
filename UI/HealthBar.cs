@@ -18,10 +18,10 @@ namespace AnotherRpgModExpanded.UI;
 
 internal enum Mode
 {
-    HP,
+    Hp,
     Leech,
-    MANA,
-    XP,
+    Mana,
+    Xp,
     Weapon,
     Breath
 }
@@ -29,8 +29,8 @@ internal enum Mode
 internal class BuffIcon : UIElement
 {
     private Texture2D _texture;
-    public Color color;
-    public float ImageScale = 1f;
+    public Color Color;
+    private const float ImageScale = 1f;
 
     public BuffIcon(Texture2D texture)
     {
@@ -55,99 +55,95 @@ internal class BuffIcon : UIElement
         var dimensions = GetDimensions();
 
         spriteBatch.Draw(_texture, dimensions.Position() + new Vector2(0, _texture.Size().Y) * (1f - ImageScale), null,
-            color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None, 0f);
+            Color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None, 0f);
     }
 }
 
-internal class RessourceInfo
+internal class ResourceInfo
 {
-    private readonly Vector2 baseSize;
-    public Vector2 position;
-    public Vector2 size;
-    public Texture2D texture;
+    private readonly Vector2 _baseSize;
+    public Vector2 Position;
+    public Vector2 Size;
+    public readonly Texture2D Texture;
 
-    public RessourceInfo(Texture2D _texture, Vector2 _position, float scale = 1f)
+    public ResourceInfo(Texture2D texture, Vector2 position, float scale = 1f)
     {
-        texture = _texture;
-        position = _position;
-        baseSize = _texture.Size();
-        size = baseSize * scale;
+        Texture = texture;
+        Position = position;
+        _baseSize = texture.Size();
+        Size = _baseSize * scale;
     }
 
     public void ChangeSize(float scale)
     {
-        size = baseSize * scale;
+        Size = _baseSize * scale;
     }
 }
 
 internal class HealthBar : UIState
 {
-    public static bool visible = false;
-    private readonly float baseUiHeight = 393f;
+    public static bool Visible = false;
+    private const float BaseUiHeight = 393f;
 
-    private RessourceBreath breath;
+    private ResourceBreath _breath;
 
-    public UIElement buffPanel;
-    public UIElement buffTTPanel;
+    private UIElement _buffPanel;
+    private UIElement _buffTtPanel;
 
-    private UIText health;
-    public bool hiden;
-    private UIText Level;
+    private UIText _health;
+    private bool _hidden;
+    private UIText _level;
 
+    private readonly UIElement[] _mainPanel = new UIElement[7];
+    private UIText _manaText;
+    private UiOverlay _overlay;
 
-    public UIElement[] MainPanel = new UIElement[7];
-    private UIText manatext;
-    private UIOverlay Overlay;
+    private Player _player;
 
+    private readonly Resource[] _resourceBar = new Resource[5];
 
-    private Player player;
+    private Dictionary<Mode, ResourceInfo> _resourceTexture;
 
-    private readonly Ressource[] ressourcebar = new Ressource[5];
-
-    private Dictionary<Mode, RessourceInfo> RessourceTexture;
-
-    private float scale = Config.vConfig.HealthBarScale;
-    private UIText xptext;
-    private float YDefaultOffSet = -Config.vConfig.HealthBarYoffSet;
-
+    private float _scale = Config.VConfig.HealthBarScale;
+    private UIText _xpText;
+    private float _yDefaultOffSet = Config.VConfig.HealthBarYOffSet / 100f;
+    
     public override void Update(GameTime gameTime)
     {
         UpdateBuffList();
 
-        if (!Config.gpConfig.RPGPlayer)
+        if (!Config.GpConfig.RpgPlayer)
         {
             RemoveAllChildren();
-            hiden = true;
+            _hidden = true;
             return;
         }
 
-        if (hiden)
+        if (_hidden)
         {
-            hiden = false;
+            _hidden = false;
             OnInitialize();
         }
 
-        buffPanel.Top.Set(Main.screenHeight - baseUiHeight + YDefaultOffSet + 185 * scale, 0f);
+        _buffPanel.Top.Set(CalcUiPosition() - 300 * _scale, 0f);
         var player = Main.player[Main.myPlayer]; //Get Player
 
         if (player.GetModPlayer<RpgPlayer>().MVirtualRes > 0)
         {
-            health.Left.Set(450 * scale, 0f);
-            health.SetText("" + player.statLife + " | " + player.statLifeMax2 + " (" +
-                           player.statLifeMax2 / (1 - player.GetModPlayer<RpgPlayer>().MVirtualRes) + ")"); //Set Life
+            _health.Left.Set(450 * _scale, 0f);
+            _health.SetText("" + player.statLife + " | " + player.statLifeMax2 + " (" +
+                            player.statLifeMax2 / (1 - player.GetModPlayer<RpgPlayer>().MVirtualRes) + ")"); //Set Life
         }
 
         else
         {
-            health.SetText("" + player.statLife + " | " + player.statLifeMax2); //Set Life
+            _health.SetText("" + player.statLife + " | " + player.statLifeMax2); //Set Life
         }
 
-
-        manatext.SetText("" + player.statMana + " | " + player.statManaMax2); //Set Mana
-        xptext.SetText("" + (float)player.GetModPlayer<RpgPlayer>().GetExp() + " | " +
-                       (float)player.GetModPlayer<RpgPlayer>().XpToNextLevel()); //Set Mana
-        Level.SetText("Lvl. " + (float)player.GetModPlayer<RpgPlayer>().GetLevel());
-
+        _manaText.SetText("" + player.statMana + " | " + player.statManaMax2); //Set Mana
+        _xpText.SetText("" + (float)player.GetModPlayer<RpgPlayer>().GetExp() + " | " +
+                        (float)player.GetModPlayer<RpgPlayer>().XpToNextLevel()); //Set Mana
+        _level.SetText("Lvl. " + (float)player.GetModPlayer<RpgPlayer>().GetLevel());
 
         Recalculate();
 
@@ -157,23 +153,23 @@ internal class HealthBar : UIState
 
     private void UpdateBuffList()
     {
-        buffPanel.RemoveAllChildren();
-        buffTTPanel.RemoveAllChildren();
+        _buffPanel.RemoveAllChildren();
+        _buffTtPanel.RemoveAllChildren();
         var rowLimit = 11;
         for (var i = 0; i < Player.MaxBuffs; i++)
             if (Main.player[Main.myPlayer].buffType[i] > 0)
             {
                 var buffType = Main.player[Main.myPlayer].buffType[i];
-                var x_pos = 32 + i * 38;
-                var y_pos = 76;
+                var xPosition = 32 + i * 38;
+                var yPosiiton = 76;
 
                 if (i >= rowLimit)
                 {
-                    y_pos -= 50;
-                    x_pos = 32 + (i - rowLimit) * 38;
+                    yPosiiton -= 50;
+                    xPosition = 32 + (i - rowLimit) * 38;
                 }
 
-                DrawBuff(buffType, i, x_pos, y_pos);
+                DrawBuff(buffType, i, xPosition, yPosiiton);
             }
     }
 
@@ -181,7 +177,7 @@ internal class HealthBar : UIState
     {
         var buffTexture = TextureAssets.Buff[type].Value;
         var buffIcon = new BuffIcon(buffTexture);
-        buffIcon.color = new Color(0.4f, 0.4f, 0.4f, 0.4f);
+        buffIcon.Color = new Color(0.4f, 0.4f, 0.4f, 0.4f);
 
         buffIcon.Left.Set(x, 0f);
         buffIcon.Top.Set(y, 0f);
@@ -195,23 +191,23 @@ internal class HealthBar : UIState
         {
             var text = Lang.LocalizedDuration(new TimeSpan(0, 0, Main.player[Main.myPlayer].buffTime[i] / 60), true,
                 false);
-            var uIText = new UIText(text, scale);
+            var uIText = new UIText(text, _scale);
             uIText.Top.Set(buffTexture.Height, 0);
             buffIcon.Append(uIText);
 
             //buffIcon.MouseOver() += draw
         }
 
-        if (Main.mouseX - buffPanel.Left.Pixels < x + buffTexture.Width &&
-            Main.mouseY - buffPanel.Top.Pixels < y + buffTexture.Height && Main.mouseX - buffPanel.Left.Pixels > x &&
-            Main.mouseY - buffPanel.Top.Pixels > y)
+        if (Main.mouseX - _buffPanel.Left.Pixels < x + buffTexture.Width &&
+            Main.mouseY - _buffPanel.Top.Pixels < y + buffTexture.Height && Main.mouseX - _buffPanel.Left.Pixels > x &&
+            Main.mouseY - _buffPanel.Top.Pixels > y)
         {
             DrawBuffToolTip(type, buffIcon);
 
             if (Main.mouseRight && Main.mouseRightRelease) RemoveBuff(i, type);
         }
 
-        buffPanel.Append(buffIcon);
+        _buffPanel.Append(buffIcon);
     }
 
     private void RemoveBuff(int id, int type)
@@ -241,9 +237,9 @@ internal class HealthBar : UIState
 
     private void DrawBuffToolTip(int id, BuffIcon icon)
     {
-        var mouseY = Main.lastMouseY - (int)buffPanel.Top.Pixels;
-        var mouseX = Main.lastMouseX - (int)buffPanel.Left.Pixels;
-        icon.color = new Color(1, 1, 1, 1f);
+        var mouseY = Main.lastMouseY - (int)_buffPanel.Top.Pixels;
+        var mouseX = Main.lastMouseX - (int)_buffPanel.Left.Pixels;
+        icon.Color = new Color(1, 1, 1, 1f);
         var buffDesc = Lang.GetBuffDescription(id);
 
         if (id == 26 && Main.expertMode) buffDesc = Language.GetTextValue("BuffDescription.WellFed_Expert");
@@ -255,32 +251,32 @@ internal class HealthBar : UIState
         }
 
         var buffName = Lang.GetBuffName(id);
-        var TText = new UIText(buffName, scale, true);
-        TText.Top.Set(mouseY - 60, 0);
-        TText.Left.Set(mouseX + 20, 0);
-        var DescText = new UIText(buffDesc, scale);
-        DescText.Top.Set(mouseY - 30, 0);
-        DescText.Left.Set(mouseX + 20, 0);
+        var text = new UIText(buffName, _scale, true);
+        text.Top.Set(mouseY - 60, 0);
+        text.Left.Set(mouseX + 20, 0);
+        var descText = new UIText(buffDesc, _scale);
+        descText.Top.Set(mouseY - 30, 0);
+        descText.Left.Set(mouseX + 20, 0);
 
-        buffTTPanel.Append(TText);
-        buffTTPanel.Append(DescText);
+        _buffTtPanel.Append(text);
+        _buffTtPanel.Append(descText);
 
         if (id == 147)
         {
-            var bannerTT = "";
+            var bannerText = "";
             for (var l = 0; l < NPCLoader.NPCCount; l++)
                 if (Item.BannerToNPC(l) != 0 && Main.SceneMetrics.NPCBannerBuff[l])
-                    bannerTT += "\n" + Lang.GetNPCNameValue(Item.BannerToNPC(l));
+                    bannerText += "\n" + Lang.GetNPCNameValue(Item.BannerToNPC(l));
 
-            var BText = new UIText(bannerTT, scale);
-            BText.Top.Set(mouseY - 20, 0);
-            BText.Left.Set(mouseX + 20, 0);
-            BText.TextColor = Color.Green;
-            buffTTPanel.Append(BText);
+            var bText = new UIText(bannerText, _scale);
+            bText.Top.Set(mouseY - 20, 0);
+            bText.Left.Set(mouseX + 20, 0);
+            bText.TextColor = Color.Green;
+            _buffTtPanel.Append(bText);
         }
     }
 
-    public void Erase()
+    private void Erase()
     {
         RemoveAllChildren();
     }
@@ -291,209 +287,222 @@ internal class HealthBar : UIState
         Reset();
     }
 
-    public void LoadTexture()
+    private float CalcUiPosition()
+    {
+        return Main.screenTarget.Height - Main.screenTarget.Height * _yDefaultOffSet;
+    }
+
+    private void LoadTexture()
     {
         float[] baseUiOffset =
         {
-            105 * scale,
-            69 * scale,
-            46 * scale,
-            33 * scale,
-            357 * scale
+            105 * _scale,
+            69 * _scale,
+            46 * _scale,
+            33 * _scale,
+            357 * _scale
         };
 
-        RessourceTexture = new Dictionary<Mode, RessourceInfo>
+        _resourceTexture = new Dictionary<Mode, ResourceInfo>
         {
             {
                 Mode.Leech,
-                new RessourceInfo(
+                new ResourceInfo(
                     ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/LeechBar",
                         AssetRequestMode.ImmediateLoad).Value,
-                    new Vector2(14 * scale, Main.screenHeight + YDefaultOffSet - baseUiOffset[0]), scale)
+                    new Vector2(14 * _scale, CalcUiPosition() - baseUiOffset[0]), _scale)
             },
             {
-                Mode.HP,
-                new RessourceInfo(
+                Mode.Hp,
+                new ResourceInfo(
                     ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/HealthBar",
                         AssetRequestMode.ImmediateLoad).Value,
-                    new Vector2(14 * scale, Main.screenHeight + YDefaultOffSet - baseUiOffset[0]), scale)
+                    new Vector2(14 * _scale, CalcUiPosition() - baseUiOffset[0]), _scale)
             },
             {
-                Mode.MANA,
-                new RessourceInfo(
+                Mode.Mana,
+                new ResourceInfo(
                     ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/ManaBar",
                         AssetRequestMode.ImmediateLoad).Value,
-                    new Vector2(31 * scale, Main.screenHeight + YDefaultOffSet - baseUiOffset[1]), scale)
+                    new Vector2(31 * _scale, CalcUiPosition() - baseUiOffset[1]), _scale)
             },
             {
-                Mode.XP,
-                new RessourceInfo(
+                Mode.Xp,
+                new ResourceInfo(
                     ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/XPBar",
                         AssetRequestMode.ImmediateLoad).Value,
-                    new Vector2(44 * scale, Main.screenHeight + YDefaultOffSet - baseUiOffset[2]), scale)
+                    new Vector2(44 * _scale, CalcUiPosition() - baseUiOffset[2]), _scale)
             },
             {
                 Mode.Weapon,
-                new RessourceInfo(
+                new ResourceInfo(
                     ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/WeaponBar",
                         AssetRequestMode.ImmediateLoad).Value,
-                    new Vector2(50 * scale, Main.screenHeight + YDefaultOffSet - baseUiOffset[3]), scale)
+                    new Vector2(50 * _scale, CalcUiPosition() - baseUiOffset[3]), _scale)
             },
             {
                 Mode.Breath,
-                new RessourceInfo(
+                new ResourceInfo(
                     ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/BreathBar",
                         AssetRequestMode.ImmediateLoad).Value,
-                    new Vector2(5 * scale, Main.screenHeight + YDefaultOffSet - baseUiOffset[4]), scale)
+                    new Vector2(5 * _scale, CalcUiPosition() - baseUiOffset[4]), _scale)
             }
         };
 
-        Overlay = new UIOverlay(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/OverlayHealthBar",
+        _overlay = new UiOverlay(ModContent.Request<Texture2D>("AnotherRpgModExpanded/Textures/UI/OverlayHealthBar",
             AssetRequestMode.ImmediateLoad).Value);
     }
 
     public void Reset()
     {
         Erase();
+        AnotherRpgModExpanded.Instance.Logger.Debug("reset");
+        
+        _yDefaultOffSet = Config.VConfig.HealthBarYOffSet / 100f;
+        _scale = Config.VConfig.HealthBarScale;
 
-        buffTTPanel = new UIElement();
-        buffTTPanel.Left.Set(10 * scale, 0f);
-        buffTTPanel.Top.Set(Main.screenHeight - baseUiHeight + YDefaultOffSet + 185 * scale, 0f);
-        buffTTPanel.Width.Set(0, 0f);
-        buffTTPanel.Height.Set(0, 0f);
+        _buffTtPanel = new UIElement();
+        _buffTtPanel.Left.Set(10 * _scale, 0f);
+        _buffTtPanel.Top.Set(CalcUiPosition() + 185 * _scale, 0f);
+        _buffTtPanel.Width.Set(0, 0f);
+        _buffTtPanel.Height.Set(0, 0f);
 
-        buffPanel = new UIElement();
-        buffPanel.Left.Set(10 * scale, 0f);
-        buffPanel.Top.Set(Main.screenHeight - baseUiHeight + YDefaultOffSet + 185 * scale, 0f);
-        buffPanel.Width.Set(1000, 0f);
-        buffPanel.Height.Set(400, 0f);
-        YDefaultOffSet = -Config.vConfig.HealthBarYoffSet;
-        scale = Config.vConfig.HealthBarScale;
+        _buffPanel = new UIElement();
+        _buffPanel.Left.Set(10 * _scale, 0f);
+        _buffPanel.Top.Set(CalcUiPosition() + 185 * _scale, 0f);
+        _buffPanel.Width.Set(1000, 0f);
+        _buffPanel.Height.Set(400, 0f);
 
         float[] baseUiOffset =
         {
-            105 * scale,
-            69 * scale,
-            46 * scale,
-            33 * scale,
-            357 * scale
+            105 * _scale,
+            69 * _scale,
+            46 * _scale,
+            33 * _scale,
+            357 * _scale
         };
 
-        RessourceTexture[Mode.Leech].position.Y = Main.screenHeight + YDefaultOffSet - baseUiOffset[0];
-        RessourceTexture[Mode.HP].position.Y = Main.screenHeight + YDefaultOffSet - baseUiOffset[0];
-        RessourceTexture[Mode.MANA].position.Y = Main.screenHeight + YDefaultOffSet - baseUiOffset[1];
-        RessourceTexture[Mode.XP].position.Y = Main.screenHeight + YDefaultOffSet - baseUiOffset[2];
-        RessourceTexture[Mode.Weapon].position.Y = Main.screenHeight + YDefaultOffSet - baseUiOffset[3];
-        RessourceTexture[Mode.Breath].position.Y = Main.screenHeight + YDefaultOffSet - baseUiOffset[4];
+        _resourceTexture[Mode.Leech].Position.Y = CalcUiPosition() - baseUiOffset[0];
+        _resourceTexture[Mode.Hp].Position.Y = CalcUiPosition() - baseUiOffset[0];
+        _resourceTexture[Mode.Mana].Position.Y = CalcUiPosition() - baseUiOffset[1];
+        _resourceTexture[Mode.Xp].Position.Y = CalcUiPosition() - baseUiOffset[2];
+        _resourceTexture[Mode.Weapon].Position.Y = CalcUiPosition() - baseUiOffset[3];
+        _resourceTexture[Mode.Breath].Position.Y = CalcUiPosition() - baseUiOffset[4];
 
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition());
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition() - baseUiOffset[0]);
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition() - baseUiOffset[0]);
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition() - baseUiOffset[1]);
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition() - baseUiOffset[2]);
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition() - baseUiOffset[3]);
+        AnotherRpgModExpanded.Instance.Logger.Debug(CalcUiPosition() - baseUiOffset[4]);
 
-        player = Main.player[Main.myPlayer];
+        _player = Main.player[Main.myPlayer];
 
+        _mainPanel[0] = new UIElement();
+        _mainPanel[0].SetPadding(0);
+        _mainPanel[0].Width.Set(840f, 0f);
+        _mainPanel[0].Height.Set(BaseUiHeight, 0f);
+        _mainPanel[0].HAlign = 0;
+        _mainPanel[0].VAlign = 0;
+        _mainPanel[0].Left.Set(0, 0f);
+        _mainPanel[0].Top.Set(CalcUiPosition() - BaseUiHeight, 0f);
 
-        MainPanel[0] = new UIElement();
-        MainPanel[0].SetPadding(0);
-        MainPanel[0].Width.Set(840f, 0f);
-        MainPanel[0].Height.Set(baseUiHeight, 0f);
-        MainPanel[0].HAlign = 0;
-        MainPanel[0].VAlign = 0;
-        MainPanel[0].Left.Set(0, 0f);
-        MainPanel[0].Top.Set(Main.screenHeight - baseUiHeight + YDefaultOffSet, 0f);
-
-
-        Overlay.ImageScale = scale;
-        Overlay.HAlign = 0;
-        Overlay.VAlign = 0;
-        MainPanel[0].Append(Overlay);
+        _overlay.ImageScale = _scale;
+        _overlay.HAlign = 0;
+        _overlay.VAlign = 0;
+        _mainPanel[0].Append(_overlay);
 
         for (var i = 0; i < 6; i++)
         {
-            MainPanel[i + 1] = new PanelBar((Mode)i, RessourceTexture[(Mode)i].texture);
+            _mainPanel[i + 1] = new PanelBar((Mode)i, _resourceTexture[(Mode)i].Texture);
 
             if ((Mode)i == Mode.Breath)
-                breath = new RessourceBreath((Mode)i, RessourceTexture[(Mode)i].texture);
+                _breath = new ResourceBreath((Mode)i, _resourceTexture[(Mode)i].Texture);
             else
-                ressourcebar[i] = new Ressource((Mode)i, RessourceTexture[(Mode)i].texture, Color.White);
-            MainPanel[i + 1].HAlign = 0;
-            MainPanel[i + 1].VAlign = 0;
-            MainPanel[i + 1].SetPadding(0);
+                _resourceBar[i] = new Resource((Mode)i, _resourceTexture[(Mode)i].Texture, Color.White);
+            _mainPanel[i + 1].HAlign = 0;
+            _mainPanel[i + 1].VAlign = 0;
+            _mainPanel[i + 1].SetPadding(0);
 
-            MainPanel[i + 1].Width.Set(RessourceTexture[(Mode)i].size.X, 0f);
-            MainPanel[i + 1].Height.Set(RessourceTexture[(Mode)i].size.Y, 0f);
-            MainPanel[i + 1].Left.Set(RessourceTexture[(Mode)i].position.X, 0f);
-            MainPanel[i + 1].Top.Set(RessourceTexture[(Mode)i].position.Y, 0f);
-
+            _mainPanel[i + 1].Width.Set(_resourceTexture[(Mode)i].Size.X, 0f);
+            _mainPanel[i + 1].Height.Set(_resourceTexture[(Mode)i].Size.Y, 0f);
+            _mainPanel[i + 1].Left.Set(_resourceTexture[(Mode)i].Position.X, 0f);
+            _mainPanel[i + 1].Top.Set(_resourceTexture[(Mode)i].Position.Y, 0f);
+            
             if ((Mode)i == Mode.Breath)
             {
-                breath.ImageScale = scale;
-                MainPanel[i + 1].Append(breath);
+                _breath.ImageScale = _scale;
+                _mainPanel[i + 1].Append(_breath);
             }
             else
             {
-                ressourcebar[i].ImageScale = scale;
+                _resourceBar[i].ImageScale = _scale;
 
                 if (i == 0)
-                    ressourcebar[i].color = new Color(0.3f, 0.3f, 0.3f, 0.3f);
-                MainPanel[i + 1].Append(ressourcebar[i]);
+                    _resourceBar[i].Color = new Color(0.3f, 0.3f, 0.3f, 0.3f);
+                _mainPanel[i + 1].Append(_resourceBar[i]);
             }
 
-            Append(MainPanel[i + 1]);
+            Append(_mainPanel[i + 1]);
         }
 
-        ;
+        Append(_mainPanel[0]);
+        Append(_buffPanel);
+        Append(_buffTtPanel);
 
-        Append(MainPanel[0]);
-        Append(buffPanel);
-        Append(buffTTPanel);
+        _health = new UIText("0|0", 1.3f * _scale);
+        _manaText = new UIText("0|0", _scale);
+        _xpText = new UIText("0|0", _scale);
+        _level = new UIText("Lvl. 1", 0.7f * _scale, true);
 
+        _health.Left.Set(500 * _scale, 0f);
+        _health.Top.Set(_mainPanel[0].Height.Pixels - 99 * _scale, 0f);
+        _manaText.Left.Set(420 * _scale, 0f);
+        _manaText.Top.Set(_mainPanel[0].Height.Pixels - 69 * _scale, 0f);
+        _xpText.Left.Set(420 * _scale, 0f);
+        _xpText.Top.Set(_mainPanel[0].Height.Pixels - 47 * _scale, 0f);
 
-        health = new UIText("0|0", 1.3f * scale);
-        manatext = new UIText("0|0", scale);
-        xptext = new UIText("0|0", scale);
-        Level = new UIText("Lvl. 1", 0.7f * scale, true);
+        _level.Left.Set(135 * _scale, 0f);
+        _level.HAlign = 0;
+        _level.Top.Set(_mainPanel[0].Height.Pixels - 136 * _scale, 0f);
 
-
-        health.Left.Set(500 * scale, 0f);
-        health.Top.Set(MainPanel[0].Height.Pixels - 99 * scale, 0f);
-        manatext.Left.Set(420 * scale, 0f);
-        manatext.Top.Set(MainPanel[0].Height.Pixels - 69 * scale, 0f);
-        xptext.Left.Set(420 * scale, 0f);
-        xptext.Top.Set(MainPanel[0].Height.Pixels - 47 * scale, 0f);
-
-        Level.Left.Set(135 * scale, 0f);
-        Level.HAlign = 0;
-        Level.Top.Set(MainPanel[0].Height.Pixels - 136 * scale, 0f);
-
-        MainPanel[0].Append(health);
-        MainPanel[0].Append(manatext);
-        MainPanel[0].Append(xptext);
-        MainPanel[0].Append(Level);
+        _mainPanel[0].Append(_health);
+        _mainPanel[0].Append(_manaText);
+        _mainPanel[0].Append(_xpText);
+        _mainPanel[0].Append(_level);
 
         Recalculate();
         //Texture2D OverlayTexture = ModLoader.Request<Texture2D>("AnotherRpgModExpanded/Assets/UI/OverlayHealthBar").Value;
     }
 }
 
-internal class RessourceBreath : UIElement
+internal class ResourceBreath : UIElement
 {
     private Texture2D _texture;
-    public Color color;
-    private readonly float height;
+    private Color _color;
+    private readonly float _height;
     public float ImageScale = 1f;
 
-    private Mode stat;
+    private Mode _stat;
 
-    public RessourceBreath(Mode stat, Texture2D texture)
+    public ResourceBreath(Mode stat, Texture2D texture)
     {
         _texture = texture;
         Width.Set(_texture.Width, 0f);
         Height.Set(_texture.Height, 0f);
-        height = _texture.Height;
+        _height = _texture.Height;
         Left.Set(0, 0f);
         Top.Set(0, 0f);
-        color = Color.White;
-        this.stat = stat;
+        _color = Color.White;
+        _stat = stat;
         VAlign = 0;
         HAlign = 0;
+    }
+
+    public ResourceBreath(float height)
+    {
+        _height = height;
     }
 
     public void SetImage(Texture2D texture)
@@ -506,13 +515,13 @@ internal class RessourceBreath : UIElement
     public override void Draw(SpriteBatch spriteBatch)
     {
         var player = Main.player[Main.myPlayer];
-        var quotient = 1f;
-        //Calculate quotient
 
-        quotient = player.breath / (float)player.breathMax;
+        var quotient =
+            //Calculate quotient
+            player.breath / (float)player.breathMax;
 
-        Height.Set(quotient * height * ImageScale, 0f);
-        Top.Set((1 - quotient) * height * ImageScale, 0);
+        Height.Set(quotient * _height * ImageScale, 0f);
+        Top.Set((1 - quotient) * _height * ImageScale, 0);
         Recalculate(); // recalculate the position and size
 
         base.Draw(spriteBatch);
@@ -526,29 +535,29 @@ internal class RessourceBreath : UIElement
         var height = (int)Math.Ceiling(dimensions.Height * 1 / ImageScale);
 
         spriteBatch.Draw(_texture, dimensions.Position(), new Rectangle((int)point1.X, (int)point1.Y, width, height),
-            color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None, 0f);
+            _color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None, 0f);
     }
 }
 
-internal class Ressource : UIElement
+internal class Resource : UIElement
 {
     private Texture2D _texture;
-    public Color color;
+    public Color Color;
     public float ImageScale = 1f;
 
-    private readonly Mode stat;
-    private readonly float width;
+    private readonly Mode _stat;
+    private readonly float _width;
 
-    public Ressource(Mode stat, Texture2D texture, Color col)
+    public Resource(Mode stat, Texture2D texture, Color col)
     {
         _texture = texture;
         Width.Set(_texture.Width, 0f);
         Height.Set(_texture.Height, 0f);
-        width = _texture.Width;
+        _width = _texture.Width;
         Left.Set(0, 0f);
         Top.Set(0, 0f);
-        color = col;
-        this.stat = stat;
+        Color = col;
+        _stat = stat;
         VAlign = 0;
         HAlign = 0;
     }
@@ -565,9 +574,9 @@ internal class Ressource : UIElement
         var player = Main.player[Main.myPlayer];
         var quotient = 1f;
         //Calculate quotient
-        switch (stat)
+        switch (_stat)
         {
-            case Mode.HP:
+            case Mode.Hp:
                 quotient = player.statLife / (float)player.statLifeMax2;
                 break;
             case Mode.Leech:
@@ -575,10 +584,10 @@ internal class Ressource : UIElement
                     player.statLifeMax2) / player.statLifeMax2;
                 break;
 
-            case Mode.MANA:
+            case Mode.Mana:
                 quotient = player.statMana / (float)player.statManaMax2;
                 break;
-            case Mode.XP:
+            case Mode.Xp:
                 quotient = player.GetModPlayer<RpgPlayer>().GetExp() /
                            (float)player.GetModPlayer<RpgPlayer>().XpToNextLevel();
                 break;
@@ -589,7 +598,7 @@ internal class Ressource : UIElement
         }
 
         quotient = Mathf.Clamp(quotient, 0, 1);
-        Left.Set(-(1 - quotient) * width * ImageScale, 0f);
+        Left.Set(-(1 - quotient) * _width * ImageScale, 0f);
         Recalculate(); // recalculate the position and size
 
         base.Draw(spriteBatch);
@@ -598,19 +607,17 @@ internal class Ressource : UIElement
     protected override void DrawSelf(SpriteBatch spriteBatch)
     {
         var dimensions = GetDimensions();
-
-
-        spriteBatch.Draw(_texture, dimensions.Position(), null, color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None,
+        spriteBatch.Draw(_texture, dimensions.Position(), null, Color, 0f, Vector2.Zero, ImageScale, SpriteEffects.None,
             0f);
     }
 }
 
-internal class UIOverlay : UIElement
+internal class UiOverlay : UIElement
 {
     private Texture2D _texture;
     public float ImageScale = 1f;
 
-    public UIOverlay(Texture2D texture)
+    public UiOverlay(Texture2D texture)
     {
         _texture = texture;
         Width.Set(_texture.Width, 0f);
@@ -639,14 +646,14 @@ internal class UIOverlay : UIElement
 
 internal class PanelBar : UIElement
 {
-    private Mode stat;
-    private float width;
+    private Mode _stat;
+    private float _width;
 
 
     public PanelBar(Mode stat, Texture2D texture)
     {
-        this.stat = stat;
-        width = texture.Width;
+        _stat = stat;
+        _width = texture.Width;
         VAlign = 0;
         HAlign = 0;
     }

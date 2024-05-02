@@ -526,7 +526,7 @@ internal class ModifierManager
 
     public static float GetRarityDamageBoost(Rarity rarity)
     {
-        if (!Config.gpConfig.ItemRarity)
+        if (!Config.GpConfig.ItemRarity)
             return 0;
         float value = 0;
         switch (rarity)
@@ -772,14 +772,14 @@ internal class ModifierManager
 
     public static bool HaveModifier(Modifier _modifier, Modifier list)
     {
-        if (!Config.gpConfig.ItemModifier)
+        if (!Config.GpConfig.ItemModifier)
             return false;
         return (_modifier & list) == _modifier;
     }
 
     public static float GetModifierBonusAlt(Modifier mod, ItemUpdate itemU)
     {
-        if (!Config.gpConfig.ItemModifier)
+        if (!Config.GpConfig.ItemModifier)
             return 0;
 
         float value = 0;
@@ -801,7 +801,7 @@ internal class ModifierManager
 
     public static float GetModifierBonus(Modifier mod, ItemUpdate itemU)
     {
-        if (!Config.gpConfig.ItemModifier)
+        if (!Config.GpConfig.ItemModifier)
             return 0;
         float value = 0;
         switch (mod)

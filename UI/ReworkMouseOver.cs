@@ -139,8 +139,8 @@ internal class ReworkMouseOver : UIState
                     NPCDetails = new NPCInfoUI(TempText, Color.White, new Vector2(Main.mouseX, Main.mouseY));
                 }
 
-                else if (IsOnScreen && ((Config.vConfig.DisplayNpcName && !ActualNPC.townNPC) ||
-                                        (Config.vConfig.DisplayTownName && ActualNPC.townNPC)))
+                else if (IsOnScreen && ((Config.VConfig.DisplayNpcName && !ActualNPC.townNPC) ||
+                                        (Config.VConfig.DisplayTownName && ActualNPC.townNPC)))
                 {
                     TempText = ActualNPC.GivenOrTypeName;
                     var Rnpc = ActualNPC.GetGlobalNPC<ARPGGlobalNPC>();
@@ -348,8 +348,8 @@ internal class NPCNameUI : UIState
 
                     NPCDetails = new NPCInfoUI(TempText, Color.White, new Vector2(Main.mouseX, Main.mouseY));
                 }
-                else if (IsOnScreen && ((Config.vConfig.DisplayNpcName && !ActualNPC.townNPC) ||
-                                        (Config.vConfig.DisplayTownName && ActualNPC.townNPC)))
+                else if (IsOnScreen && ((Config.VConfig.DisplayNpcName && !ActualNPC.townNPC) ||
+                                        (Config.VConfig.DisplayTownName && ActualNPC.townNPC)))
                 {
                     TempText = ActualNPC.GivenOrTypeName;
                     var Rnpc = ActualNPC.GetGlobalNPC<ARPGGlobalNPC>();

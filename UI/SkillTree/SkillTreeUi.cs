@@ -32,7 +32,7 @@ internal class SkillTreeUi : UIState
 
     public bool dragging;
 
-    public Vector2 offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.vConfig.UI_Scale;
+    public Vector2 offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.VConfig.UiScale;
     private Vector2 regOffSet;
 
     private UIText ResetText;
@@ -44,7 +44,7 @@ internal class SkillTreeUi : UIState
 
     private SkillTree skillTree;
     private UIPanel toolTip;
-    private readonly float UIScale = Config.vConfig.UI_Scale;
+    private readonly float UIScale = Config.VConfig.UiScale;
 
     private float Zoom = 1;
 
@@ -146,7 +146,7 @@ internal class SkillTreeUi : UIState
 
     private void ResetOffset(UIMouseEvent evt, UIElement listeningElement)
     {
-        offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.vConfig.UI_Scale;
+        offSet = new Vector2(Main.screenWidth * 0.5f, Main.screenHeight * 0.5f) / Config.VConfig.UiScale;
         Zoom = 1;
         Init();
     }

@@ -67,7 +67,28 @@ Mods: {
 				UseCustomSkillTree: {
 					Label: Use Custom SkillTree
 					Tooltip: '''When true, it'll use the JsonSkillTree in "Documents\My Games\Terraria\ModLoader\Mod Configs\AnRPG" '''
-				}			}
+				}
+
+				LifeLeechCd: {
+					Label: Life Leech Cd
+					Tooltip: ""
+				}
+
+				RpgPlayer: {
+					Label: Rpg Player
+					Tooltip: ""
+				}
+
+				XpReduction: {
+					Label: Xp Reduction
+					Tooltip: ""
+				}
+
+				XpReductionDelta: {
+					Label: Xp Reduction Delta
+					Tooltip: ""
+				}
+			}
 
 			NPCConfig: {
 				DisplayName: AnRPG Enemies config
@@ -160,7 +181,63 @@ Mods: {
 				NPCGrowthHardModePercent: {
 					Label: NPC growth Hard Mode Percent
 					Tooltip: Multiply the world level by this value (applied before "NPC growth OnHardMode")
-				}			}
+				}
+
+				LimitNpcGrowth: {
+					Label: Limit Npc Growth
+					Tooltip: ""
+				}
+
+				LimitNpcGrowthPercent: {
+					Label: Limit Npc Growth Percent
+					Tooltip: ""
+				}
+
+				LimitNpcGrowthValue: {
+					Label: Limit Npc Growth Value
+					Tooltip: ""
+				}
+
+				NpcGrowthHardMode: {
+					Label: Npc Growth Hard Mode
+					Tooltip: ""
+				}
+
+				NpcGrowthHardModePercent: {
+					Label: Npc Growth Hard Mode Percent
+					Tooltip: ""
+				}
+
+				NpcGrowthValue: {
+					Label: Npc Growth Value
+					Tooltip: ""
+				}
+
+				NpcLevelMultiplier: {
+					Label: Npc Level Multiplier
+					Tooltip: ""
+				}
+
+				NpcModifier: {
+					Label: Npc Modifier
+					Tooltip: ""
+				}
+
+				NpcProgress: {
+					Label: Npc Progress
+					Tooltip: ""
+				}
+
+				NpcProjectileDamageLevel: {
+					Label: Npc Projectile Damage Level
+					Tooltip: ""
+				}
+
+				NpcRarity: {
+					Label: Npc Rarity
+					Tooltip: ""
+				}
+			}
 
 			VisualConfig: {
 				DisplayName: AnRPG display config
@@ -193,7 +270,117 @@ Mods: {
 				HideVanillaHB: {
 					Label: Hide Old Bar
 					Tooltip: Hide The vanilla game HealthBar
-				}			}
+				}
+
+				HealthBarYOffSet: {
+					Label: Health Bar Y Off Set
+					Tooltip: ""
+				}
+
+				HideVanillaHb: {
+					Label: Hide Vanilla Hb
+					Tooltip: ""
+				}
+
+				UiScale: {
+					Label: Ui Scale
+					Tooltip: ""
+				}
+			}
+
+			NpcConfig: {
+				DisplayName: Npc Config
+
+				BossClustered: {
+					Label: Boss Clustered
+					Tooltip: ""
+				}
+
+				BossHealthMultiplier: {
+					Label: Boss Health Multiplier
+					Tooltip: ""
+				}
+
+				BossKillLevelIncrease: {
+					Label: Boss Kill Level Increase
+					Tooltip: ""
+				}
+
+				BossModifier: {
+					Label: Boss Modifier
+					Tooltip: ""
+				}
+
+				BossRarity: {
+					Label: Boss Rarity
+					Tooltip: ""
+				}
+
+				LimitNpcGrowth: {
+					Label: Limit Npc Growth
+					Tooltip: ""
+				}
+
+				LimitNpcGrowthPercent: {
+					Label: Limit Npc Growth Percent
+					Tooltip: ""
+				}
+
+				LimitNpcGrowthValue: {
+					Label: Limit Npc Growth Value
+					Tooltip: ""
+				}
+
+				NpcDamageMultiplier: {
+					Label: Npc Damage Multiplier
+					Tooltip: ""
+				}
+
+				NpcGrowthHardMode: {
+					Label: Npc Growth Hard Mode
+					Tooltip: ""
+				}
+
+				NpcGrowthHardModePercent: {
+					Label: Npc Growth Hard Mode Percent
+					Tooltip: ""
+				}
+
+				NpcGrowthValue: {
+					Label: Npc Growth Value
+					Tooltip: ""
+				}
+
+				NpcHealthMultiplier: {
+					Label: Npc Health Multiplier
+					Tooltip: ""
+				}
+
+				NpcLevelMultiplier: {
+					Label: Npc Level Multiplier
+					Tooltip: ""
+				}
+
+				NpcModifier: {
+					Label: Npc Modifier
+					Tooltip: ""
+				}
+
+				NpcProgress: {
+					Label: Npc Progress
+					Tooltip: ""
+				}
+
+				NpcProjectileDamageLevel: {
+					Label: Npc Projectile Damage Level
+					Tooltip: ""
+				}
+
+				NpcRarity: {
+					Label: Npc Rarity
+					Tooltip: ""
+				}
+			}
 		}
 
 		Keybinds: {
@@ -627,6 +814,7 @@ Mods: {
 					Allow Exp Gain after level 1000
 
 					'''
-			}		}
+			}
+		}
 	}
 }
